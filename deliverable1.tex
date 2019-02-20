@@ -1,6 +1,33 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{amsmath}
+\usepackage{chngcntr}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{placeins}
+\usepackage{multicol}
+
+\usepackage{csvsimple}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
@@ -48,7 +75,7 @@ Los actores en este proyecto serán las personas que tomen parte en él, ya sea 
  \item \textbf{Desarrollador:} La figura del desarrollador \textbf{debe} ser la persona que trabaje de manera más directa en el proyecto. En este proyecto únicamente habrá un desarrollador que ha elaborado la documentación que leerás a continuación y dará forma a los objetivos tangibles del proyecto.  
  \item \textbf{Director y codirector:} Pese a que el desarrollador tendrá el papel principal en el proyecto, el director y el codirector le guiarán en el camino abierto que es el desarrollo del proyecto. Se establecerán reuniones de seguimiento donde serán capaces de hacer un correcto supervisamiento de las actividades propuestas para el proyecto.
  \item \textbf{Barcelona Supercomputing Center:} De manera directa el centro otorga al desarrollador un lugar de trabajo y un equipo informático. Por otra parte, cuenta con el soporte por parte de los equipos de desarrollo de \textit{COMPSs} (del cual forma parte el desarrollador) y de \textit{OmpSs} para cualquier incidencia relacionada con su \textit{software} y derivados.
- \item \textbf{Beneficiarios:} %TODO Quienes son?
+ \item \textbf{Beneficiarios:} \todo{Por determinar}%TODO Quienes son?
  
 \end{itemize}
 
@@ -61,22 +88,30 @@ Para esto son necesarios modelos de programación que nos den la posibilidad de 
 \par\bigskip
 La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos otorgará esta posibilidad de utilizar todos los recursos de la máquina, a continuación se ahonda en las características de ambos.
 
-\subsection{Modelos de programación}
+\subsection{COMPSs}
 
-\textit{COMPSs} es desarrollado por el grupo \textit{WDS - Workflows and Distributed Computing} y \textit{OmpSs} es desarrollado por el grupo \textit{PM - Programming Models}ambos dentro del departamento de \textit{CS - Computer Science}.
-
-\subsubsection{COMPSs}
+\textit{COMPSs} es desarrollado por el grupo \textit{WDS - Workflows and Distributed Computing} que pertenece al departamento de \textit{CS - Computer Science}.
+\par\bigskip
 
 \textit{COMPSs} es un modelo de programación para entornos distribuidos\cite{badia2015comp}, dado que se basa en la generación de tareas por parte de un programa principal ejecutado en secuencial que llamaremos \textit{master}, mediante simples modificaciones del código podemos conseguir que este se ejecute de manera distribuida. A los procesos que ejecutarán las tareas generadas por el \textit{master} los llamaremos \textit{workers}.  \par\bigskip
 
-Para facilitar más aún el uso del modelo, está dotado de un sistema de \textit{runtime}, que tal y como indica la palabra coexiste con la aplicación. Este sistema de \textit{runtime} se encarga de detectar las dependencias que puedan surgir entre las tareas que genera el \textit{master} y las ejecuta a medida que las dependencias se resuelven. \par\bigskip
+Para facilitar más aún el uso del modelo, está dotado de un sistema de \textit{runtime}, que tal y como indica la palabra coexiste con la aplicación. Este sistema de \textit{runtime} se encarga de detectar las dependencias que puedan surgir entre las tareas que genera el \textit{master} y las ejecuta a medida que las dependencias se resuelven. 
+%\par\bigskip
+
+\subsubsection{}
 
 
 
+\subsection{OmpSs}
 
+\textit{OmpSs} es desarrollado por el grupo \textit{PM - Programming Models}, perteneciente también al departamento de \textit{CS - Computer Science}.
+\par\bigskip
 
+\textit{OmpSs} es un modelo de programación que intenta explotar el paralelismo de las aplicaciones de una manera sencilla y aprovechando al máximo los recursos de la máquina. 
+\par\bigskip
+El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que desarrolló el \textit{BSC}), este integra funcionalidades presentes en ambos. Por parte de \textit{OpenMP} se quiere tomar la facilidad de paralelizar una aplicación secuencial insertando pragmas, y de \textit{StarSs} el modelo de ejecución basado en un \textit{thread-pool} y que permite la ejecución de código en más recursos que el procesador, es decir, que ofrece fácil gestión de recursos heterogéneos.
 
-\subsubsection{OmpSs}
+\subsection{COMPSs+OmpSs}
 
 
 \bibliography{bibliography}{}
