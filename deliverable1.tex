@@ -8,7 +8,9 @@
 
 %% Useful packages
 \usepackage{amsmath}
+\usepackage{floatrow}
 \usepackage{graphicx}
+\graphicspath{ {./images/} }
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{amsmath}
@@ -24,10 +26,37 @@
 \usepackage{xcolor}
 \usepackage{listings}
 
-\definecolor{mGreen}{rgb}{0,0.6,0}
-\definecolor{mGray}{rgb}{0.5,0.5,0.5}
-\definecolor{mPurple}{rgb}{0.58,0,0.82}
-\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+
+\renewcommand{\lstlistingname}{Código}% 
+\renewcommand{\lstlistlistingname}{Lista de código}% List of Listings -> List of Algorithms
+
+% extracted from internet: https://timmurphy.org/2014/01/27/displaying-code-in-latex-documents/
+\definecolor{lbcolor}{rgb}{0.93,0.93,0.93}
+\lstset{  
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=left, % display line numbers on the left
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red},
+    backgroundcolor=\color{lbcolor}
+}
+%sdf
+\definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
+\definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
+\definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
+\definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+\lstdefinestyle{idlstyle}
+{
+    language = C++,
+    keywordstyle = {\color{key-color}},
+    keywordstyle = [3]{\color{blue}},
+    otherkeywords = {in, int ,interface, out, inout},
+    morekeywords = [3]{in, out, inout}
+}
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
@@ -98,8 +127,46 @@ La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos o
 Para facilitar más aún el uso del modelo, está dotado de un sistema de \textit{runtime}, que tal y como indica la palabra coexiste con la aplicación. Este sistema de \textit{runtime} se encarga de detectar las dependencias que puedan surgir entre las tareas que genera el \textit{master} y las ejecuta a medida que las dependencias se resuelven. 
 %\par\bigskip
 
-\subsubsection{}
+\subsubsection{Modelo de programación}
 
+El \textit{runtime} de \textit{COMPSs} está implementado en \textit{Java} por lo cuál se soporta dicho lenguaje, además se desarrollaron los \textit{bindings} de \textit{Python} y \textit{C/C++} para facilitar el portaje de aplicaciones en estos lenguajes a \textit{COMPSs}. 
+\par\bigskip
+
+Dicho esto, centraremos nuestros esfuerzos en \textit{C} y \textit{C++}. Para desarrollar una aplicación de \textit{COMPSs} en \textit{C/C++} necesitamos el código que ejecutará el \textit{master} (recordemos, en secuencial), una interfaz que especificará las funciones que ejecutadas en el \textit{master}, \textit{a posteriori} serán ejecutadas en los \textit{workers}, y el código que realmente implementan estas tareas. 
+\par\bigskip
+
+Veamos en orden de enumeración ejemplos de los componentes de una aplicación.
+
+\begin{lstlisting}[caption={Interfaz de la aplicación 'ejemplo'.},captionpos=b, label={lst:ejemplo.idl}, style=idlstyle]
+interface ejemplo {
+    void funcionEjemplo(in int a, out int[a] array_a);
+};
+\end{lstlisting}
+
+La interfaz de la imagen superior define una función llamada funcionEjemplo con un parámetro de entrada y uno de salida, las palabras clave \textit{in} y \textit{out} respectivamente otorgan estas propiedades a los parámetros, también se puede combinar con \textit{inout}. \smallskip
+
+\begin{lstlisting}[caption={Fracción del código del \textit{master}}, captionpos=b, label={lst:ejemplo.cc}, language=C++]
+    compss_on();
+
+    int a = 10;
+    int* array_a;
+
+    funcionEjemplo(a, array_a);
+
+    compss_wait_on(array_a);
+
+    compss_off();
+\end{lstlisting}
+
+Esta imagen muestra el código del \textit{master} de manera reducida. Es tan sencillo como prometía, encendemos el \textit{runtime} de \textit{COMPSs}, preparamos los parámetros de la función, esperamos a los parámetros de salida y apagamos el \textit{runtime}. 
+
+\begin{figure}[H]
+    \centering
+    \caption{Proceso de compilado de una aplicación COMPSs C/C++}
+%    \includegraphics[width=\textwidth]{proceso_compilado.jpg}
+    \includegraphics[scale=0.5]{proceso_compilado.jpg}
+    \label{fig:proceso_compilado}
+\end{figure}
 
 
 \subsection{OmpSs}
