@@ -122,7 +122,7 @@ La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos o
 
 \subsection{COMPSs}
 
-\textit{COMPSs} es desarrollado por el grupo \textit{WDS - Workflows and Distributed Computing} que pertenece al departamento de \textit{CS - Computer Science}.
+\textit{COMPSs} es desarrollado por el grupo \textit{WDS - Workflows and Distributed Systems} que pertenece al departamento de \textit{CS - Computer Science}.
 \par\bigskip
 
 \textit{COMPSs} es un modelo de programación para entornos distribuidos\cite{badia2015comp}, dado que se basa en la generación de tareas por parte de un programa principal ejecutado en secuencial que llamaremos \textit{master}, mediante simples modificaciones del código podemos conseguir que este se ejecute de manera distribuida. A los procesos que ejecutarán las tareas generadas por el \textit{master} los llamaremos \textit{workers}.  \par\bigskip
@@ -250,7 +250,7 @@ El modelo de ejecución se ha comentado en lo que va de documento, consiste en u
 
 Cabe decir que para compilar una aplicación de \textit{OmpSs}, se utiliza el compilador \textit{source-to-source Mercurium} y el runtime \textit{Nanos} para gestionar el paralelismo, es decir, la creación de tareas, sincronización entre estas, etc.
 
-\subsection{COMPSs+OmpSs}
+\subsection{COMPSs+OmpSs} \label{compssompss}
 
 Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs} pero con ciertas restricciones. Las problemáticas aparecen con los dos tipos de \textit{worker} que hemos visto antes. Para el worker no persistente, no suele valer la pena debido a la granularidad de las tareas de \textit{OmpSs}. El \textit{overhead} proviene de crear el \textit{thread} del \textit{worker}, registrarlo en el \textit{runtime Nanos} y levantar las \textit{pipes}. El persistente carece del \textit{overhead} de levantar las \textit{pipes} y el resto vale la pena ya que el \textit{worker} persiste durante la ejecución de la aplicación. Pese a que el persistente mejora respecto al no persitente, hay problemas de migración de \textit{threads} entre aplicaciones cuando se ejecutan varias a la vez.
 \par\bigskip
@@ -260,15 +260,89 @@ Esto pretende paliarse re-integrando con la nueva versión \textit{OmpSs-2}, que
 
 \section{Alcance del proyecto}
 
-En esta sección se declaran las intenciones del proyecto (qué se pretende hacer), mediante una serie de requerimientos que harán que el proyecto se considere finalizado o bien inacabado. También los posibles riesgos que surjan (y las soluciones de estos) y la metodología de trabajo que se llevará a cabo.
+En esta sección se declaran las intenciones del proyecto (qué se pretende hacer), mediante una serie de requerimientos que harán que el proyecto pueda ser acabado con éxito, y unos objetivos que marcarán el desarrollo de este. También los posibles riesgos que surjan (y las soluciones de estos) y la metodología de trabajo que se llevará a cabo.
 
 \subsection{Requerimientos}
 
-El objetivo de este proyecto es reformular la integración de \textit{COMPSs} con \textit{OmpSs} para solucionar los problemas actuales, ya sea integrándolo de nuevo pero esta vez con \textit{OmpSs-2} o salirse por la tangente con otra idea. Los requerimientos que darán por satisfecho este proyecto son:
+ Los requerimientos necesarios para este proyecto son:
 
 \begin{itemize}
- \item 
+ \item La nueva integración con \textit{OmpSs-2} no debe romper la actual compatibilidad con \textit{OmpSs}.
+ \item El rendimiento de las aplicaciones desarrolladas con \textit{COMPSs+OmpSs-2} debe mejorar.
+ \item Todas las modificaciones sobre \textit{COMPSs} deben ajustarse al grupo de \textit{Workflows and Distributed Systems}.
+ \item Todas las medidas de rendimiento deben sacarse en clústers o supercomputadores del \textit{BSC}.
+ \item Cualquier requerimiento impuesto (o aconsejado) por el \textit{BSC} formará parte de esta lista.
+  
 \end{itemize}
+
+\subsection{Objetivos}
+
+El objetivo principal de este proyecto es reformular la integración de \textit{COMPSs} con \textit{OmpSs} para solucionar los problemas actuales, ya sea integrándolo de nuevo pero esta vez con \textit{OmpSs-2} o salirse por la tangente con otra idea. La siguiente lista muestra la posible descomposición de objetivos:
+
+\begin{itemize}
+ \item Aprender a utilizar la API (\textit{Application Programming Interface}) de \textit{Nanos++}.
+ \item Eliminar o bien reducir las problemáticas planteadas en la sección   \ref{compssompss}.
+  \item Mejorar la gestión de recursos heterogéneos en las aplicaciones desarrolladas en \textit{COMPSs} integrando \textit{OmpSs-2}.
+ \item En caso de conseguir el resto de objetivos plantear la integración en \textit{Java} y \textit{Python}.
+\end{itemize}
+
+\subsection{Riesgos}
+
+Durante el desarrollo del proyecto pueden surgir problemas, para mejorar la reacción ante ellos listaremos los posibles riesgos y las respectivas soluciones.
+
+\subsubsection{Problemas con el material de desarrollo}
+
+Se podría romper el equipo en el cual se desarrolla el proyecto, pongamos que de una pantalla, un teclado y un ordenador se rompe el último. Se perdería todo el avance del proyecto, incluso documentación.
+\par\medskip
+
+\textbf{Solución:} Pese a que la pérdida del ordenador es importante, todo el código del proyecto será subido al \textit{GitLab} de \textit{WDS}, y la documentación al \textit{GitHub} personal del desarrollador, por lo cual se podría recuperar todo el  proyecto.
+
+\subsubsection{Problemas con los clústers y supercomputadores}
+
+Si por casualidad, caen los clústers y supercomputadores en los cuales se medirá el rendimiento del proyecto, se pararía la obtención de las métricas. 
+\par\medskip
+
+\textbf{Solución:} En este caso, como no resultaría lo mismo ejecutarlo en local en mi ordenador, debería optar por realizar otras tareas hasta que el equipo del \textit{BSC} solucione los inconvenientes.
+
+\subsubsection{Aparición de errores en la implementación}
+
+Cualquier proyecto esta lleno de errores en la implementación, hay que saber encontrarlos y solucionarlos lo más rápido posible, pero puede entorpecer el proyecto.
+\par\medskip
+
+\textbf{Solución:} Activaremos los \textit{flags} de \textit{debug} para poder evitar el mínimo error y en caso de su aparición utilizaremos \textit{gdb} (\textit{GNU Debugger}) para encontrarlo.
+
+\subsubsection{Problemas con OmpSs/OmpSs-2}
+
+Dado que se realizará una integración de otro proyecto del \textit{BSC} el desarrollador puede encontrarse con dificultades relacionadas con este a lo largo del proyecto.
+\par\medskip
+
+\textbf{Solución:} Después de haber intentado solucionarlo por sus propios medios se enviará un \textit{e-mail} a la \textit{mailing-list} del grupo de \textit{Programming Tools} con la descripción del error e intentos de solucionarlo.
+
+\section{Metodología}
+
+Para decidir la metodología a utilizar, hay que tener en cuenta que el proyecto consta únicamente de tres personas que se envolverán en él. El desarrollador, que hará todo el desarrollo tangible, el director y el codirector. %Esto implica que no podemos aplicar por ejemplo \textit{Extreme programming} dado que el equipo de desarrolladores es de una persona. Aunque existen adaptaciones de esta metodología a una persona, no es la correcta por el hecho de que los requerimientos no estan en un cambio constante.
+\par\bigskip
+
+La metodología que más se ciñe a las características del ``equipo'' es \textit{SCRUM}. Esta metodología forma parte de las populares (y bastante de moda) metodologías ágiles, consiste en planear al milímetro las tareas a realizar, y hacer una predicción de qué se conseguira hacer y que no, en cortos periodos de tiempo llamados iteraciones. Además de estas predicciones, se consultará el estado del proyecto a diario, con cuestiones como ``¿Desde la última reunión que he conseguido?'', ``¿Desde entonces que haré para llegar a los objetivos de la iteración?'', ``¿Algún impedimento que no me permita alcanzar estos objetivos?''.
+\par\bigskip
+
+Esta metodología nos permitirá reaccionar rápidamente a los imprevistos, además de hacer un bueno monitoreo del estado del proyecto, por lo cual se ha decidido emplearla.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
