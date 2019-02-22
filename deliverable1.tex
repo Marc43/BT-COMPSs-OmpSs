@@ -1,6 +1,5 @@
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{cite}
 \usepackage[T1]{fontenc}
 
 %% Sets page size and margins
@@ -21,6 +20,9 @@
 \usepackage{listings}
 \usepackage{placeins}
 \usepackage{multicol}
+\usepackage{verbatim}
+
+\usepackage[sorting=none]{biblatex}
 
 \usepackage{csvsimple}
 \usepackage{xcolor}
@@ -66,6 +68,7 @@
 \author{Marc Domínguez de la Rocha}
 \date{Febrero 2019}
 
+\bibliography{bibliography} 
 \begin{document}
 
 \maketitle
@@ -127,7 +130,7 @@ La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos o
 Para facilitar más aún el uso del modelo, está dotado de un sistema de \textit{runtime}, que tal y como indica la palabra coexiste con la aplicación. Este sistema de \textit{runtime} se encarga de detectar las dependencias que puedan surgir entre las tareas que genera el \textit{master} y las ejecuta a medida que las dependencias se resuelven. 
 %\par\bigskip
 
-\subsubsection{Modelo de programación}
+\subsubsection{Modelo de programación} \label{compss_pm}
 
 El \textit{runtime} de \textit{COMPSs} está implementado en \textit{Java} por lo cuál se soporta dicho lenguaje, además se desarrollaron los \textit{bindings} de \textit{Python} y \textit{C/C++} para facilitar el portaje de aplicaciones en estos lenguajes a \textit{COMPSs}. 
 \par\bigskip
@@ -137,6 +140,7 @@ Dicho esto, centraremos nuestros esfuerzos en \textit{C} y \textit{C++}. Para de
 
 Veamos en orden de enumeración ejemplos de los componentes de una aplicación.
 
+%EJEMPLO INTERFACE
 \begin{lstlisting}[caption={Interfaz de la aplicación 'ejemplo'.},captionpos=b, label={lst:ejemplo.idl}, style=idlstyle]
 interface ejemplo {
     void funcionEjemplo(in int a, out int[a] array_a);
@@ -145,6 +149,7 @@ interface ejemplo {
 
 La interfaz de la imagen superior define una función llamada funcionEjemplo con un parámetro de entrada y uno de salida, las palabras clave \textit{in} y \textit{out} respectivamente otorgan estas propiedades a los parámetros, también se puede combinar con \textit{inout}. \smallskip
 
+%EJEMPLO MASTER CODE
 \begin{lstlisting}[caption={Fracción del código del \textit{master}}, captionpos=b, label={lst:ejemplo.cc}, language=C++]
     compss_on();
 
@@ -158,7 +163,22 @@ La interfaz de la imagen superior define una función llamada funcionEjemplo con
     compss_off();
 \end{lstlisting}
 
-Esta imagen muestra el código del \textit{master} de manera reducida. Es tan sencillo como prometía, encendemos el \textit{runtime} de \textit{COMPSs}, preparamos los parámetros de la función, esperamos a los parámetros de salida y apagamos el \textit{runtime}. 
+Esta imagen muestra el código del \textit{master} de manera reducida. Es tan sencillo como prometía, encendemos el \textit{runtime} de \textit{COMPSs}, preparamos los parámetros de la función, ejecutamos y finalmente esperamos a los parámetros de salida y apagamos el \textit{runtime}. \smallskip
+
+\begin{lstlisting}[caption={Implementación de la función 'funcionEjemplo'}, captionpos=b, label={lst:ejemplo-functions.cc}, language=C++]
+void funcionEjemplo(int a, int array_a[]) {
+    for (int i = 0; i < a; ++i) {
+        array_a[i] = a;
+    }
+}
+\end{lstlisting}
+
+Ahora bien, en la parte del \textit{worker} encontramos la implementación de la función, simplemente inicializa el array de tamaño \textit{a} a 0. Salvo convenciones en los nombres de los ficheros para hacer la compilación de la aplicación esto es todo lo necesario para desarrollar una aplicación en \textit{COMPSs} de \textit{C/C++}.
+
+\begin{comment}
+\subsubsection{Compilación}
+
+Para compilar la aplicacion en \textit{COMPSs} de \textit{C/C++}, 
 
 \begin{figure}[H]
     \centering
@@ -167,6 +187,29 @@ Esta imagen muestra el código del \textit{master} de manera reducida. Es tan se
     \includegraphics[scale=0.5]{proceso_compilado.jpg}
     \label{fig:proceso_compilado}
 \end{figure}
+\end{comment}
+
+\subsubsection{Modelo de ejecución}
+
+El modelo de ejecución es sencillo, es muy similar al \textit{thread-pool} que implementan \textit{StarSs}, \textit{OmpSs} y \textit{OpenMP} a partir de la release 3.0 \cite{ayguade2009design}. Para cada tarea generada se estudia que \textit{workers} hay libres y si cumplen los requisítos para ejecutar dicha tarea.
+
+\begin{figure}[H]
+    \centering 
+    \caption{Modelo de ejecución, basado en la aplicación 'ejemplo'.}
+    %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
+    \includegraphics[scale=0.75]{sta-masterworker.jpg}
+    \label{fig:masterworker_pool}
+\end{figure}
+
+La imagen muestra lo que sucede al ejecutar la aplicación de ejemplo de la sección \ref{compss_pm}, las líneas rojas curvas indican procesos (o bien \textit{threads}), lo importante sucede entre las flechas etiquetadas como compss\_on y compss\_off, la ejecución de la tarea. Se pide ejecutar la tarea funcionEjemplo al \textit{runtime} de \textit{COMPSs} y se decide en qué \textit{worker} se ejecutará. Hasta aquí podríamos pensar que es indéntico al \textit{thread-pool}, pero nótese la línea roja punteada que indica que los \textit{workers} no tiene por qué estar en el mismo nodo, por lo que en algún caso habría que enviar la tarea a otro nodo.
+\par\bigskip
+
+En \textit{C/C++} existen dos posibles \textit{workers}, uno \textbf{no persistente} y otro \textbf{persistente}. 
+
+\begin{itemize}
+ \item \textbf{No persistente:} Para cada tarea que se quiere ejecutar en uno de estos workers se debe crear el \textit{thread} y unas \textit{pipes} para hacer \textit{Inter-process communication} (IPC). %No sé si indagar en qué se pasa por las pipes, hmmm... qué se pasa por las pipes?
+ \item \textbf{Persistente:} Este tipo de \textit{worker} se levanta una vez al inicio de la aplicación y espera recibir las tareas a ejecutar.
+\end{itemize}
 
 
 \subsection{OmpSs}
@@ -176,11 +219,58 @@ Esta imagen muestra el código del \textit{master} de manera reducida. Es tan se
 
 \textit{OmpSs} es un modelo de programación que intenta explotar el paralelismo de las aplicaciones de una manera sencilla y aprovechando al máximo los recursos de la máquina. 
 \par\bigskip
-El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que desarrolló el \textit{BSC}), este integra funcionalidades presentes en ambos. Por parte de \textit{OpenMP} se quiere tomar la facilidad de paralelizar una aplicación secuencial insertando pragmas, y de \textit{StarSs} el modelo de ejecución basado en un \textit{thread-pool} y que permite la ejecución de código en más recursos que el procesador, es decir, que ofrece fácil gestión de recursos heterogéneos.
+El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que desarrolló el \textit{BSC}), este integra funcionalidades presentes en ambos. Por parte de \textit{OpenMP} se quiere tomar la facilidad de paralelizar una aplicación secuencial insertando pragmas, y de \textit{StarSs} el modelo de ejecución basado en un \textit{thread-pool} y que permite la ejecución de código en más recursos que únicamente el procesador, es decir, que ofrece fácil gestión del resto de recursos de cómputo (\textit{GPUs}, \textit{FPGAs}, ...).
+
+\subsubsection{Modelo de programación y ejecución}
+
+Se ha dejado entrever cómo es el modelo de programación de \textit{OmpSs}, para dar un vistazo rápido es: La generación de tareas sencillamente insertando pragmas en código secuencial, que serán ejecutadas por \textit{threads} que conforman un \textit{thread-pool} y la facilidad para gestionar recursos heterogéneos. Veamos un pequeño ejemplo que muestre estas facultades. 
+
+\begin{lstlisting}[caption={Multiplicación de un bloque de una matriz utilizando GPUs.}, captionpos=b, label={lst:ejemplo-functions.cc}, language=C++]
+for (int i = 0; i < N; ++i) {
+    for (int j = 0; j < N; ++j) {
+        for (int k = 0; k < N; ++k) {
+            #pragma omp target device(cuda) \
+                               copy_deps    \
+                               ndrange(2,N,N,32,32)
+            #pragma omp task inout([N*N]C) in([N*N]A, [N*N]B)
+            multiply_partitions_GPU(A[i*N+k], 
+                                    B[k*N+j], 
+                                    C[i*N+j], 
+                                    n);
+        }
+    }
+}
+\end{lstlisting}
+
+Con el primer pragma se indica que el dispositivo objetivo es una tarjeta gráfica que soporte \textit{CUDA}, y el segundo la declaración de una tarea y el tamaño de los bloques junto a las dependencias de esta.
+\par\bigskip
+
+El modelo de ejecución se ha comentado en lo que va de documento, consiste en un \textit{thread-pool}, es decir, al generar tareas se escogerán \textit{threads} del \textit{pool} (entendámoslo como un conjunto de \textit{threads}) para ejecutarlas.
+\par\bigskip
+
+Cabe decir que para compilar una aplicación de \textit{OmpSs}, se utiliza el compilador \textit{source-to-source Mercurium} y el runtime \textit{Nanos} para gestionar el paralelismo, es decir, la creación de tareas, sincronización entre estas, etc.
 
 \subsection{COMPSs+OmpSs}
 
+Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs} pero con ciertas restricciones. Las problemáticas aparecen con los dos tipos de \textit{worker} que hemos visto antes. Para el worker no persistente, no suele valer la pena debido a la granularidad de las tareas de \textit{OmpSs}. El \textit{overhead} proviene de crear el \textit{thread} del \textit{worker}, registrarlo en el \textit{runtime Nanos} y levantar las \textit{pipes}. El persistente carece del \textit{overhead} de levantar las \textit{pipes} y el resto vale la pena ya que el \textit{worker} persiste durante la ejecución de la aplicación. Pese a que el persistente mejora respecto al no persitente, hay problemas de migración de \textit{threads} entre aplicaciones cuando se ejecutan varias a la vez.
+\par\bigskip
 
-\bibliography{bibliography}{}
-\bibliographystyle{plain}
+Esto pretende paliarse re-integrando con la nueva versión \textit{OmpSs-2}, que relaja las dependencias ....
+\todo{Qué features?}
+
+\section{Alcance del proyecto}
+
+En esta sección se declaran las intenciones del proyecto (qué se pretende hacer), mediante una serie de requerimientos que harán que el proyecto se considere finalizado o bien inacabado. También los posibles riesgos que surjan (y las soluciones de estos) y la metodología de trabajo que se llevará a cabo.
+
+\subsection{Requerimientos}
+
+El objetivo de este proyecto es reformular la integración de \textit{COMPSs} con \textit{OmpSs} para solucionar los problemas actuales, ya sea integrándolo de nuevo pero esta vez con \textit{OmpSs-2} o salirse por la tangente con otra idea. Los requerimientos que darán por satisfecho este proyecto son:
+
+\begin{itemize}
+ \item 
+\end{itemize}
+
+
+
+\printbibliography
 \end{document}
