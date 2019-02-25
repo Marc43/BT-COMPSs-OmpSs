@@ -1,84 +1,3 @@
-\documentclass[a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-
-%% Sets page size and margins
-\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-
-%% Useful packages
-\usepackage{amsmath}
-\usepackage{floatrow}
-\usepackage{graphicx}
-\graphicspath{ {./images/} }
-\usepackage[colorinlistoftodos]{todonotes}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{amsmath}
-\usepackage{chngcntr}
-\usepackage{wrapfig}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{listings}
-\usepackage{placeins}
-\usepackage{multicol}
-\usepackage{verbatim}
-
-\usepackage[sorting=none]{biblatex}
-
-\usepackage{csvsimple}
-\usepackage{xcolor}
-\usepackage{listings}
-
-\usepackage[spanish]{babel}
-\selectlanguage{spanish}
-
-\renewcommand{\lstlistingname}{Código}% 
-\renewcommand{\lstlistlistingname}{Lista de código}% List of Listings -> List of Algorithms
-
-% extracted from internet: https://timmurphy.org/2014/01/27/displaying-code-in-latex-documents/
-\definecolor{lbcolor}{rgb}{0.93,0.93,0.93}
-\lstset{  
-    frame=tb, % draw a frame at the top and bottom of the code block
-    tabsize=4, % tab space width
-    showstringspaces=false, % don't mark spaces in strings
-    numbers=left, % display line numbers on the left
-    commentstyle=\color{green}, % comment color
-    keywordstyle=\color{blue}, % keyword color
-    stringstyle=\color{red},
-    backgroundcolor=\color{lbcolor}
-}
-%sdf
-\definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
-\definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
-\definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
-\definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
-\lstdefinestyle{idlstyle}
-{
-    language = C++,
-    keywordstyle = {\color{key-color}},
-    keywordstyle = [3]{\color{blue}},
-    otherkeywords = {in, int ,interface, out, inout},
-    morekeywords = [3]{in, out, inout}
-}
-
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
-
-% \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
-\title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
-\author{Marc Domínguez de la Rocha}
-\date{Febrero 2019}
-
-\bibliography{bibliography} 
-\begin{document}
-
-\maketitle
-
-\newpage
-\renewcommand{\contentsname}{Índice}
-\tableofcontents
-\newpage
-
-
 % La siguiente seccion enmarca el contexto
 % que envuelve al proyecto y de alguna
 % manera el por qué
@@ -257,14 +176,12 @@ Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \text
 Estos problemas pretenden arreglarse integrando \textit{OmpSs-2}, que ofrece nuevas características como por ejemplo:
 
 \begin{itemize}
- \item \textbf{Liberación de las dependencias:} Las dependencias en esta versión se libren de manera temprana, es decir, una vez una tarea acaba con un dato lo notifica al \textit{runtime} y este se encarga de \textit{schedular} las tareas que queden libres de esta dependencia.
+ \item \textbf{Liberación de las dependencias:} Las dependencias en esta versión se liberen de manera temprana, es decir, una vez una tarea acaba con un dato lo notifica al \textit{runtime} y este se encarga de \textit{schedular} las tareas que queden libres de esta dependencia.
  \item \textbf{Relejación de las dependencias:} Ahora se pueden utilizar nuevos pragmas para determinar dependencias más suaves, no tan estrictas como en la versión anterior.
  \item \textbf{Ejecución de funciones de manera asíncrona:} La \textit{API} del \textit{runtime} permite ejecutar de manera asíncrona funciones en forma de tarea a partir de un puntero a una función.
 \end{itemize}
 
 Hemos listado las que de alguna manera eran clave para el proyecto, \textit{OmpSs-2} implementa muchas otras mejorías a parte de estas\cite{OmpSs2reference}. Una vez integrado, el proyecto estudiará si realmente han sido solucionadas las problemáticas anteriormente planteadas.
-
-\todo{Qué features?}
 
 \section{Alcance del proyecto}
 
@@ -328,31 +245,14 @@ Dado que se realizará una integración de otro proyecto del \textit{BSC} el des
 
 \section{Metodología}
 
-Para decidir la metodología a utilizar, hay que tener en cuenta que el proyecto consta únicamente de tres personas que se envolverán en él. El desarrollador, que hará todo el desarrollo tangible, el director y el codirector. %Esto implica que no podemos aplicar por ejemplo \textit{Extreme programming} dado que el equipo de desarrolladores es de una persona. Aunque existen adaptaciones de esta metodología a una persona, no es la correcta por el hecho de que los requerimientos no estan en un cambio constante.
+Para decidir la metodología a utilizar, hay que tener en cuenta que el proyecto consta únicamente de tres personas que se envolverán en él. El desarrollador, que hará todo el desarrollo tangible, el director y el codirector. 
 \par\bigskip
 
-La metodología que más se ciñe a las características del ``equipo'' es \textit{SCRUM}. Esta metodología forma parte de las populares (y bastante de moda) metodologías ágiles, consiste en planear al milímetro las tareas a realizar, y hacer una predicción de qué se conseguira hacer y que no, en cortos periodos de tiempo llamados iteraciones. Además de estas predicciones, se consultará el estado del proyecto a diario, con cuestiones como ``¿Desde la última reunión que he conseguido?'', ``¿Desde entonces que haré para llegar a los objetivos de la iteración?'', ``¿Algún impedimento que no me permita alcanzar estos objetivos?''.
+La metodología que más se ciñe a las características del ``equipo'' es \textit{SCRUM}. Esta metodología forma parte de las populares (y bastante de moda) metodologías ágiles, consiste en planear al milímetro las tareas a realizar, y hacer una predicción de qué se conseguira hacer y que no en cortos periodos de tiempo llamados iteraciones. Además de estas predicciones, se consultará el estado del proyecto a diario, con cuestiones como ``¿Desde la última reunión que he conseguido?'', ``¿Desde entonces que haré para llegar a los objetivos de la iteración?'', ``¿Algún impedimento que no me permita alcanzar estos objetivos?''.
 \par\bigskip
 
 Esta metodología nos permitirá reaccionar rápidamente a los imprevistos, además de hacer un bueno monitoreo del estado del proyecto, por lo cual se ha decidido emplearla.
 
+\subsection{Herramientas}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\printbibliography
-\end{document}
+Para efectuar el seguimiento del proyecto junto a mi director y codirector, se empleará un \textit{workspace} de \textit{Slack} para las comunicaciones directas (decidir dónde y cuándo hacer las reuniones por ejemplo), y \textit{Trello} para gestionar las tareas a desempeñar en cada iteración. Como ya se ha mencionado anteriormente, para el control de versiones del proyecto, código y documentación se utilizará respectivamente \textit{GitLab} y \textit{GitHub}.

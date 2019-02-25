@@ -1,0 +1,83 @@
+% Main document of the project, this will include all the other parts involving the documentation...
+
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{floatrow}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{amsmath}
+\usepackage{chngcntr}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{placeins}
+\usepackage{multicol}
+\usepackage{verbatim}
+\usepackage[sorting=none]{biblatex}
+\usepackage{csvsimple}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+
+\renewcommand{\lstlistingname}{Código}% 
+\renewcommand{\lstlistlistingname}{Lista de código}% List of Listings -> List of Algorithms
+
+% extracted from internet: https://timmurphy.org/2014/01/27/displaying-code-in-latex-documents/
+\definecolor{lbcolor}{rgb}{0.93,0.93,0.93}
+\lstset{  
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=left, % display line numbers on the left
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red},
+    backgroundcolor=\color{lbcolor}
+}
+
+\definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
+\definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
+\definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
+\definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+\lstdefinestyle{idlstyle}
+{
+    language = C++,
+    keywordstyle = {\color{key-color}},
+    keywordstyle = [3]{\color{blue}},
+    otherkeywords = {in, int ,interface, out, inout},
+    morekeywords = [3]{in, out, inout}
+}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
+\title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
+\author{Marc Domínguez de la Rocha}
+\date{Febrero 2019}
+
+\bibliography{bibliography} 
+\begin{document}
+
+\maketitle
+
+\newpage
+\renewcommand{\contentsname}{Índice}
+\tableofcontents
+\newpage
+
+\input{deliverable1.tex}
+
+\printbibliography
+\end{document}
