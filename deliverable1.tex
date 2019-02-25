@@ -84,7 +84,7 @@
 % manera el por qué
 \section{Contexto}
 
-Hoy en día se tiende a tener distintos recursos de cómputo en un solo dispositivo, por ejemplo, en un teléfono móvil ya tenemos al menos un procesador y una tarjeta gráfica, pero no tan sólo en el ámbito más mundano (aunque no nos demos cuenta), si no que en los más profesionales y especializados está siendo también cada vez más común la heterogeneidad de los recursos de computación. 
+Hoy en día se tiende a tener distintos recursos de cómputo en un solo dispositivo, por ejemplo, en un teléfono móvil ya tenemos al menos un procesador y una tarjeta gráfica, pero no tan sólo en el ámbito más cotidiano (aunque no nos demos cuenta), sino que en los más profesionales y especializados está siendo también cada vez más común la heterogeneidad de los recursos de computación. 
 \par\bigskip
 
 El proyecto pretende facilitar la gestión de estos recursos de computación en entornos distribuidos, brindando un método robusto y eficiente para programar aplicaciones en estos entornos.
@@ -107,8 +107,7 @@ Los actores en este proyecto serán las personas que tomen parte en él, ya sea 
  \item \textbf{Desarrollador:} La figura del desarrollador \textbf{debe} ser la persona que trabaje de manera más directa en el proyecto. En este proyecto únicamente habrá un desarrollador que ha elaborado la documentación que leerás a continuación y dará forma a los objetivos tangibles del proyecto.  
  \item \textbf{Director y codirector:} Pese a que el desarrollador tendrá el papel principal en el proyecto, el director y el codirector le guiarán en el camino abierto que es el desarrollo del proyecto. Se establecerán reuniones de seguimiento donde serán capaces de hacer un correcto supervisamiento de las actividades propuestas para el proyecto.
  \item \textbf{Barcelona Supercomputing Center:} De manera directa el centro otorga al desarrollador un lugar de trabajo y un equipo informático. Por otra parte, cuenta con el soporte por parte de los equipos de desarrollo de \textit{COMPSs} (del cual forma parte el desarrollador) y de \textit{OmpSs} para cualquier incidencia relacionada con su \textit{software} y derivados.
- \item \textbf{Beneficiarios:} \todo{Por determinar}%TODO Quienes son?
- 
+ \item \textbf{Beneficiarios:} \textit{COMPSs} es utilizado para proyectos europeos en los cuales el \textit{BSC} toma parte, el proyecto podrá ser útil para algunos de ellos, además todo departamento del \textit{BSC} que utilice \textit{COMPSs} para el desarrollo de aplicaciones podrá utilizarlo.
 \end{itemize}
 
 \section{Estado del arte}
@@ -125,14 +124,14 @@ La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos o
 \textit{COMPSs} es desarrollado por el grupo \textit{WDS - Workflows and Distributed Systems} que pertenece al departamento de \textit{CS - Computer Science}.
 \par\bigskip
 
-\textit{COMPSs} es un modelo de programación para entornos distribuidos\cite{badia2015comp}, dado que se basa en la generación de tareas por parte de un programa principal ejecutado en secuencial que llamaremos \textit{master}, mediante simples modificaciones del código podemos conseguir que este se ejecute de manera distribuida. A los procesos que ejecutarán las tareas generadas por el \textit{master} los llamaremos \textit{workers}.  \par\bigskip
+\textit{COMPSs} es un modelo de programación para entornos distribuidos\cite{badia2015comp}. Se basa en la generación de tareas por parte de un programa principal ejecutado en secuencial que llamaremos \textit{master}, mediante simples modificaciones del código podemos conseguir que este se ejecute de manera distribuida. A los procesos que ejecutarán las tareas generadas por el \textit{master} los llamaremos \textit{workers}.  \par\bigskip
 
 Para facilitar más aún el uso del modelo, está dotado de un sistema de \textit{runtime}, que tal y como indica la palabra coexiste con la aplicación. Este sistema de \textit{runtime} se encarga de detectar las dependencias que puedan surgir entre las tareas que genera el \textit{master} y las ejecuta a medida que las dependencias se resuelven. 
 %\par\bigskip
 
 \subsubsection{Modelo de programación} \label{compss_pm}
 
-El \textit{runtime} de \textit{COMPSs} está implementado en \textit{Java} por lo cuál se soporta dicho lenguaje, además se desarrollaron los \textit{bindings} de \textit{Python} y \textit{C/C++} para facilitar el portaje de aplicaciones en estos lenguajes a \textit{COMPSs}. 
+El \textit{runtime} de \textit{COMPSs} está implementado en \textit{Java} por lo cuál se soporta dicho lenguaje, además se desarrollaron los \textit{bindings} de \textit{Python}\cite{tejedor2017pycompss} y \textit{C/C++} para facilitar el portaje de aplicaciones en estos lenguajes a \textit{COMPSs}. 
 \par\bigskip
 
 Dicho esto, centraremos nuestros esfuerzos en \textit{C} y \textit{C++}. Para desarrollar una aplicación de \textit{COMPSs} en \textit{C/C++} necesitamos el código que ejecutará el \textit{master} (recordemos, en secuencial), una interfaz que especificará las funciones que ejecutadas en el \textit{master}, \textit{a posteriori} serán ejecutadas en los \textit{workers}, y el código que realmente implementan estas tareas. 
@@ -191,7 +190,7 @@ Para compilar la aplicacion en \textit{COMPSs} de \textit{C/C++},
 
 \subsubsection{Modelo de ejecución}
 
-El modelo de ejecución es sencillo, es muy similar al \textit{thread-pool} que implementan \textit{StarSs}, \textit{OmpSs} y \textit{OpenMP} a partir de la release 3.0 \cite{ayguade2009design}. Para cada tarea generada se estudia que \textit{workers} hay libres y si cumplen los requisítos para ejecutar dicha tarea.
+El modelo de ejecución es sencillo, es muy similar al \textit{thread-pool} que implementan \textit{StarSs}, \textit{OmpSs} y \textit{OpenMP} a partir de la release 3.0 \cite{ayguade2009design}. Para cada tarea generada se estudia qué \textit{workers} hay libres y si cumplen los requisitos para ejecutar dicha tarea.
 
 \begin{figure}[H]
     \centering 
@@ -204,7 +203,7 @@ El modelo de ejecución es sencillo, es muy similar al \textit{thread-pool} que 
 La imagen muestra lo que sucede al ejecutar la aplicación de ejemplo de la sección \ref{compss_pm}, las líneas rojas curvas indican procesos (o bien \textit{threads}), lo importante sucede entre las flechas etiquetadas como compss\_on y compss\_off, la ejecución de la tarea. Se pide ejecutar la tarea funcionEjemplo al \textit{runtime} de \textit{COMPSs} y se decide en qué \textit{worker} se ejecutará. Hasta aquí podríamos pensar que es indéntico al \textit{thread-pool}, pero nótese la línea roja punteada que indica que los \textit{workers} no tiene por qué estar en el mismo nodo, por lo que en algún caso habría que enviar la tarea a otro nodo.
 \par\bigskip
 
-En \textit{C/C++} existen dos posibles \textit{workers}, uno \textbf{no persistente} y otro \textbf{persistente}. 
+En \textit{C/C++} existen dos tipos de \textit{worker}, uno \textbf{no persistente} y otro \textbf{persistente}. 
 
 \begin{itemize}
  \item \textbf{No persistente:} Para cada tarea que se quiere ejecutar en uno de estos workers se debe crear el \textit{thread} y unas \textit{pipes} para hacer \textit{Inter-process communication} (IPC). %No sé si indagar en qué se pasa por las pipes, hmmm... qué se pasa por las pipes?
@@ -217,13 +216,13 @@ En \textit{C/C++} existen dos posibles \textit{workers}, uno \textbf{no persiste
 \textit{OmpSs} es desarrollado por el grupo \textit{PM - Programming Models}, perteneciente también al departamento de \textit{CS - Computer Science}.
 \par\bigskip
 
-\textit{OmpSs} es un modelo de programación que intenta explotar el paralelismo de las aplicaciones de una manera sencilla y aprovechando al máximo los recursos de la máquina. 
+\textit{OmpSs} es un modelo de programación que intenta explotar el paralelismo de las aplicaciones de una manera sencilla y aprovechando al máximo los recursos de la máquina\cite{duran2011ompss}. 
 \par\bigskip
-El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que desarrolló el \textit{BSC}), este integra funcionalidades presentes en ambos. Por parte de \textit{OpenMP} se quiere tomar la facilidad de paralelizar una aplicación secuencial insertando pragmas, y de \textit{StarSs} el modelo de ejecución basado en un \textit{thread-pool} y que permite la ejecución de código en más recursos que únicamente el procesador, es decir, que ofrece fácil gestión del resto de recursos de cómputo (\textit{GPUs}, \textit{FPGAs}, ...).
+El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que desarrolló el \textit{BSC}), este integra funcionalidades presentes en ambos. Por parte de \textit{OpenMP} se quiere tomar la facilidad de paralelizar una aplicación secuencial insertando pragmas, y de \textit{StarSs} el modelo de ejecución basado en un \textit{thread-pool} y que permite la ejecución de código en más recursos que únicamente el procesador, es decir, que ofrece fácil gestión del resto de recursos de cómputo (\textit{GPUs}, \textit{FPGAs}, ...)\cite{sainz2014leveraging}\cite{filgueras2013heterogeneous}.
 
 \subsubsection{Modelo de programación y ejecución}
 
-Se ha dejado entrever cómo es el modelo de programación de \textit{OmpSs}, para dar un vistazo rápido es: La generación de tareas sencillamente insertando pragmas en código secuencial, que serán ejecutadas por \textit{threads} que conforman un \textit{thread-pool} y la facilidad para gestionar recursos heterogéneos. Veamos un pequeño ejemplo que muestre estas facultades. 
+Se ha dejado entrever cómo es el modelo de programación de \textit{OmpSs}, para dar un vistazo rápido es: la generación de tareas sencillamente insertando pragmas en código secuencial, que serán ejecutadas por \textit{threads} que conforman un \textit{thread-pool} y la facilidad para gestionar recursos heterogéneos. Veamos un pequeño ejemplo que muestre estas facultades.
 
 \begin{lstlisting}[caption={Multiplicación de un bloque de una matriz utilizando GPUs.}, captionpos=b, label={lst:ejemplo-functions.cc}, language=C++]
 for (int i = 0; i < N; ++i) {
@@ -242,7 +241,7 @@ for (int i = 0; i < N; ++i) {
 }
 \end{lstlisting}
 
-Con el primer pragma se indica que el dispositivo objetivo es una tarjeta gráfica que soporte \textit{CUDA}, y el segundo la declaración de una tarea y el tamaño de los bloques junto a las dependencias de esta.
+El código muestra una multiplicación de matrices por bloques. Con el primer pragma se indica que el dispositivo objetivo es una tarjeta gráfica que soporte \textit{CUDA}, y el segundo la declaración de una tarea y el tamaño de los bloques junto a las dependencias de esta.
 \par\bigskip
 
 El modelo de ejecución se ha comentado en lo que va de documento, consiste en un \textit{thread-pool}, es decir, al generar tareas se escogerán \textit{threads} del \textit{pool} (entendámoslo como un conjunto de \textit{threads}) para ejecutarlas.
@@ -252,10 +251,19 @@ Cabe decir que para compilar una aplicación de \textit{OmpSs}, se utiliza el co
 
 \subsection{COMPSs+OmpSs} \label{compssompss}
 
-Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs} pero con ciertas restricciones. Las problemáticas aparecen con los dos tipos de \textit{worker} que hemos visto antes. Para el worker no persistente, no suele valer la pena debido a la granularidad de las tareas de \textit{OmpSs}. El \textit{overhead} proviene de crear el \textit{thread} del \textit{worker}, registrarlo en el \textit{runtime Nanos} y levantar las \textit{pipes}. El persistente carece del \textit{overhead} de levantar las \textit{pipes} y el resto vale la pena ya que el \textit{worker} persiste durante la ejecución de la aplicación. Pese a que el persistente mejora respecto al no persitente, hay problemas de migración de \textit{threads} entre aplicaciones cuando se ejecutan varias a la vez.
+Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs} pero con ciertas restricciones. Las problemáticas aparecen con los dos tipos de \textit{worker} que hemos visto antes. Para el worker no persistente, no suele valer la pena debido a la granularidad de las tareas de \textit{OmpSs}. El \textit{overhead} proviene de crear el \textit{thread} del \textit{worker}, registrarlo en el \textit{runtime Nanos} y levantar las \textit{pipes}. El persistente carece del \textit{overhead} de levantar las \textit{pipes} y el resto, vale la pena ya que el \textit{worker} persiste durante la ejecución de la aplicación. Pese a que el persistente mejora respecto al no persitente, hay problemas de migración de \textit{threads} entre aplicaciones cuando se ejecutan varias a la vez.
 \par\bigskip
 
-Esto pretende paliarse re-integrando con la nueva versión \textit{OmpSs-2}, que relaja las dependencias ....
+Estos problemas pretenden arreglarse integrando \textit{OmpSs-2}, que ofrece nuevas características como por ejemplo:
+
+\begin{itemize}
+ \item \textbf{Liberación de las dependencias:} Las dependencias en esta versión se libren de manera temprana, es decir, una vez una tarea acaba con un dato lo notifica al \textit{runtime} y este se encarga de \textit{schedular} las tareas que queden libres de esta dependencia.
+ \item \textbf{Relejación de las dependencias:} Ahora se pueden utilizar nuevos pragmas para determinar dependencias más suaves, no tan estrictas como en la versión anterior.
+ \item \textbf{Ejecución de funciones de manera asíncrona:} La \textit{API} del \textit{runtime} permite ejecutar de manera asíncrona funciones en forma de tarea a partir de un puntero a una función.
+\end{itemize}
+
+Hemos listado las que de alguna manera eran clave para el proyecto, \textit{OmpSs-2} implementa muchas otras mejorías a parte de estas\cite{OmpSs2reference}. Una vez integrado, el proyecto estudiará si realmente han sido solucionadas las problemáticas anteriormente planteadas.
+
 \todo{Qué features?}
 
 \section{Alcance del proyecto}
