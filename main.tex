@@ -28,7 +28,11 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage[spanish]{babel}
+\renewcommand\spanishtablename{Tabla}
 \selectlanguage{spanish}
+
+\captionsetup[table]{position=bottom}
+\usepackage[table]{xcolor}
 
 \renewcommand{\lstlistingname}{Código}% 
 \renewcommand{\lstlistlistingname}{Lista de código}% List of Listings -> List of Algorithms
@@ -64,7 +68,14 @@
 
 % \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
 \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
-\author{Marc Domínguez de la Rocha}
+\author
+{
+Marc Domínguez de la Rocha
+\and
+Rosa M. Badia
+\and
+Jorge Ejarque
+}
 \date{Febrero 2019}
 
 \bibliography{bibliography} 
@@ -77,7 +88,9 @@
 \tableofcontents
 \newpage
 
-\input{deliverable1.tex}
+%\input{deliverable1.tex}
+\input{deliverable2.tex}
 
-\printbibliography
+
+%\printbibliography
 \end{document}
