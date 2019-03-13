@@ -8,6 +8,8 @@
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 %% Useful packages
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{longtable}
 \usepackage{amsmath}
 \usepackage{floatrow}
 \usepackage{graphicx}
@@ -17,22 +19,35 @@
 \usepackage{amsmath}
 \usepackage{chngcntr}
 \usepackage{wrapfig}
+\usepackage{eurosym}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{listings}
 \usepackage{placeins}
 \usepackage{multicol}
 \usepackage{verbatim}
-\usepackage[sorting=none]{biblatex}
 \usepackage{csvsimple}
-\usepackage{xcolor}
 \usepackage{listings}
 \usepackage[spanish]{babel}
 \renewcommand\spanishtablename{Tabla}
 \selectlanguage{spanish}
+\usepackage{colortbl}
+\usepackage{cite}
+
+\usepackage[toc,page]{appendix}
+\usepackage{pdflscape}
+
+\expandafter\def\expandafter\appendixpagename%
+\expandafter{\expandafter\Huge\appendixpagename}
+
+\usepackage{afterpage}
+
+\addto\captionsspanish{%
+  \renewcommand\appendixname{\Huge Apéndices}
+  \renewcommand\appendixpagename{\Huge Apéndices}
+}
 
 \captionsetup[table]{position=bottom}
-\usepackage[table]{xcolor}
 
 \renewcommand{\lstlistingname}{Código}% 
 \renewcommand{\lstlistlistingname}{Lista de código}% List of Listings -> List of Algorithms
@@ -78,8 +93,9 @@ Jorge Ejarque
 }
 \date{Febrero 2019}
 
-\bibliography{bibliography} 
 \begin{document}
+
+
 
 \maketitle
 
@@ -88,10 +104,13 @@ Jorge Ejarque
 \tableofcontents
 \newpage
 
-%\input{deliverable1.tex}
-%\input{deliverable2.tex}
+\input{deliverable1.tex}
+\input{deliverable2.tex}
 \input{deliverable3.tex}
+\input{appendix.tex}
 
-
-%\printbibliography
+\bibliographystyle{plain}
+\bibliography{bibliography.bib}
+\nocite{*}
 \end{document}
+\printbibliography
