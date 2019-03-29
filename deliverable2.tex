@@ -67,7 +67,7 @@ La siguiente tabla define la relación de dependencia entre las tareas que conci
 
 \begin{table}[H]
 \centering
- \begin{tabular}{||c | c||}
+ \begin{tabular}{|| l | l ||}
     \hline  
     Tarea dependiente & Tarea predecesora \\
     \hline\hline
@@ -100,7 +100,7 @@ La tabla anterior muestra la relación de dependencia, se respetará esta relaci
 
 \begin{table}[H]
  \centering
- \begin{tabular}{||c | c||}
+ \begin{tabular}{|| l | l ||}
     \hline  
     Tarea dependiente & Tarea predecesora \\
     \hline\hline
@@ -133,7 +133,7 @@ En el momento en el que se han enumerado y explicado las tareas se ha comentado 
 
 \begin{table}[H]
  \centering
- \begin{tabular}{|| c | c ||}
+ \begin{tabular}{|| l | l ||}
   \hline
   Tarea & Estimación temporal (horas) \\
   \hline\hline
@@ -163,7 +163,7 @@ En los apéndices
 
 \begin{table}[H]
  \centering
- \begin{tabular}{|| c | c ||}
+ \begin{tabular}{|| l | l ||}
  \hline
  Tarea & Recursos necesarios \\
  \hline\hline  
@@ -192,6 +192,8 @@ En la tabla anterior, se muestran los recursos estrictamente necesarios para rea
  \item \textbf{Ordenador portátil:} Proporcionado por el \textit{BSC}, Dell Latitude 7480 Intel® Core™ i7-6650U Processor (Dual Core, 4M Cache, 2.2GHz,15W, vPro), 512GB SSD (\textit{Solid State Drive}), Intel® HD Graphics 540 y 16 GB de memoria \textit{RAM}.
  
  \item \textbf{Pantalla:} Es habitual la configuración de portátil con una pantalla para simular una torre, la pantalla externa es también Dell, el modelo Professional P2217H.
+ 
+ \item \textbf{Periféricos:} Todos los periféricos, ratón y teclado en este caso.
  
  \item \textbf{Clústers:} Con tal de medir el rendimiento ejecutando la aplicación que se desarrollará haciendo uso de la integración, necesitaremos un clúster con una arquitectura heterogénea. En la lista de candidatos se encuentran \textit{MinoTauro} y \textit{CTE-Power}, ambos están dotados de nodos que contienen \textit{CPUs} y \textit{GPUs}, se aprofundizará más en sus caracterísitcas en el momento de medir el rendimiento.
  
@@ -236,6 +238,12 @@ En un proyecto de este tipo, es probable que haya desviaciones respecto el plan 
  \item Si una tarea dura más tiempo de lo esperado, habrá que planteárselo de dos maneras, o bien se acorta otra tarea con tal de ajustarnos a la planificación o bien se intentan reducir lo mínimo posible los objetivos del proyecto para poderlo acabar en el tiempo establecido.
 \end{itemize}
 
+La tarea que más tiempo puede llevar dada la aparición de imprevistos es la de integrar \textit{OmpSs-2} en el \textit{binding} de C. Dado que la documentación aún está en una fase un tanto primeriza y no siempre tenemos por qué contar con el apoyo de soporte, por lo cuál habrá que invertir tiempo extra en ese caso. 
+\par\medskip
+El resto de tareas van un poco de la mano de esta anterior, no debería haber ninguna complicación extra. Como mucho en el estudio del rendimiento podemos encontrar resultados que no nos gusten o no acaben de agradar del todo, pero es parte del proyecto, se intentará mejorar dentro del tiempo estipulado. 
+\par\medskip
+Por tanto, siempre que falte tiempo para realizar una tarea se intentará equilibrar entre el resto, ya que el riesgo de sufrir un imprevisto es bastante bajo.
+\par\bigskip
 Para ser más previsores, en las reuniones de seguimiento se intentarán prever estos posibles problemas durante la realización del proyecto. 
 
 
