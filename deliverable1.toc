@@ -1,4 +1,0 @@
-\contentsline {section}{\numberline {1}Contexto}{3}
-\contentsline {subsection}{\numberline {1.1}Introducci\IeC {\'o}n}{3}
-\contentsline {subsection}{\numberline {1.2}Actores}{3}
-\contentsline {section}{\numberline {2}Estado del arte}{3}
