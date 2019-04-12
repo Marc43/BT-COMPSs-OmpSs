@@ -1,0 +1,315 @@
+\section{Autoevaluación sobre la sostenibilidad}
+
+Todos los alumnos que estén realizando un trabajo de final de grado este cuatrimestre, saben qué supone el impacto de un proyecto sobre la sostenibilidad. Es difícil para mí, analizar de manera crítica y de alguna manera metódica estos impactos que se describen en la encuesta. 
+\par\medskip
+En cuanto a conocer los impactos, tener sentido común e intentar siempre reducir los impactos que de alguna manera sean insostenibles, sí que hay un conocimiento pleno y ganas de mantenerlo, pero desconozco los métodos más avanzados y profesionales para abordar la reducción de impactos negativos y aumentar la sostenibilidad de un proyecto.
+\par\medskip
+Los aspectos ambientales son de alguna manera los que resultan más intuitivos, de manera que no resulta difícil desenvolverse en primer momento, pero no conozco en profundidad el tema.
+\par\medskip
+En cuánto a aspectos sociales, de igual manera que los ambientales, soy capaz de reconocer cuando un proyecto impacta de manera negativa en la sociedad (que puede suceder aunque aparentemente parezca beneficioso en primer momento). Pero cuando se trata de poner sobre la mesa un estudio preciso sobre estos aspectos, no soy capaz, desconozco la teoria.
+\par\medskip
+Sobre aspectos económicos es donde más fallo, pese a que tengo cierta formación gracias a asignaturas impartidas en la \textit{FIB}, me resulta complicado entender y comprender como a mí me gustaría estos aspectos. Aún así tengo la voluntad y las ganas de ser capaz de analizarlo de manera correcta.
+\par\medskip
+Básicamente, se quiere poder analizar de igual manera los tres aspectos, ambiental, social y económico, existe una voluntad fehaciente que por desgracia puede resultar insuficente cuando se ahonda en el análisis.
+
+\section{Gestión económica y sostenibilidad}
+
+%Cuando se desarrolla un proyecto siempre hay un cierto impacto ambiental, económico, social. Cómo el proyecto impacta sobre estas tres componentes indica cuánto de sostenbile es el proyecto. Aunque \textit{a priori} desconocemos las técnicas para medir el impacto, se conseguirá hacer una aproximación del impacto del proyecto. 
+
+%\subsection{Análisis de la sostenibilidad}
+
+A lo largo de esta sección, se detallará la gestión económica del proyecto. Se estudiarán los costes tanto directos e indirectos y las posibles desviaciones en términos económicos. Además se estudiará también el componente que queda olvidado en la mayoría de proyectos informáticos, la sostenibilidad de este.
+
+\subsection{Costes directos e indirectos}
+
+Los costes directos de este proyecto, vienen a partir de los recursos definidos para el proyecto y las actividades que se llevan a cabo en este. Es importante tener en cuenta que por mucho que los recursos tenga un coste directo en el proyecto y estén asociados a este, los recursos tienen una vida útil por lo cuál habrá un grado de amortización del coste por recurso. Estos costes se recapitulan a continuación en forma de tabla.
+
+\begin{table}[H]
+\centering
+ \begin{tabular}{| l | l | l | l | l |}
+    \hline
+    Unidades & Unidad & Precio/Unidad(\euro) & Vida útil (años) & Amortización (\euro/h) \\
+    \hline
+    \cline{1-1}
+    \rowcolor{gray!50}
+    Recursos hardware \\
+    \hline
+    Dell Latitude 7480          & 1 & 1,500  & 4 & 0.21\\
+    \hline 
+    Dell Professional P2217H    & 1 & 250   & 4 & 0.03\\
+    \hline
+    Periféricos                 & 1 & 50    & 4 & 0.07\\
+    \hline
+    \rowcolor{gray!50}
+    Total                       & - & 0     & - & 0.31\\
+    \hline
+    \cline{1-1}
+    \rowcolor{gray!50}
+    Recursos software \\
+    \hline
+    Ubuntu 18.04                & 1 & 0     & - & 0\\
+    \hline
+    GitHub                      & 1 & 0     & - & 0\\
+    \hline
+    GitLab                      & 1 & 0     & - & 0\\
+    \hline
+    Terminator                  & 1 & 0     & - & 0\\
+    \hline
+    Gantter                     & 1 & 0     & - & 0\\
+    \hline
+    Trello                      & 1 & 0     & - & 0\\
+    \hline
+    Google Drive                & 1 & 0     & - & 0\\
+    \hline
+    Kile                        & 1 & 0     & - & 0\\
+    \hline
+    LibreOffice                 & 1 & 0     & - & 0\\
+    \hline
+    Maven                       & 1 & 0     & - & 0\\
+    \hline
+    GNU Compiler Collection     & 1 & 0     & - & 0\\
+    \hline
+    GDB                         & 1 & 0     & - & 0\\
+    \hline
+    Extrae                      & 1 & 0     & - & 0\\
+    \hline
+    Paraver                     & 1 & 0     & - & 0\\
+    \hline
+    OmpSs-2                     & 1 & 0     & - & 0\\
+    \hline
+    COMPSs                      & 1 & 0     & - & 0\\
+    \hline
+    \rowcolor{gray!50}
+    Total                       & - & 0     & - & 0\\
+    \hline
+ \end{tabular}
+\caption{Costes directos divididos en recursos hardware y software.}
+\end{table}
+
+Los recursos \textit{GitHub}, \textit{IntelliJ IDEA} y \textit{PyCharm}, no añaden ningún coste al proyecto ya que se utilizan versiones y subscripciones para estudiantes. Por otra parte \textit{Gantter} proporciona una versión de prueba de 30 días, por lo cuál tampoco añade ningún coste.
+\par\bigskip
+
+En la anterior tabla se han omitido los dos clústers, ya que querríamos costearlos a \euro$/$h y no por unidad. Se puede considerar que \textit{MinoTauro} y \textit{CTE-Power} no suponen ningún coste al proyecto, ni de adquisición de este ni eléctrico, ya que son proporcionados por el \textit{BSC}, aún así para proporcionar una visión más realista se ha seleccionado una máquina de \textit{Amazon Web Services} \textit{AWS} con caracterísitcas similares a cada clúster, con tal de seleccionar un precio \euro$/$h adecuado. Para \textit{MinoTauro} se ha considerado que la instáncia \textit{Amazon EC2 G3} de modelo \textit{g3.8xlarge} a un coste de 2.02 \euro/h, y para \textit{CTE-Power} la instáncia \textit{Amazon EC2 P3} modelo \textit{p3.8xlarge} a un coste de 10.85 \euro/h.
+\par\bigskip
+
+En cuanto a costes directos solo nos falta comentar los que provienen de los recursos humanos del proyecto.
+
+\begin{comment}
+begin{table}[ht!]
+ \centering
+ \begin{tabular}{c|c|c|c|} 
+  \cline{2-4}
+                & Horas (h) & Precio/Hora(\euro) & Total(\euro) \\
+  \cline{2-4}\hline
+  Desarrollador & 489 & 10 & 4890 \\
+  \hline
+  Director & 55 & 30 & 1650\\
+  \hline 
+  Codirector & 50 & 30 & 1500\\
+  \hline
+  Soporte & 20 & 20 & 400\\
+  \hline
+  \rowcolor{gray!50}
+  Total & - & - & 8440\\
+  \hline
+ \end{tabular}
+\caption{Costes directos provenientes de recursos humanos.}
+\end{table}
+\end{comment}
+
+\begin{table}[H]
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+                                                    & Horas (h) & Precio/Hora(\euro) & Total(\euro) \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                 & 489       & 10               & 4,890     \\ \hline
+\multicolumn{1}{|l|}{Director}                      & 55        & 30               & 1,650     \\ \hline
+\multicolumn{1}{|l|}{Codirector}                    & 50        & 30               & 1,500     \\ \hline
+\multicolumn{1}{|l|}{Soporte}                       & 20        & 20               & 400      \\ \hline
+\rowcolor{gray!50}
+\multicolumn{1}{|l|}{Total} &    -       &  -              &  8,440        \\ \hline
+\end{tabular}
+\caption{Costes directos provenientes de recursos humanos.}
+\end{table}
+
+Es difícil cuantificar las horas que entran en soporte, dado que este puede ser efectuado por varias personas con distintos sueldos, se ha optado por pensar que se dedicará un total de 20 horas y que el prefio esta en la media entre un desarrollador y un director.
+
+\par\bigskip
+
+Los costes indirectos del proyecto engloban el alquiler de la oficina (edificio K2M) el gasto energético de esta , su debido mantenimiento la contratación de servicios como internet, u otros servicios que se ofrezcan al conjunto de trabajadores en general. Del enlace \cite{k2msuperficie} se extrae que la superfície de la primera planta del edifico K2M es de $445.6 m^{2}$ y de \cite{k2mpreu} que el coste para una empresa es de 17.8 \euro$/m^{2}$ al mes. El gasto en consumo eléctrico de la planta se da por hecho que entra en el precio estipulado por el alquiler.
+% preu https://govern.upc.edu/ca/consell-de-govern/consell-de-govern/sessio-3-2017-de-consell-de-govern/aprovacio-de-la-modificacio-de-les-tarifes-dels-espais-parc-upc/9-11-modificacio-de-les-tarifes-desl-espais-parc-upc.pdf/@@display-file/visiblefile/9.11%20Modificaci%C3%B3%20de%20les%20tarifes%20desl%20espais%20Parc%20UPC.pdf
+% superficie https://wwwbupc.webs.upc.edu/bupc/hemeroteca/2008/b107/05-06-2008.pdf
+
+\begin{table}[H]
+\begin{tabular}{l|l|l|l|l|}
+\cline{2-5}
+                                                    & Meses   & $m^{2}$ & Precio mensual(\euro$/m^{2})$ & Total(\euro) \\ \hline
+\multicolumn{1}{|l|}{Alquiler oficinas }            & 4  & 445.6   & 17.8 & 31,726.72     \\ \hline
+\rowcolor{gray!50}
+\multicolumn{1}{|l|}{Total} & - &   -       &  -              &   31,726.72       \\ \hline
+\end{tabular}
+\caption{Costes indirectos derivados del alquiler de las oficinas.}
+\end{table}
+
+\subsection{Imprevistos y contingencias}
+
+En la planificación temporal se tuvo en cuenta que todos los proyectos sufren de desviaciones e imprevistos. Las desviaciones pueden ser anticipadas efectuando las reuniones de seguimiento, pero los imprevistos son inevitables. Evidentemente, ante la aparición de cualquiera de estos dos, habría un aumento de los costes directos e indirectos (el tiempo dedicado por los recursos humanos aumenta, por lo tanto el coste, etc).
+\par\medskip
+En la siguiente sección, se detallarán los costes a nivel de recurso y uso temporal de estos por cada actividad a desarrollar en el proyecto. Con tal de no proponer un presupuesto que pueda quedar negativo por culpa de imprevistos, se dedicará un porcentaje extra de las tareas a poder sobrevenir el posible coste.
+En el mejor de los casos no tendremos imprevistos o bien será una cantidad tan pequeña que el porcentaje extra reservado por tarea nos permitirá costearnos los imprevistos. Por otra banda, si tenemos un imprevisto con cada tarea es muy posible que no seamos capaces de cubrir los costes (en función del porcentaje que se reserve, claro).
+
+\subsection{Presupuesto}
+
+
+\begin{longtable}{l|l|l|l|l|l|}
+\cline{2-6}
+                                                                                                                                    & Uds.                            & Precio(€ o €/h)         & Vida útil(años)         & Amortización(€/h)       & Precio(€)                       \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes directos}                                                                       &                                 &                         &                         &                         & {\color[HTML]{343434} 16,463.38} \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{343434} Gestión del proyecto}}                                           & {\color[HTML]{343434} 60 horas} & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} 620.45}   \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 17.05                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 2.84                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.57                            \\ \hline
+\multicolumn{1}{|l|}{Ubuntu 18.04}                                                                                                  & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{GitHub}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Gantter}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Trello}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Google Drive}                                                                                                  & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Kile}                                                                                                          & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{LibreOffice}                                                                                                   & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 600                             \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Uso de la API Nanos6}                                                                  & 60 horas                        &                         &                         &                         & 620.45                          \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 17.05                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 2.84                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.57                            \\ \hline
+\multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       &                         & 0                               \\ \hline
+\multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 600                             \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Integrar OmpSs-2 en C/C++}                                                             & 96 horas                        &                         &                         &                         & 992.72                          \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 27.27                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 4.54                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.912                           \\ \hline
+\multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 960                             \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Integrar OmpSs-2 en Python\\ y Java\end{tabular}}           & 93 horas                        &                         &                         &                         & 961.7                           \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 26.42                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 4.40                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.88                            \\ \hline
+\multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 930                             \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Desarrollo de una aplicación\\ COMPSs+OmpSs-2\end{tabular}} & 84 horas                        &                         &                         &                         & 868.63                          \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1500                    & 4                       & 0.2841                  & 23.86                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 3.97                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.80                            \\ \hline
+\multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 840                             \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Estudio del rendimiento}                                                               & 84 horas                        &                         &                         &                         & 11,679.43                        \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 23.86                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 3.97                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.80                            \\ \hline
+\multicolumn{1}{|l|}{MinoTauro}                                                                                                     & 10                              & 2.02                    & -                       & -                       & 1,696.8                          \\ \hline
+\multicolumn{1}{|l|}{CTE-Power}                                                                                                     & 10                              & 10.85                   & -                       & -                       & 9,114                            \\ \hline
+\multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Extrae}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Paraver}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 840                             \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Redactar la memoria}                                                                   & 72 horas                        &                         &                         &                         & 720                             \\ \hline
+\multicolumn{1}{|l|}{GitHub}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Kile}                                                                                                          & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{LibreOffice}                                                                                                   & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 720                             \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes indirectos}                                                                     &                                 &                         &                         &                         & 31,726.72                        \\ \hline
+\multicolumn{1}{|l|}{Alquiler oficinas K2M}                                                                                         & -                               & -                       & -                       & -                       & 31,726.72                        \\ \hline
+\multicolumn{1}{|l|}{Servicios}                                                                                                     & -                               & -                       & -                       & -                       & -                               \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total acumulado}                                                                       &                                 &                         &                         &                         & 48,190.1                         \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Contingencia}                                                                          & 10\%                            &                         &                         &                         & 53,009.11                        \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total sin IVA}                                                                         &                                 &                         &                         &                         & 53,009.11                        \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total con IVA}                                                                         & 21\%                            &                         &                         &                         & 64,141.02                        \\ \hline
+\end{longtable}
+
+En la anterior tabla de detalla el presupuesto final del proyecto, se define la contingencia y se aplica el impuesto \textit{IVA}. En esta última tabla no siempre se ha hecho referencia a todos los recursos, esto ha sido así siempre que el recurso tuviera un papel secundario (por ejemplo editores o terminales, que son cosas a elección del desarrollador...) y el coste fuera nulo.
+
+\section{Dimensión económica}
+
+\begin{itemize}
+ \item \textbf{Reflexión sobre el coste estimado para la realización del proyecto.}\newline
+ 
+    El presupuesto ha sido elaborado de manera cautelosa y más bien conservadora, intentando llegar a cubrir todos los gastos y siendo previsores añadiendo el margen de contingencia. En la mayoría de actividades los recursos principales con coste no nulo son el equipo informático y el propio desarrollador, por lo cual ante cualquier imprevisto serán los recursos que añadirán más costes.
+
+ \item \textbf{Como se resuelve actualmente el problema que quieres abordar? En que mejorará económicamente tu solución respecto a las existentes?}\newline
+ 
+ El problema actualmente se aborda de diversas maneras, el problema es que estas son costosas en términos de tiempo, se pretende aportar una nueva manera de resolverlo que ahorre en términos de tiempo, que se traduce en dinero.
+\end{itemize}
+
+\section{Dimensión ambiental}
+
+\begin{itemize}
+ \item \textbf{Has estimado el impacto ambiental que tendrá la realización del proyecto?}\newline
+ 
+ Es difícil estimar el impacto ambiental, en este tipo de proyectos no estamos creando una cadena de montaje ni aplicando un nuevo método para facilitar algún proceso industrial. El impacto de nuestro proyecto recae en el consumo energético de las máquinas en las que se medirá en rendimiento, y una vez puesto en producción todo el consumo energético que generen el resto de proyectos que utilicen como recurso el nuestro. Por otra parte es interesante tener en cuenta que nuestro proyecto pretende poder aprovechar al máximo los recursos de cómputo de una plataforma, de tal manera se consumirá más pero de una manera más eficiente, por tanto, mejor.
+ 
+ \item \textbf{Te has planteado minimizar el impacto, por ejemplo, reutilizando recursos?}\newline
+ 
+ Todos los recursos utilizados tanto software como hardware pueden ser reutilizados hasta que la vida útil de estos recursos finalice.
+ 
+ \item \textbf{Como se resuelve actualmente el problema que quieres abordar? En que mejorará ambientalmente tu solución respecto a las existentes?}\newline
+ 
+Como se ha dicho anteriormente, hay diversas maneras de abordar el problema, el caso es que no se cree que mejore ambientalmente respecto al resto, será interesante de igual manera intentar efectuar una medición del consumo energético  bien la eficiencia energética.
+\end{itemize}
+
+\section{Dimensión social}
+
+\begin{itemize}
+ \item \textbf{Qué crees que te aportará a nivel personal la realización del proyecto?}\newline
+ 
+ El proyecto me dará una nueva visión del mundo de la investigación, ya que en ciertos momentos trabajaré codo con codo con los mejores en el campo. Además me aportará conocimientos diversos de los modelos de programación paralelos y distribuidos, y su funcionamiento interno.
+ \item \textbf{Cómo se resuelve actualmente el problema que quieres abordar? En que mejorará socialmente tu solución respecto a las existentes?}\newline
+ 
+ Este proyecto puede ser utilizado al final para desarrollar aplicaciones que envuelvan campos de carácter social (tanto médico, como literalmente social...). Aún así, no supone ninguna mejoría respecto a lo que aportan el resto de soluciones a nivel social.
+ 
+ \item \textbf{Existe una necesidad real del proyecto?}\newline
+ 
+ Abordando la pregunta desde una perspectiva social no existe la necesidad para el ciudadano del proyecto. La comunidad científica sí que puede aprovecharse de la facilidad que aportará el proyecto al desarrollo de aplicaciones en entornos heterogéneos distribuidos.
+ 
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
