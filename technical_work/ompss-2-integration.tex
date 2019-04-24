@@ -1,4 +1,3 @@
-\usepackage{xr}
 \externaldocument{GEP/deliverable1.tex}
 
 \section{Integración de OmpSs-2 en C/C++ COMPSs}
@@ -16,7 +15,6 @@ La siguiente imagen muestra la estructura general de los \textit{bindings} actua
 \begin{figure}[H]
     \centering 
     \caption{Estructura de los bindings de COMPSs.}
-    %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
     \includegraphics[scale=0.6]{estructuraBindings.png}
     \label{fig:estructura_bindings}
 \end{figure}
@@ -44,10 +42,23 @@ La siguiente imagen describe de manera visual cómo se compila una aplicación.
 
 \par\bigskip
 Para facilitar el compilado de la aplicación se utiliza el script \textit{compss\_build\_app}, y para hacer la generación de código a partir de la interfaz, el binario \textit{compss\_generator}.
-\par\bigksip
-
 La aplicación una vez desarrollada por el usuario, compilada sin \textit{COMPSs} por el medio también funcionaría, pero sencillamente las tareas serían ejecutadas \textit{in situ} en el \textit{master}.  Lo que pretendemos hacer al introducir \textit{COMPSs} es que el \textit{master}, en vez de ejecutar la tarea, comunique al \textit{runtime} que se debe ejecutar una tarea, y este se encargue de ejecutarla en un \textit{worker}, todo evidentemente, de manera transparente al usuario.
 \par\bigskip
+
+\bigskip
+En la figura \ref{fig:workflowcompilado} veíamos la caja negra de ficheros intermedios, estos ficheros son el \textit{stubs} y \textit{executor} (siempre del estilo, \textit{ejemplo-stubs.cc} y \textit{ejemplo-executor.cc} donde ejemplo es el nombre de la aplicación compilada). El fichero \textit{stubs} corresponde con la parte del \textit{master} que se encargará de comunicarse con el \textit{runtime} para registrar la tarea. Esto lo consigue implementando las funciones de las tareas con el código para gestionar su registro, es decir, sustituyendo el código que sería propio de la ejecución de cada tarea por un código para efectuar el registro en el \textit{runtime}. Una vez registrada la tarea, eventualmente el \textit{runtime} designará a un \textit{worker} a ejecutarla. El \textit{worker} recibirá la tarea que debe ejecutar, los datos necesarios y más parámetros, el \textit{executor} ha sido \textit{autogenerado} con el código principal de la aplicación, por lo que conoce como gestionar los datos y parámetros recibidos para ejecutar la tarea pertinente. 
+
+\begin{figure}[H]
+    \centering  
+    \caption{Registro y ejecución de tareas en una aplicación COMPSs C/C++.}
+    \includegraphics[scale=0.6]{stubs-executor.png}
+    \label{fig:stubs-executor}
+\end{figure}
+
+La imagen anterior muestra las llamadas a funciones pertinentes a \textit{stubs} que contienen el código para registrar las tareas en el \textit{runtime}, la eventual ejecución de las tareas registradas en los \textit{workers} que hayan disponibles y como toma parte su ejecución mediante el \textit{executor}.
+
+
+
 
 
 
