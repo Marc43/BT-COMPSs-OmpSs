@@ -20,6 +20,7 @@ La siguiente imagen muestra la estructura general de los \textit{bindings} actua
 \end{figure}
 
 \subsection{Modelo de ejecución en el binding C/C++}
+\label{sec:bindings}
 
 \textit{C} y \textit{C++} son lenguajes de programación compilados, esto quiere decir que necesitamos un segundo programa llamado compilador que procese nuestro programa y genere un fichero que nuestro ordenador pueda ejecutar, a este proceso se le llama compilar y al fichero generado, binario. De esta manera, para poder obtener el modelo de ejecución introducido en la sección \ref{modeloejecucion}, necesitaremos compilar dos binarios, uno para el \textit{master} y otro para los \textit{workers}.
 \par\bigskip
@@ -55,7 +56,132 @@ En la figura \ref{fig:workflowcompilado} veíamos la caja negra de ficheros inte
     \label{fig:stubs-executor}
 \end{figure}
 
-La imagen anterior muestra las llamadas a funciones pertinentes a \textit{stubs} que contienen el código para registrar las tareas en el \textit{runtime}, la eventual ejecución de las tareas registradas en los \textit{workers} que hayan disponibles y como toma parte su ejecución mediante el \textit{executor}.
+La imagen anterior muestra las llamadas a funciones pertinentes a \textit{stubs} que contienen el código para registrar las tareas en el \textit{runtime}, la eventual ejecución de las tareas registradas en los \textit{workers} que hayan disponibles y como toma parte su ejecución mediante el \textit{executor}. Ahora que sabemos como se estructura un \textit{binding}, y en concreto, como funciona el de \textit{C/C++}, el siguiente paso es estudiar el funcionamiento de \textit{OmpSs-2}.
+
+\subsection{Conceptos básicos de OmpSs-2}
+
+En la sección \ref{sec:bindings} dimos una visión más interna y propia de desarrollador del \textit{binding} de \textit{C/C++}. Sobre \textit{OmpSs-2} necesitamos saber, como se desarrolla una aplicación, en concreto con el modo librería y cómo se compila. En las dos siguientes secciones se verá todo lo necesario para el desarrollo de la integración.
+
+\subsubsection{Mercurium}
+
+\textit{Mercurium} es el encargado de compilar una aplicación de \textit{OmpSs-2} y hacer que las directivas insertadas en el código tengan efecto sobre este. De manera superficial, lo que hace es añadir código para gestionar el \textit{runtime}, encender el \textit{runtime}, añadir las tareas, notificar las dependencias y un largo etcétera. 
+
+\subsubsection{Nanos6}
+
+\todo{Pensar algo}
+
+\subsection{Modo librería: nanos6\_spawn\_function}
+
+Esta funcionalidad, nos permite registrar una tarea en el \textit{runtime} de \textit{OmpSs-2} de manera asíncrona, con lo cuál podremos brindar a cada tarea y sus sucesoras un entorno aislado del resto. Gracias a esto, conseguiremos arreglar el problema con la migración de \texit{threads}, planteado en la sección \ref{compssompss}. \smallskip
+
+\begin{lstlisting}[caption={Definición de la función nanos6\_spawn\_function.},captionpos=b, label={lst:nanos6spawn}, language=C++]
+void nanos6_spawn_function(
+   void (*function)(void *), 
+   void *args,
+   void (*completion_callback)(void *), 
+   void *completion_args, 
+   char const *label
+);
+\end{lstlisting}
+
+La anterior imagen muestra la definición de la función que nos permitirá registrar una función \textbf{function} con argumentos \textbf{args} en el \textit{runtime}. Una vez ejecutada la función registrada como tarea, se ejecutará la función \textbf{completion\_callback} con argumentos \textbf{completion\_args} (mecanismo conocido como \textit{callback}, de ahí el nombre), el argumento de la función \textit{label} sirve para etiquetar la tarea con el nombre que contenga.
+
+\subsubsection{Ejemplo}
+
+Con tal de entender como funciona un programa que utilice el modo librería, vamos a ver un ejemplo sencillo. Este programa de ejemplo, hará \textit{spawn} de una función y dentro de ésta se generarán tareas con dependencias entre ellas. \smallskip
+
+\begin{lstlisting} [caption={Función a ser registrada como tarea.},captionpos=b, label={lst:nanos6\_ejemplo}, language=C++]
+ int nanos6_ejemplo(int* a) {
+
+    int local_a;
+
+    #pragma oss task shared(local_a) out(local_a) 
+    {
+        local_a = a[0];
+    }
+
+    #pragma oss task shared(local_a) inout(local_a)
+    {
+        local_a = local_a * 4;
+    }
+
+    #pragma oss taskwait
+
+    return local_a;
+}
+\end{lstlisting}
+
+En la imagen podemos ver la función \textbf{nanos6\_ejemplo}, ésta tiene como parámetro un puntero a enteros \textbf{a} y retorna un valor del tipo \textbf{int}. La función será registrada como tarea desde otro fichero. El cálculo que se realiza en la función no tiene la menor importancia, es solo un \textbf{ejemplo}. \medskip
+
+Por supuesto, esta función será compilada con \textit{Mercurium}, si no fuera el caso, la función se ejecutaría correctamente pero no se generarían las tareas de dentro de la función. 
+
+\begin{lstlisting} [caption={Gestión del modo librería desde el main.},captionpos=b, label={lst:library-main}, language=C++]
+    char const *error = nanos6_library_mode_init();
+    if (error != NULL)
+    {
+        fprintf(stderr, "Error initializing Nanos6: %s\n", error);
+        return 1;
+    }
+
+    condition_variable_t cond_var = COND_VAR_INIT;
+
+    ejemplo_wrapper_args_t args;
+
+    int A = 1;
+    args.array = &A;
+    
+    nanos6_spawn_function(ejemplo_wrapper, &args, 
+    condition_variable_callback, &cond_var, 
+    "spawned ejemplo");
+
+    wait_condition_variable(&cond_var);
+
+    printf("%li\n", args.ret);
+
+    nanos6_shutdown();
+
+\end{lstlisting}
+
+Las funciones \textit{nanos6\_library\_mode\_init()} y \textit{nanos6\_shutdown()} efectúan respectivamente el encendido y apagado del \textit{runtime}, el código que vemos entre estas dos llamadas es el correspondiente para registrar una función como tarea utilizando el modo librería. Dado que la función nanos6\_spawn\_function espera como un puntero los parámetros a pasar a la función, se deben incluir todos dentro de una estructura que los pueda contener, el \textit{struct} \textit{ejemplo\_wrapper\_args\_t} tiene los campos \textbf{a} y \textbf{ret} que corresponden al parámetro de la función \textit{nanos6\_ejemplo} y valor de retorno de ésta.
+
+\todo{anexo para los helpers, pthreads...?}
+
+\bigskip
+
+Como es necesario utilizar una estructura auxiliar para pasar los parámetros mediante un puntero, necesitaremos también una función intermedia con la cuál llamar a la función que realmente queremos registrar como tarea. Habitualmente a este tipo de funciones intermedias se les llama \textit{wrapper}. En la siguiente imagen veremos la función que actúa como \textit{wrapper} de la función \textit{nanos6\_ejemplo}. \smallskip
+
+\begin{lstlisting} [caption={Wrapper de la función nanos6\_ejemplo.},captionpos=b, label={lst:library-main}, language=C++]
+ void ejemplo_wrapper(void *untyped_arg)
+{
+    ejemplo_wrapper_args_t *args = 
+        (ejemplo_wrapper_args_t *) untyped_arg;
+    args->ret = nanos6_ejemplo(args->a);
+}
+\end{lstlisting}
+
+El puntero de tipo \textit{void} puede contener cualquier tipo de estructura, aprovechando que sabemos que únicamente deberá contener el tipo \textit{ejemplo\_wrapper\_args\_t} se hace un \textit{cast} para interpretarlo como la estructura deseada. Se asigna \textbf{ret} al valor de retorno y se pasa \textbf{a} como parámetro.
+
+\subsection{Integración}
+
+En los apartados se ha visto cómo funciona una aplicación de \textit{COMPSs} en \textit{C/C++}, y por otra parte como funciona \textit{OmpSs-2} y el modo librería con la función \textit{nanos6\_spawn\_function}. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
