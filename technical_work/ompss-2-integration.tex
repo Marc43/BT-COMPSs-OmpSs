@@ -171,7 +171,7 @@ El puntero de tipo \textit{void} puede contener cualquier tipo de estructura, ap
 
 \todo{TODO}
 
-Ahora que tenemos claro el funcionamiento de ambas partes, podemos plantear un prototipo de la integración e implementarlo. Está claro que \textit{OmpSs-2} tomará parte únicamente en los nodos del tipo \textit{worker}, ya que es dónde realmente se ejecutarán las tareas detectadas por el \textit{master}. Entonces, si 
+Ahora que tenemos claro el funcionamiento de ambas partes, podemos plantear un prototipo de la integración e implementarlo. Está claro que \textit{OmpSs-2} tomará parte únicamente en los nodos del tipo \textit{worker}, ya que es dónde realmente se ejecutarán las tareas detectadas por el \textit{master}. En el ejemplo para utilizar el modo librería \ref{spawnfunction}, 
 
 %En los apartados se ha visto cómo funciona una aplicación de \textit{COMPSs} en \textit{C/C++}, y por otra parte como funciona \textit{OmpSs-2} y el modo librería con la función \textit{nanos6\_spawn\_function}. Para tener una integración funcional nos bastará con activar el modo librería en los \textit{workers} de \textit{COMPSs}, añadir código para registrar las tareas de \textit{COMPSs} en el \textit{runtime} de \textit{OmpSs-2} utilizando \textit{nanos6\_spawn\_function} y añadir los mecanismos necesarios para esperar a la finalización de estas. 
 
