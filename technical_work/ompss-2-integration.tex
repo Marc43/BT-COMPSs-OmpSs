@@ -75,7 +75,7 @@ La imagen anterior muestra las llamadas a funciones pertinentes a \textit{stubs}
 En la sección \ref{sec:bindings} dimos una visión más interna y propia de desarrollador del \textit{binding} de \textit{C/C++}. Sobre \textit{OmpSs-2} necesitamos saber, como se desarrolla una aplicación, en concreto con el modo librería.
 \medskip
 
-Esta funcionalidad, nos permite registrar una tarea en el \textit{runtime} de \textit{OmpSs-2} de manera asíncrona, con lo cuál podremos brindar a cada tarea y sus sucesoras un entorno aislado del resto. Gracias a esto, conseguiremos arreglar el problema con la migración de \texit{threads}, planteado en la sección \ref{compssompss}. \smallskip
+Esta funcionalidad, nos permite registrar una tarea en el \textit{runtime} de \textit{OmpSs-2} de manera asíncrona, con lo cuál podremos brindar a cada tarea y sus sucesoras un entorno aislado del resto. Gracias a esto, conseguiremos arreglar el problema con la migración de \textit{threads}, planteado en la sección \ref{compssompss}. \smallskip
 
 \begin{lstlisting}[caption={Definición de la función nanos6\_spawn\_function.},captionpos=b, label={lst:nanos6spawn}, language=C++]
 void nanos6_spawn_function(
@@ -148,7 +148,68 @@ Por supuesto, esta función será compilada con \textit{Mercurium}, si no fuera 
 Las funciones \textit{nanos6\_library\_mode\_init()} y \textit{nanos6\_shutdown()} efectúan respectivamente el encendido y apagado del \textit{runtime}, el código que vemos entre estas dos llamadas es el correspondiente para registrar una función como tarea utilizando el modo librería. Dado que la función nanos6\_spawn\_function espera como un puntero los parámetros a pasar a la función, se deben incluir todos dentro de una estructura que los pueda contener, el \textit{struct} \textit{ejemplo\_wrapper\_args\_t} tiene los campos \textbf{a} y \textbf{ret} que corresponden al parámetro de la función \textit{nanos6\_ejemplo} y valor de retorno de ésta.
 
 \bigskip
-Un detalle que no se ha comentado es que la ejecución de este código será efectuada por \textit{pthreads}, el estándar \textit{POSIX} de \textit{threads}. Dado que la ejecución de la tarea tendrá lugar de manera \textbf{asíncrona} es necesario un mecanismo de sincronización, la implementación de \textit{threads} que utilizamos (y por tanto los mecanismos de sincronización dependerán de estos) es la explicada en el apéndice \ref{appendix:pthread}.
+Un detalle que no se ha comentado es que la ejecución de este código será efectuada por \textit{pthreads}, el estándar \textit{POSIX} de \textit{threads}. Dado que la ejecución de la tarea tendrá lugar de manera \textbf{asíncrona} es necesario un mecanismo de sincronización, la implementación de \textit{threads} que utilizamos (y por tanto los mecanismos de sincronización dependerán de estos).
+
+\bigskip
+
+Requerimos de un mecanismo de sincronización por que la función que se registra como tarea la ejecuta un \textit{thread} diferente al que la registra, se hace uso de la librería \textit{pthread} \ref{appendix:pthread}.
+
+\begin{figure}[H]
+    \centering 
+    \caption{Mecanismo de sincronización abstracto.}
+    \includegraphics[scale=0.6]{spawn_sync.png}
+    \label{fig:spawn_sync}
+\end{figure}
+
+En la figura anterior se muestran dos \textit{threads}, uno que registra una tarea y otro que espera a poder ejecutar alguna tarea. El primer \textit{thread} una vez haya registrado la tarea procederá a bloquearse, el segundo cuando acabe de ejecutar la tarea registrada, ejecutará un \textit{callback} donde desbloquearemos al primer \textit{thread}. \bigskip
+
+El mecanismo abstracto es sencillo, pero la implementación real depende de los \textit{Pthreads}. Las estructuras utilizadas para realizar la sincronización son \textit{mutexes} y \textit{condition variables}. Un \textit{mutex} es una estructura que sirve para definir regiones de exclusión mútua mediante métodos de adquisición y liberación de la región, en este mecanismo se utilizan tan sólo por que son necesarios para utilizar \textit{condition variables}. Las \textit{condition variables} nos permiten que un \textit{thread} espere a un evento de manera no bloqueante, si no, habría que hacer \textit{polling} y consumir tiempo de cómputo inútilmente.
+\bigskip
+
+Será con las funciones \textit{pthread\_cond\_wait(pthread\_cond\_t * cond, pthread\_mutex\_t * mutex)} y \textit{pthread\_cond\_signal(pthread\_cond\_t * cond)} con las que respectivamente bloqueemos al primer \textit{thread} después de registrar la tarea y lo desbloqueemos al acabar de ejecutarla.
+\bigskip
+
+Dado que para utilizar \textit{condition variables} se necesitan \textit{mutexes} y se recomienda utilizar una variable auxiliar para evitar abrazos mortales (en el caso de que, el segundo \textit{thread} ya ha intentado desbloquear al primero, pero este aún no se había bloqueado, cuando se bloquee, se bloqueará para siempre), se crea una estructura de datos para contener todas estas variables llamada \textit{condition\_variable\_t}.
+
+\smallskip
+
+\begin{lstlisting} [caption={Definición de la estructura de datos condition\_variable\_t.},captionpos=b, label={lst:wait-condition}, language=C++]
+typedef struct {
+    pthread_mutex_t _mutex;
+    pthread_cond_t _cond;
+    int _signaled;
+} condition_variable_t;
+\end{lstlisting}
+
+\smallskip
+
+\begin{lstlisting} [caption={Función wait\_condition\_variable},captionpos=b, label={lst:wait-condition}, language=C++]
+void wait_condition_variable(condition_variable_t *cond_var)
+{
+    pthread_mutex_lock(&cond_var->_mutex);
+    while (cond_var->_signaled == 0) {
+        pthread_cond_wait(&cond_var->_cond, &cond_var->_mutex);
+    }
+    pthread_mutex_unlock(&cond_var->_mutex);
+}
+\end{lstlisting}
+
+En la imagen \ref{lst:library-main} se utiliza la función \textit{wait\_condition\_variable(&cond\_var)}, la llamada a  \textit{pthread\_cond\_wait} está dentro de una región crítica para prevenir que nadie más se bloquee sobre la misma \textit{condition variable} y esta se encuentra dentro de un \textit{while} por que puede ocurrir que el \textit{thread} se desbloquee sin haber sido desbloqueado por otro \textit{thread}, la variable \textit{cond\_var->\_signaled} será 0 hasta que el \textit{thread} que produzca el desbloqueo lo modifique, así garantizaremos que el desbloqueo es intencionado.
+\smallskip
+
+\begin{lstlisting} [caption={Callback de la tarea registrada},captionpos=b, label={lst:signal-condition}, language=C++]
+void condition_variable_callback(void *untyped_arg)
+{
+    condition_variable_t *cond_var = (condition_variable_t *) untyped_arg;
+
+    pthread_mutex_lock(&cond_var->_mutex);
+    cond_var->_signaled = 1;
+    pthread_cond_signal(&cond_var->_cond);
+    pthread_mutex_unlock(&cond_var->_mutex);
+}
+\end{lstlisting}
+
+La imagen anterior muestra el \textit{callback} que se ejecuta al finalizar la ejecución de la tarea, modifica el valor de la variable \textit{cond\_var->\_signaled} y efectúa un \textit{pthread\_cond\_signal} para despertar al primer \textit{thread}.
 
 \bigskip
 
@@ -189,7 +250,43 @@ La ejecución de las tareas de \textit{OmpSs-2} generará otro grafo, dónde fig
 
 \subsubsection{Encendido y apagado del modo librería}
 
-\todo{nio worker c y worker c}
+Para la implementación de los \textit{workers} hay dos ficheros distintos \textit{nio\_worker\_c.cc} y \textit{worker\_c.cc} respectivamente para el persistente y el no persistente. En cada uno de estos ficheros deberemos añadir el código para que cuando los compilemos con la opción de \textit{OmpSs-2} y \textit{COMPSs} los ejecute (en función de si es persistente o no) y activen el modo librería.
+\bigskip
+
+\begin{lstlisting} [caption={Código necesario para la gestión del modo librería de Nanos6 en nio\_worker\_c.cc y worker\_c.cc},captionpos=b, label={lst:managementnanosworkers}, language=C++]
+
+#ifdef OMPSS2_ENABLED
+#include <pthread.h>
+#include <nanos6/bootstrap.h>
+#include <nanos6/library-mode.h>
+#endif
+
+    ...
+
+#ifdef OMPSS2_ENABLED
+    char const *error = nanos6_library_mode_init();
+    if (error != NULL)
+    {
+        fprintf(stderr, "Error initializing Nanos6: %s\n", error);
+        return 1;
+    }
+    std::cout << "[C-BINDING] Nanos6 initialized" << std::endl;
+#endif
+
+    ...
+    
+#ifdef OMPSS2_ENABLED
+    nanos6_shutdown();
+    std::cout << "[C-BINDING] Nanos6 shutdown" << std::endl;
+#endif
+
+\end{lstlisting}
+
+
+El código mostrado en la imagen \ref{lst:managementnanosworkers} se divide en tres bloques divididos por puntos suspensivos, el código que hubiera entre estos, depende de si el fichero es \textit{nio\_worker\_c.cc} o \textit{worker\_c.cc} y es independiente de ellos. Se hace uso de macros del preprocesador de \textit{C}, la macro \textit{\#ifdef VAR} comprueba en tiempo de compilación si la variable \textit{OMPSS2\_ENABLED} está definida, si lo está las líneas contenidas entre la primera y el \textit{\#endif} serán incluidas en el fichero, sino no lo serán.
+\par\medskip
+
+En cuánto a los tres bloques, el primero incluye cabeceras necesarias para \textit{Nanos6}, y el resto han sido ya explicados en la sección \ref{spawnfunction}.
 
 \subsubsection{Generación del código de cada tarea}
 
@@ -199,43 +296,17 @@ La ejecución de las tareas de \textit{OmpSs-2} generará otro grafo, dónde fig
 
 \todo{modificacion de los scripts, autotools, etc}
 
+Para compilar una aplicación que utilice \textit{OmpSs} se necesita poner el \textit{flag} \textit{-{}-ompss} en \textit{Mercurium}, y el \textit{flag} \textit{-{}-ompss-2} para \textit{OmpSs-2}. En la anterior integración se compilaba la totalidad de los ficheros con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss} debido a que no existía el modo librería. Ahora, es estrictamente necesario compilar con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss-2} tan sólo un único fichero, el que contiene las funciones a ejecutar como tareas. 
+\par\bigskip
+Habrá que modificar el método actual de compilación de una aplicación del \textit{binding} de \textit{C/C++} con tal de que aplique lo relativo a la compilación explicado en la sección \ref{spawnfunction}.
+\par\bigskip
+
+Lo primero es ...
+
 \subsubsection{Tipo enum y cabeceras en la interfaz}
 
 \todo{Añadido del tipo enum y el include de las cabeceras}
 
+\subsection{Estudio previo del rendimiento}
 \section{Aplicación COMPSs+OmpSs-2}
-
-
-
 \section{Estudio del rendimiento}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
