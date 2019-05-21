@@ -37,7 +37,7 @@ La siguiente imagen describe de manera visual cómo se compila una aplicación.
     \centering 
     \caption{Proceso de compilación de una aplicación COMPSs C/C++.}
     %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
-    \includegraphics[scale=0.6]{workflowCompilado.png}
+    \includegraphics[scale=0.5]{workflowCompilado.png}
     \label{fig:workflowcompilado}
 \end{figure}
 
@@ -169,11 +169,39 @@ El puntero de tipo \textit{void} puede contener cualquier tipo de estructura, ap
 
 \subsection{Integración}
 
-\todo{TODO}
+Ahora que tenemos claro el funcionamiento de ambas partes, podemos plantear un prototipo de la integración e implementarlo. Está claro que \textit{OmpSs-2} tomará parte únicamente en los nodos del tipo \textit{worker}, ya que es dónde realmente se ejecutarán las tareas detectadas por el \textit{master}. 
+\par\medskip
 
-Ahora que tenemos claro el funcionamiento de ambas partes, podemos plantear un prototipo de la integración e implementarlo. Está claro que \textit{OmpSs-2} tomará parte únicamente en los nodos del tipo \textit{worker}, ya que es dónde realmente se ejecutarán las tareas detectadas por el \textit{master}. En el ejemplo para utilizar el modo librería \ref{spawnfunction}, 
+En el ejemplo para utilizar el modo librería \ref{spawnfunction}, aprendimos como activar el \textit{runtime} de \textit{OmpSs-2} en este modo y como ejecutar las tareas, por lo que bastará con activarlo en los \textit{workers} (persistente y no persistente) y modificar la generación del código \textit{executor} (queremos hacerlo en el \textit{worker}) para generar la misma estructura del ejemplo en cada tarea de la interfaz de la aplicación.
+\par\medskip
+Entonces, con la activación de \textit{OmpSs-2} en los nodos \textit{worker} conseguiremos la siguiente estructura y modelo de ejecución.
 
-%En los apartados se ha visto cómo funciona una aplicación de \textit{COMPSs} en \textit{C/C++}, y por otra parte como funciona \textit{OmpSs-2} y el modo librería con la función \textit{nanos6\_spawn\_function}. Para tener una integración funcional nos bastará con activar el modo librería en los \textit{workers} de \textit{COMPSs}, añadir código para registrar las tareas de \textit{COMPSs} en el \textit{runtime} de \textit{OmpSs-2} utilizando \textit{nanos6\_spawn\_function} y añadir los mecanismos necesarios para esperar a la finalización de estas. 
+\begin{figure}[H]
+    \centering 
+    \caption{Estructura y modelo de ejecución master-worker de la integración COMPSs+OmpSs-2}
+    %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
+    \includegraphics[scale=0.5]{compss2rt.png}
+    \label{fig:compssompssrt}
+\end{figure}
+
+Durante la ejecución del programa principal se irá generando un grafo con las tareas que se deben ejecutar, eventualmente cada una de estas será enviada a un nodo \textit{worker} (en la figura tan sólo aparece uno, pero podrían ser más) y este ejecutará la tarea de \textit{COMPSs} en forma de tarea de \textit{OmpSs-2}.
+La ejecución de las tareas de \textit{OmpSs-2} generará otro grafo, dónde figurarán tanto las tareas que han sido creadas mediante el mecanismo de \textit{spawn} como las que puedan ser creadas dentro de las anteriores, y finalmente las tareas de este grafo serán ejecutadas.
+
+\subsubsection{Encendido y apagado del modo librería}
+
+\todo{nio worker c y worker c}
+
+\subsubsection{Generación del código de cada tarea}
+
+\todo{spawn en sí}
+
+\subsubsection{Modificaciones en la compilación actual}
+
+\todo{modificacion de los scripts, autotools, etc}
+
+\subsubsection{Tipo enum y cabeceras en la interfaz}
+
+\todo{Añadido del tipo enum y el include de las cabeceras}
 
 \section{Aplicación COMPSs+OmpSs-2}
 

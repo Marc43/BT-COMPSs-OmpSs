@@ -93,6 +93,19 @@ No se proponen alternativas dado que el trabajo propone hacerlo con una alternat
 
 Se utilizan conocimientos de programación a nivel de threads, de programación en entornos distribuidos, de programación en entornos paralelos, también técnicas de \textit{debugging} (gdb), lenguajes como \textit{C}, \textit{C++}, \textit{Java} y \textit{Bash} y herramientas para crear programas que interpreten o compilen como son \textit{Yacc} y \textit{Lex}.
 
+\begin{itemize}
+ \item \textbf{Programación distribuida y paralela}: Han sido necesarios conocimientos de programación distribuida y paralela para conocer cómo sería útil integrar ambos modelos. También será necesario para el posterior estudio de rendimiento a realizar sobre la integración.
+ \item \textbf{Debugging}: Para acelerar el desarrollo ha sido necesario conocer técnicas \textit{debugging} con tal de solventar el mayor número de problemas eficientemente.
+ \item \textbf{Lenguajes de programación}: Para realizar las integración de \textit{C/C++} ha sido necesario conocer los lenguajes \textit{C} y \textit{C++} además de \textit{Java}. Para realizar las dos integraciones pendientes hará falta también \textit{Python}.
+ \item \textbf{Scripting}: Mayoritariamente la infraestructura que \textit{COMPSs} necesita levantar con tal de encender el \textit{master} y los \textit{workers} utiliza \textit{scripts} de \textit{Bash}, por lo que ha sido necesario conocer bien este lenguaje de \textit{scripting}.
+ \item \textbf{Tracing}: Con tal de realizar el estudio previo de rendimiento se ha necesitado saber utilizar \textit{Extrae} y \textit{Paraver}.
+ \item \textbf{Arquitectura de un clúster}: Dado que el estudio del rendimiento se realizará en un clúster, se necesita conocer la arquitectura de este y como esto afecta al rendimiento que desempeñará la integración, tanto de manera positiva como negativa.
+ \item \textbf{Compiladores}: Se ha añadido mecanismos para soportar el tipo \textit{enum} y añadir \textit{headers} en una interfaz de una aplicación \textit{C/C++} por lo que ha sido necesario saber como modificar una gramática y modificar el \textit{parsing}. Se ha utilizado \textit{Yacc} y \textit{Lex}.
+\end{itemize}
+
+
 \section{Identificación de leyes y regulaciones}
 
-???
+El proyecto consiste en el uso de dos modelos de programación existentes para concebir una integración y distribuirla. Dado que el proyecto se desarrolla en el grupo del primer modelo \textit{COMPSs}, no necesitamos ningún tipo de aprobación externa, aún así utiliza una licencia Apache 2.0\footnote{https://github.com/bsc-wdc/compss/blob/stable/LICENSE} por lo que igualmente no tendríamos ningún tipo de problema en su modificación y distribución. En cuánto al segundo modelo sólo necesitamos el permiso para utilizarlo, ya que no ningún momento vamos a modificar ni distribuir su código.
+
+
