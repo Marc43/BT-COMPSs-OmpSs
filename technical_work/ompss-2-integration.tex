@@ -90,6 +90,7 @@ void nanos6_spawn_function(
 La anterior imagen muestra la definición de la función que nos permitirá registrar una función \textbf{function} con argumentos \textbf{args} en el \textit{runtime}. Una vez ejecutada la función registrada como tarea, se ejecutará la función \textbf{completion\_callback} con argumentos \textbf{completion\_args} (mecanismo conocido como \textit{callback}, de ahí el nombre), el argumento de la función \textit{label} sirve para etiquetar la tarea con el nombre que contenga.
 
 \subsubsection{Ejemplo}
+\label{sec:ejemplo}
 
 Con tal de entender como funciona un programa que utilice el modo librería, vamos a ver un ejemplo sencillo. Este programa de ejemplo, hará \textit{spawn} de una función y dentro de ésta se generarán tareas con dependencias entre ellas. \smallskip
 
@@ -153,15 +154,20 @@ Un detalle que no se ha comentado es que la ejecución de este código será efe
 \bigskip
 
 Requerimos de un mecanismo de sincronización por que la función que se registra como tarea la ejecuta un \textit{thread} diferente al que la registra, se hace uso de la librería \textit{pthread} \ref{appendix:pthread}.
+\bigskip
 
+\begin{comment}
 \begin{figure}[H]
     \centering 
     \caption{Mecanismo de sincronización abstracto.}
     \includegraphics[scale=0.6]{spawn_sync.png}
     \label{fig:spawn_sync}
 \end{figure}
-
-En la figura anterior se muestran dos \textit{threads}, uno que registra una tarea y otro que espera a poder ejecutar alguna tarea. El primer \textit{thread} una vez haya registrado la tarea procederá a bloquearse, el segundo cuando acabe de ejecutar la tarea registrada, ejecutará un \textit{callback} donde desbloquearemos al primer \textit{thread}. \bigskip
+\end{comment}
+ 
+\subsubsection{Mecanismo de sincronización} 
+ 
+Un \textit{thread} perteneciente al \textit{worker} de \textit{COMPSs} registra una tarea y un segundo thread perteneciente a \textit{OmpSs-2} espera a poder ejecutar alguna tarea. El primer \textit{thread} una vez haya registrado la tarea procederá a bloquearse, el segundo cuando acabe de ejecutar la tarea registrada, ejecutará un \textit{callback} donde desbloquearemos al primer \textit{thread}. \bigskip
 
 El mecanismo abstracto es sencillo, pero la implementación real depende de los \textit{Pthreads}. Las estructuras utilizadas para realizar la sincronización son \textit{mutexes} y \textit{condition variables}. Un \textit{mutex} es una estructura que sirve para definir regiones de exclusión mútua mediante métodos de adquisición y liberación de la región, en este mecanismo se utilizan tan sólo por que son necesarios para utilizar \textit{condition variables}. Las \textit{condition variables} nos permiten que un \textit{thread} espere a un evento de manera no bloqueante, si no, habría que hacer \textit{polling} y consumir tiempo de cómputo inútilmente.
 \bigskip
@@ -173,7 +179,7 @@ Dado que para utilizar \textit{condition variables} se necesitan \textit{mutexes
 
 \smallskip
 
-\begin{lstlisting} [caption={Definición de la estructura de datos condition\_variable\_t.},captionpos=b, label={lst:wait-condition}, language=C++]
+\begin{lstlisting} [caption={Definición de la estructura de datos condition\_variable\_t.},captionpos=b, label={lst:structwait-condition}, language=C++]
 typedef struct {
     pthread_mutex_t _mutex;
     pthread_cond_t _cond;
@@ -226,7 +232,36 @@ Como es necesario utilizar una estructura auxiliar para pasar los parámetros me
 
 El puntero de tipo \textit{void} puede contener cualquier tipo de estructura, aprovechando que sabemos que únicamente deberá contener el tipo \textit{ejemplo\_wrapper\_args\_t} se hace un \textit{cast} para interpretarlo como la estructura deseada. Se asigna \textbf{ret} al valor de retorno y se pasa \textbf{a} como parámetro.
 
-\todo{faltan detalles de compilado...}
+\subsubsection{Compilado}
+\label{sec:compilado}
+
+El modo librería nos permite desacoplar de alguna manera la parte que pertenece a \textit{OmpSs-2} de la que no. Es decir, ahora podemos tener un código principal encargado de hacer \textit{spawn} de funciones que no tiene por qué estar compilado con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss-2}.
+\par\bigskip
+
+Un \textit{Makefile} para compilar el ejemplo \ref{sec:ejemplo} sería:
+\medskip
+
+\begin{lstlisting} [caption={Makefile para compilar el ejemplo.},captionpos=b, label={lst:makefileejemplo}, language=C++]                                                                                                                                               
+all: ejemplo
+
+# Codigo principal
+main-ejemplo.o : main-ejemplo.c nanos6-ejemplo.h nanos6-helpers.h                                                                                                                                       
+    $(CC) $(CFLAGS) -c main-ejemplo.c -o $@                                                                                                                                                                 
+
+# Mecanismos de sincronizacion
+nanos6-helpers.o : nanos6-helpers.c nanos6-helpers.h
+    $(CC) $(CFLAGS) -c nanos6-helpers.c -o $@                                                                                                                                                                 
+
+# Nanos6 (codigo a compilar con Mercurium y ompss-2)
+nanos6-ejemplo.o :  nanos6-ejemplo.c nanos6-ejemplo.h
+    $(MCC) $(CFLAGS) -c  nanos6-ejemplo.c -o $@                                                                                                                                                             
+
+# Linking
+ejemplo: main-ejemplo.o nanos6-ejemplo.o nanos6-ejemplo.o                                                                                                                                      
+    $(CC) $^ -o $@ $(LIBS)                                                                                                                                                                                    
+\end{lstlisting}
+
+Se divide el \textit{Makefile} en cuatro etapas, la primera compila el \textit{main-ejemplo.c} utilizando el compilador definido por la variable de entorno \textit{CC}, en nuestro caso será \textit{g++}, la segunda etapa compila las funciones utilizadas para los mecanismos de sincronización descritos anteriormente en el fichero \textit{main-helpers.c}, la tercera compila el código que contiene la o las funciones a ser ejecutadas como tarea con el compilador definido por la variable de entorno \textit{MCC}, que es \textit{Mercurium}, y por último en una fase de \textit{linkage} se enlazan los objetos compilados entre sí, y además con el objeto \textit{nanos6-library-mode.o} y la librería \textit{nanos6}, esto es necesario por que el objeto generado al compilar el \textit{main-ejemplo.c} utiliza las llamadas para encender el modo librería descritas en la sección \ref{sec:ejemplo}.
 
 \subsection{Integración}
 
@@ -282,7 +317,6 @@ Para la implementación de los \textit{workers} hay dos ficheros distintos \text
 
 \end{lstlisting}
 
-
 El código mostrado en la imagen \ref{lst:managementnanosworkers} se divide en tres bloques divididos por puntos suspensivos, el código que hubiera entre estos, depende de si el fichero es \textit{nio\_worker\_c.cc} o \textit{worker\_c.cc} y es independiente de ellos. Se hace uso de macros del preprocesador de \textit{C}, la macro \textit{\#ifdef VAR} comprueba en tiempo de compilación si la variable \textit{OMPSS2\_ENABLED} está definida, si lo está las líneas contenidas entre la primera y el \textit{\#endif} serán incluidas en el fichero, sino no lo serán.
 \par\medskip
 
@@ -298,10 +332,10 @@ En cuánto a los tres bloques, el primero incluye cabeceras necesarias para \tex
 
 Para compilar una aplicación que utilice \textit{OmpSs} se necesita poner el \textit{flag} \textit{-{}-ompss} en \textit{Mercurium}, y el \textit{flag} \textit{-{}-ompss-2} para \textit{OmpSs-2}. En la anterior integración se compilaba la totalidad de los ficheros con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss} debido a que no existía el modo librería. Ahora, es estrictamente necesario compilar con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss-2} tan sólo un único fichero, el que contiene las funciones a ejecutar como tareas. 
 \par\bigskip
-Habrá que modificar el método actual de compilación de una aplicación del \textit{binding} de \textit{C/C++} con tal de que aplique lo relativo a la compilación explicado en la sección \ref{spawnfunction}.
+Habrá que modificar el método actual de compilación de una aplicación del \textit{binding} de \textit{C/C++} con tal de que aplique lo relativo a la compilación explicado en la sección \ref{sec:compilado}.
 \par\bigskip
 
-Lo primero es ...
+La estructura 
 
 \subsubsection{Tipo enum y cabeceras en la interfaz}
 
