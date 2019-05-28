@@ -13,20 +13,21 @@ El proyecto se realiza conjuntamente con el \textit{Barcelona Supercomputing Cen
 
 \section{Cambios en la planificación}
 
-Respecto a la planificación ha habido un par de modificaciones, por motivos de compatibilidad entre OmpSs-2 y las GPUs que hay en MinoTauro hemos decidido prescindir de este y utilizar solamente CTE-Power.
+Respecto a la planificación ha habido un par de modificaciones, por motivos de compatibilidad entre OmpSs-2 y las GPUs que hay en MinoTauro hemos decidido utilizar \textit{MareNostrum4} en su lugar. El cálculo para el supercomputador \textit{MareNostrum4} se ha computado con la instancia \textit{r5.12xlarge} de \textit{Amazon} que cuesta 2,7\euro la hora.
 \bigskip
 
-Los costes se ven reducidos, la siguente tabla muestra todos los apartados colapsados menos el que concierne al uso de MinoTauro.
+
+La siguente tabla muestra como afecta esto al presupuesto, todos los apartados están colapsados menos el que concierne al uso de \textit{MinoTauro} y \textit{MareNostrum4}.
 
 \begin{longtable}{l|l|l|l|l|l|}
 \cline{2-6}
-                                                                                                                                    & Uds.                            & Precio(€ o €/h)         & Vida útil(años)         & Amortización(€/h)       & Precio(€)                        \\ \hline
+                                                                                                                                    & Uds.                            & Precio(\euro o \euro/h)         & Vida útil(años)         & Amortización(\euro/h)       & Precio(€)                        \\ \hline
 \endfirsthead
 %
 \endhead
 %
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes directos}                                                                       &                                 &                         &                         &                         & {\color[HTML]{343434} 14.766,58} \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes directos}                                                                       &                                 &                         &                         &                         & {\color[HTML]{343434} 17.034,58} \\ \hline
 \rowcolor[HTML]{C0C0C0} 
 \multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{343434} Gestión del proyecto}}                                           & {\color[HTML]{343434} 60 horas} & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} 620,45}    \\ \hline
 \rowcolor[HTML]{C0C0C0} 
@@ -38,20 +39,21 @@ Los costes se ven reducidos, la siguente tabla muestra todos los apartados colap
 \rowcolor[HTML]{C0C0C0} 
 \multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Desarrollo de una aplicación\\ COMPSs+OmpSs-2\end{tabular}} & 84 horas                        &                         &                         &                         & 868,63                           \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Estudio del rendimiento}                                                               & 84 horas                        &                         &                         &                         & 9.982,63                         \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Estudio del rendimiento}                                                               & 84 horas                        &                         &                         &                         & 12.250,63                         \\ \hline
 \multicolumn{1}{|l|}{MinoTauro}                                                                                                     & 10                              & 2,02                    & -                       & -                       & -1.696,8                         \\ \hline
+\multicolumn{1}{|l|}{MareNostrum4}                                                                                                     & 10                              & 2,7                    & -                       & -                       &  2268,0               \\ \hline
 \rowcolor[HTML]{C0C0C0} 
 \multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Redactar la memoria}                                                                   & 72 horas                        &                         &                         &                         & 720                              \\ \hline
 \rowcolor[HTML]{9B9B9B} 
 \multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes indirectos}                                                                     &                                 &                         &                         &                         & 31.726,72                        \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total acumulado}                                                                       &                                 &                         &                         &                         & 46.493,3                         \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total acumulado}                                                                       &                                 &                         &                         &                         & 48.761,3                         \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Contingencia}                                                                          & 10\%                            &                         &                         &                         & 51.142,63                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Contingencia}                                                                          & 10\%                            &                         &                         &                         & 53.637,43                        \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total sin IVA}                                                                         &                                 &                         &                         &                         & 53.009,11                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total sin IVA}                                                                         &                                 &                         &                         &                         & 53.637,43                       \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total con IVA}                                                                         & 21\%                            &                         &                         &                         & 61.882,58                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total con IVA}                                                                         & 21\%                            &                         &                         &                         & 64.901,29                        \\ \hline
 \end{longtable}
 
 No hemos querido tener que implementar las tres integraciones (recordemos, \textit{C/C++}, \textit{Java}, \textit{Python}) sin antes ver si \textit{OmpSs-2} solucionaba los problemas que nos encontramos con \textit{OmpSs}, lo que nos ha llevado a adelantar parte del estudio de rendimiento. Por tanto, la planificación definitiva es:
@@ -80,10 +82,7 @@ Como el estudio de rendimiento consiste en ejecutar la aplicación desarrollada 
 
 \section{Metodología y rigor}
 
-La metodología propuesta sigue siendo la misma. La metodología que más se ciñe a las características del “equipo” es SCRUM. Esta metodología forma parte de las populares (y bastante de moda) metodologías ágiles, consiste en planear al milímetro las tareas a realizar, y hacer una predicción de qué se conseguira hacer y que no en cortos periodos de tiempo llamados iteraciones. Además de estas predicciones, se consultará el
-estado del proyecto a diario, con cuestiones como “¿Desde la última reunión que he conseguido?”,
-“¿Desde entonces que haré para llegar a los objetivos de la iteración?”, “¿Algún impedimento que
-no me permita alcanzar estos objetivos?”.
+La metodología propuesta en el GEP fue \textit{SCRUM}. Una vez empezado el proyecto se percibió que esta metodología se suele utilizar con grupos más grandes, siendo el proyecto desarrollado por una única persona se decidió cambiar a la metodología iterativa. En esta metodología se aplica sobre el proyecto de manera iterativa en periodos de tiempo (llamados iteraciones) una serie de tareas similares en tanto que incrementalmente mejoremos el proyecto.
 
 \section{Análisis de alternativas}
 
@@ -106,6 +105,6 @@ Se utilizan conocimientos de programación a nivel de threads, de programación 
 
 \section{Identificación de leyes y regulaciones}
 
-El proyecto consiste en el uso de dos modelos de programación existentes para concebir una integración y distribuirla. Dado que el proyecto se desarrolla en el grupo del primer modelo \textit{COMPSs}, no necesitamos ningún tipo de aprobación externa, aún así utiliza una licencia Apache 2.0\footnote{https://github.com/bsc-wdc/compss/blob/stable/LICENSE} por lo que igualmente no tendríamos ningún tipo de problema en su modificación y distribución. En cuánto al segundo modelo sólo necesitamos el permiso para utilizarlo, ya que en ningún momento vamos a modificar ni distribuir su código.
+El proyecto consiste en el uso de dos modelos de programación existentes para concebir una integración y distribuirla. Dado que el proyecto se desarrolla en el grupo del primer modelo \textit{COMPSs}, no necesitamos ningún tipo de aprobación externa, aún así utiliza una licencia Apache 2.0\footnote{https://github.com/bsc-wdc/compss/blob/stable/LICENSE} por lo que igualmente no tendríamos ningún tipo de problema en su modificación y distribución. En cuánto al segundo modelo, utiliza la licencia GPL3.0\footnote{https://www.gnu.org/licenses/gpl-3.0.en.html}, que nos da permiso para utilizarlo, modificarlo y distribuirlo.
 
 
