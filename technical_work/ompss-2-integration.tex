@@ -335,7 +335,40 @@ Para compilar una aplicación que utilice \textit{OmpSs} se necesita poner el \t
 Habrá que modificar el método actual de compilación de una aplicación del \textit{binding} de \textit{C/C++} con tal de que aplique lo relativo a la compilación explicado en la sección \ref{sec:compilado}.
 \par\bigskip
 
-La estructura 
+Para el usuario compilar una aplicación con \textit{OmpSs} es muy sencillo, ejecutando en el terminal el comando \textit{compss\_build\_app -{}-ompss ejemplo} empezaría el proceso de compilado del \textit{master} y el \textit{worker} de manera automática, en la nueva integración no puede ser más difícil. Antes de indagar en las modificaciones en concreto en los \textit{scripts} vamos a ver una descripción superficial de cómo se hace actualmente.
+
+\begin{figure}[H]
+    \centering 
+    \caption{Estructura superficial de los \textit{scripts} para compilar una aplicación de COMPSs.}
+    %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
+    \includegraphics[scale=0.7]{compilation.png}
+    \label{fig:compilado}
+\end{figure}
+
+En la imagen \ref{fig:compilado} vemos que existen dos \textit{scripts}, \textit{compss\_build\_app} y \textit{compss\_build}, el primero es el encargado de recoger los argumentos que el usuario haya introducido para la compilación de su aplicación (si se utiliza \textit{OmpSs}, donde está la instalación de \textit{OmpSs}, si se utiliza \textit{OpenCL}, o \textit{Cuda}, etc) y procesarlos configurando el entorno correcto para la compilación según estos argumentos que ha introducido el usuario. Una vez configurado el entorno se ejecuta el segundo \textit{script} \textit{compss\_build} tanto para el \textit{master} como para el \textit{worker}, que será realmente quién efectúe la compilación. 
+\par\bigskip
+Para ello se utiliza un conjunto de herramientas muy populares desarrolladas por \textit{GNU},  \textit{Autotools}\ref{appendix:autotools}. Estas herramientas tienen como objetivo facilitar a los usuarios (que no a los desarrolladores...) la compilación y portabilidad entre plataformas. Pese a que es un campo interesante y muy útil, no entraremos demasiado en detalles, daremos una visión general y entraremos en las modificaciones que se han realizado con tal de poder compilar aplicaciones del tipo \textit{COMPSs+OmpSs-2}. 
+\par\bigskip
+Como ya hemos visto, \textit{compss\_build\_app} hace de alguna manera de \textit{wrapper} de\textit{compss\_build}, es decir, lo ejecuta con los parámetros adecuados las veces que sea necesario. Este segundo, es el que toca de primera mano \textit{Autotools}, con tal de integrarlo dentro de una aplicación hay que generar una serie de ficheros que son necesarios. Ejecutando las siguientes líneas conseguiremos estos ficheros.
+
+\begin{lstlisting} [caption={Makefile para compilar el ejemplo.},captionpos=b, label={lst:aclocal}, language=C++]                                                                                                                                               
+#!/bin/bash
+set -e
+
+/usr/bin/aclocal
+/usr/bin/automake -a -c
+/usr/bin/autoconf
+       
+\end{lstlisting}
+
+Una vez ejecutado esto (lo ejecutará \textit{compss\_build} cada vez), entre otros, esto nos habrá generado un \textit{script} \textit{configure}, que al ser ejecutado generará un \textit{Makefile} adaptado al entorno que hayamos especificado. Nuestro proceso de compilado requiere ser flexible, ya que permitimos utilizar \textit{OmpSs}, a veces con \textit{Cuda}, a veces con \textit{OpenCL}... Por tanto, necesitamos pasarle al compilador dónde se encuentran las librerías que necesitamos, \textit{flags} adicionales que necesitemos (\textit{-{}-ompss}, \textit{-{}-ompss}, \textit{-{}-cuda}...). Por suerte, este \textit{configure}, nos permite pasar variables de entorno a tener en cuenta durante la compilación, además de opciones que como veremos ahora se han definido en otros ficheros y que cambiarán cómo se compilan nuestro \textit{master} y/o \textit{worker}.
+\par\bigskip
+
+Dos ficheros esenciales en todo este proces, son \textit{configure.ac} y \textit{Makefile.am}, uno utiliza una serie de \textit{macros} \todo{es castellano?} para generar de manera customizada \textit{configure}, y el otro indica cuáles son los ficheros que deben ser compilados, cómo y adónde irán una vez compilados.
+\par\bigskip
+
+\todo{Explicar como he cambiad .ac y .am}
+
 
 \subsubsection{Tipo enum y cabeceras en la interfaz}
 
