@@ -200,7 +200,7 @@ void wait_condition_variable(condition_variable_t *cond_var)
 }
 \end{lstlisting}
 
-En la imagen \ref{lst:library-main} se utiliza la función \textit{wait\_condition\_variable(&cond\_var)}, la llamada a  \textit{pthread\_cond\_wait} está dentro de una región crítica para prevenir que nadie más se bloquee sobre la misma \textit{condition variable} y esta se encuentra dentro de un \textit{while} por que puede ocurrir que el \textit{thread} se desbloquee sin haber sido desbloqueado por otro \textit{thread}, la variable \textit{cond\_var->\_signaled} será 0 hasta que el \textit{thread} que produzca el desbloqueo lo modifique, así garantizaremos que el desbloqueo es intencionado.
+En la imagen \ref{lst:library-main} se utiliza la función \textit{wait\_condition\_variable(\&cond\_var)}, la llamada a  \textit{pthread\_cond\_wait} está dentro de una región crítica para prevenir que nadie más se bloquee sobre la misma \textit{condition variable} y esta se encuentra dentro de un \textit{while} por que puede ocurrir que el \textit{thread} se desbloquee sin haber sido desbloqueado por otro \textit{thread}, la variable \textit{cond\_var->\_signaled} será 0 hasta que el \textit{thread} que produzca el desbloqueo lo modifique, así garantizaremos que el desbloqueo es intencionado.
 \smallskip
 
 \begin{lstlisting} [caption={Callback de la tarea registrada},captionpos=b, label={lst:signal-condition}, language=C++]
@@ -261,7 +261,7 @@ ejemplo: main-ejemplo.o nanos6-ejemplo.o nanos6-ejemplo.o
     $(CC) $^ -o $@ $(LIBS)                                                                                                                                                                                    
 \end{lstlisting}
 
-Se divide el \textit{Makefile} en cuatro etapas, la primera compila el \textit{main-ejemplo.c} utilizando el compilador definido por la variable de entorno \textit{CC}, en nuestro caso será \textit{g++}, la segunda etapa compila las funciones utilizadas para los mecanismos de sincronización descritos anteriormente en el fichero \textit{main-helpers.c}, la tercera compila el código que contiene la o las funciones a ser ejecutadas como tarea con el compilador definido por la variable de entorno \textit{MCC}, que es \textit{Mercurium}, y por último en una fase de \textit{linkage} se enlazan los objetos compilados entre sí, y además con el objeto \textit{nanos6-library-mode.o} y la librería \textit{nanos6}, esto es necesario por que el objeto generado al compilar el \textit{main-ejemplo.c} utiliza las llamadas para encender el modo librería descritas en la sección \ref{sec:ejemplo}.
+Se divide el \textit{Makefile} en cuatro etapas, la primera compila el \textit{main-ejemplo.c} utilizando el compilador definido por la variable de entorno \textit{CC}, en nuestro caso será \textit{g++}, la segunda etapa compila las funciones utilizadas para los mecanismos de sincronización descritos anteriormente en el fichero \textit{main-helpers.c}, la tercera compila el código que contiene la o las funciones a ser ejecutadas como tarea con el compilador definido por la variable de entorno \textit{MCC}, que es \textit{Mercurium}, y por último en una fase de \textit{linking} se enlazan los objetos compilados entre sí, y además con el objeto \textit{nanos6-library-mode.o} y la librería \textit{nanos6}, esto es necesario por que el objeto generado al compilar el \textit{main-ejemplo.c} utiliza las llamadas para encender el modo librería descritas en la sección \ref{sec:ejemplo}.
 
 \subsection{Integración}
 
@@ -349,26 +349,214 @@ En la imagen \ref{fig:compilado} vemos que existen dos \textit{scripts}, \textit
 \par\bigskip
 Para ello se utiliza un conjunto de herramientas muy populares desarrolladas por \textit{GNU},  \textit{Autotools}\ref{appendix:autotools}. Estas herramientas tienen como objetivo facilitar a los usuarios (que no a los desarrolladores...) la compilación y portabilidad entre plataformas. Pese a que es un campo interesante y muy útil, no entraremos demasiado en detalles, daremos una visión general y entraremos en las modificaciones que se han realizado con tal de poder compilar aplicaciones del tipo \textit{COMPSs+OmpSs-2}. 
 \par\bigskip
-Como ya hemos visto, \textit{compss\_build\_app} hace de alguna manera de \textit{wrapper} de\textit{compss\_build}, es decir, lo ejecuta con los parámetros adecuados las veces que sea necesario. Este segundo, es el que toca de primera mano \textit{Autotools}, con tal de integrarlo dentro de una aplicación hay que generar una serie de ficheros que son necesarios. Ejecutando las siguientes líneas conseguiremos estos ficheros.
+Como ya hemos visto, \textit{compss\_build\_app} hace de alguna manera de \textit{wrapper} de \textit{compss\_build}, es decir, lo ejecuta con los parámetros adecuados las veces que sea necesario. Este segundo, es el que toca de primera mano \textit{Autotools}, con tal de utilizarlo para compilar una aplicación hay que generar una serie de ficheros. La siguiente imagen nos muestra una porción del \textit{script}  \textit{compss\_build} para generar el \textit{script} \textit{autogen.sh}, que al ser ejecutado nos generará estos ficheros que \textit{Autotools} necesita.
+\smallskip
 
-\begin{lstlisting} [caption={Makefile para compilar el ejemplo.},captionpos=b, label={lst:aclocal}, language=C++]                                                                                                                                               
+\begin{lstlisting} [caption={Porción del script autogen.sh que genera los ficheros base necesarios para Autotools.},captionpos=b, label={lst:aclocal}, language=bash]
+/bin/cat > autogen.sh << EOF
 #!/bin/bash
 set -e
 
 /usr/bin/aclocal
 /usr/bin/automake -a -c
 /usr/bin/autoconf
-       
+EOF       
 \end{lstlisting}
 
-Una vez ejecutado esto (lo ejecutará \textit{compss\_build} cada vez), entre otros, esto nos habrá generado un \textit{script} \textit{configure}, que al ser ejecutado generará un \textit{Makefile} adaptado al entorno que hayamos especificado. Nuestro proceso de compilado requiere ser flexible, ya que permitimos utilizar \textit{OmpSs}, a veces con \textit{Cuda}, a veces con \textit{OpenCL}... Por tanto, necesitamos pasarle al compilador dónde se encuentran las librerías que necesitamos, \textit{flags} adicionales que necesitemos (\textit{-{}-ompss}, \textit{-{}-ompss}, \textit{-{}-cuda}...). Por suerte, este \textit{configure}, nos permite pasar variables de entorno a tener en cuenta durante la compilación, además de opciones que como veremos ahora se han definido en otros ficheros y que cambiarán cómo se compilan nuestro \textit{master} y/o \textit{worker}.
+La primera y la última línea de la imagen \ref{lst:aclocal} sirven para escribir el código contenido entre estas en el fichero \textit{autogen.sh}. El \textit{script} \textit{autogen.sh} es generado por \textit{compss\_build} cada vez que se quiere compilar una aplicación y también en función de si se está compilando el \textit{master} o el \textit{worker} (de hecho, se encuentran en sitios distintos), tendrá una forma u otra. 
+\par\smallskip
+
+Una vez ejecutada esta porción del \textit{script} \textit{autogen.sh}, entre otros, esto nos habrá generado un \textit{script} \textit{configure}, que al ser ejecutado generará un \textit{Makefile} adaptado al entorno que hayamos especificado. Nuestro proceso de compilado requiere ser flexible, ya que permitimos utilizar \textit{OmpSs}, a veces con \textit{Cuda}, a veces con \textit{OpenCL}... Por tanto, necesitamos pasarle al compilador dónde se encuentran las librerías que necesitamos, \textit{flags} adicionales que necesitemos (\textit{-{}-ompss}, \textit{-{}-ompss-2}, \textit{-{}-cuda}...). Por suerte, este \textit{configure}, nos permite pasar variables de entorno a tener en cuenta durante la compilación, además de opciones personalizadas, a continuación del código de la imagen \ref{lst:aclocal} añadiremos código para que \textit{autogen.sh} ejecute el \textit{script} \textit{configure} con las opciones que necesitamos.
 \par\bigskip
 
-Dos ficheros esenciales en todo este proces, son \textit{configure.ac} y \textit{Makefile.am}, uno utiliza una serie de \textit{macros} \todo{es castellano?} para generar de manera customizada \textit{configure}, y el otro indica cuáles son los ficheros que deben ser compilados, cómo y adónde irán una vez compilados.
+\begin{lstlisting} [caption={Porción del script autogen.sh que se encarga de customizar la ejecución de configure.},captionpos=b, label={lst:customconfigure}, language=bash]                                                                                                                                               
+if [ "$OMPSS2_ENABLED" == "enabled" ]; then
+    ldflags_aux="$ldflags_aux -L$OMPSS2_DIR/lib
+                -Wl,-rpath,$OMPSS2_DIR/lib"
+    cflags_aux="$cflags_aux -I$OMPSS2_DIR/include"
+    conf_opts="--with-ompss-2"
+fi
+
+if [ "$OMPSS_ENABLED" == "enabled" ]; then
+    ldflags_aux="$ldflags_aux -L$OMPSS_DIR/lib"
+    cflags_aux="$cflags_aux -I$OMPSS_DIR/include"
+    conf_opts="$conf_opts --with-ompss"
+fi
+
+if [ "$CUDA_ENABLED" == "enabled" ]; then
+    ldflags_aux="$ldflags_aux -L$CUDA_HOME/lib64"
+    cflags_aux="$cflags_aux -I$CUDA_HOME/include"
+    conf_opts="$conf_opts --with-cuda"
+fi
+
+/bin/cat >> autogen.sh << EOF
+./configure --with-cs-prefix=$CS_HOME $conf_opts \ 
+            CXXFLAGS="$CXXFLAGS $cflags_aux" CFLAGS="$CFLAGS  \
+            $cflags_aux" LDFLAGS="$LDFLAGS $ldflags_aux" 
+EOF
+
+/bin/chmod +x autogen.sh
+\end{lstlisting}
+
+\todo{he quitado el fragmento de TARGET HOST... lo vuelvo a poner?}
+
+Anteriormente hemos mencionado que el \textit{script} \textit{compss\_build\_app} es el encargado de recolectar los \textit{flags} que nos interesan del usuario en el proceso de compilación y servirlos al \textit{script} \textit{compss\_build}, como se puede ver en la imagen \ref{lst:customconfigure} en función de si las variables de entorno \textit{OMPSS2\_ENABLED}, \textit{OMPSS\_ENABLED}, o \textit{CUDA\_ENABLED} tienen por valor la cadena de carácteres \textit{enabled}, definirá el valor de los \textit{flags} para la fase de compilación \textit{CXXFLAGS} y \textit{CFLAGS}, que se asignarán via la variable \textit{cflags\_aux} y para la fase de \textit{linking} \textit{LDFLAGS} que se asignará via la variable \textit{ldflags\_aux}, además de las opciones personalizadas (que serán pasadas mediante la variable \textit{conf\_opts}).
+\par\smallskip
+Dos ficheros esenciales en todo este proceso, son \textit{configure.ac} y \textit{Makefile.am}, uno utiliza una serie de \textit{macros} para generar de manera customizada \textit{configure} (por ejemplo, con las opciones mencionadas anteriormente), y el otro indica cuáles son los ficheros que deben ser compilados, cómo y adónde irán una vez compilados.
 \par\bigskip
+Las modificaciones que explicamos ahora mismo sólo se han aplicado al \textit{worker}, para el \textit{master} no se ha necesitado ningún tipo de modificación. Para declarar una opción personalizada en \textit{configure} se utiliza la macro \textit{AC\_ARG\_WITH}, que tiene como argumentos el nombre de la opción (ompss, que pasará a ser with-ompss), el mensaje de ayuda para el usuario y lo que hay que hacer en caso que se habilite la opción, la imagen \ref{lst:ac-ompss} muestra exactamente cómo se hace.
+\smallskip
 
-\todo{Explicar como he cambiad .ac y .am}
+\begin{lstlisting} [caption={Macros necesarias en configure.ac para habilitar la opcion --ompss en configure.},captionpos=b, label={lst:ac-ompss}, language=bash]
+AC_ARG_WITH([ompss],
+    AS_HELP_STRING([ --with-ompss], [Enables the use of OmpSs and 
+                                    specificates its directory.]),
+            [
+                ompss=true
+            ]
+)
+\end{lstlisting}
 
+Para el resto de opciones se utiliza el mismo mecanismo, pero las acciones a realizar si se habilita la opción son distintas. Con tal de compilar una aplicación de \textit{OmpSs-2} necesitamos librerías de \textit{Pthreads}, \textit{dl}\footnote{https://en.wikipedia.org/wiki/Dynamic\_loading}, \textit{nanos6} (evidentemente para todo lo que concierne al \textit{runtime}), y \textit{custom-nanos6}, que no es más que la adaptación a librería del \textit{nanos6-library-mode.o} que se utilizó en la sección \ref{sec:compilado}. La imagen \ref{lst:ac-ompss-2} muestra exactamente cómo lo hacemos.
+\smallskip
+
+\begin{lstlisting} [caption={Macros necesarias en configure.ac para habilitar la opcion --ompss-2 en configure.},captionpos=b, label={lst:ac-ompss-2}, language=bash]
+AC_ARG_WITH([ompss-2],
+    AS_HELP_STRING([ --with-ompss-2], [Enables the use of OmpSs2 
+                                      and specificates its 
+                                      directory.]),
+            [
+                ompss2=true
+
+                AC_CHECK_LIB([pthread], 
+                            [pthread_cond_signal], 
+                            [],
+                [
+                    AC_MSG_ERROR([Pthread library not found, 
+                                is needed to enable OmpSs2.])
+                ])
+
+                AC_CHECK_LIB([dl], 
+                            [dlopen], 
+                            [],
+                [
+                    AC_MSG_ERROR([dl library not found, 
+                                is needed to enable OmpSs2.])
+                ])
+
+                AC_CHECK_LIB([nanos6], 
+                            [nanos6_spawn_function], 
+                            [],
+                [
+                    AC_MSG_ERROR([Nanos6 library not found, 
+                                is needed to enable OmpSs2.])
+                ])
+
+                AC_CHECK_LIB([custom-nanos6], 
+                            [nanos6_library_mode_init], 
+                            [],
+                [
+                    AC_MSG_ERROR([nanos6-library-mode.o is needed, 
+                                we make a custom library from it.])
+                ])
+            ]
+)
+\end{lstlisting}
+
+En este caso a parte de la macro \textit{AC\_ARG\_WITH} se utiliza \textit{AC\_CHECK\_LIB}, esta macro hará que se compruebe si la librería del primer argumento existe y contiene la función del segundo argumento, el tercer y el cuarto argumento indican respectivamente que se hará si se encuentra la librería y que se hará en caso que no se encuentre. Nótese que esta macro, añade la librería a la variable de entorno \textit{LIBS} (librerías que tomarán parte en la fase de \textit{linking}). En el caso de cuda debemos buscar la librería del \textit{runtime} de \textit{Cuda}, que es \textit{cudart}. Se utilizan exactamente los mismos mecanismos que en el resto de opciones, se muestra exactamente en la imagen \ref{lst:ac-cuda}.
+\par\smallskip
+
+\begin{lstlisting} [caption={Macros necesarias en configure.ac para habilitar la opcion --cuda en configure.},captionpos=b, label={lst:ac-cuda}, language=bash]
+AC_ARG_WITH([cuda],
+    AS_HELP_STRING([ --with-cuda], [Enables the use of CUDA.]),
+            [
+                cuda=true
+
+                AC_CHECK_LIB([cudart], 
+                            [cudaMalloc], 
+                            [],
+                [
+                    AC_MSG_ERROR([cudart library not found, 
+                                is needed to enable CUDA.])
+                ])
+            ]
+)
+\end{lstlisting}
+
+Para todas las opciones, en las imágenes \ref{lst:ac-ompss}, \ref{lst:ac-ompss-2} y \ref{lst:ac-cuda} se asigna el valor a una variable ompss, ompss-2 y cuda respectivamente para cada opción al valor \textit{true}. Con la macro \textit{AC\_CONDITIONAL} asignamos a una variable con el nombre del primer argumento el valor que obtengamos del segundo. Estas variables son visibles en el fichero \textit{Makefile.am}, de manera que podremos condicionar la compilación en función de que opciones pase el usuario al \textit{script} \textit{configure}.
+\smallskip
+
+\begin{lstlisting} [caption={Creación de las variables para el Makefile.am.},captionpos=b, label={lst:ac-vars}, language=bash]
+AM_CONDITIONAL([OMPSS]      , [test x$ompss = xtrue])
+AM_CONDITIONAL([OMPSS2]     , [test x$ompss2 = xtrue])
+AM_CONDITIONAL([CUDAOMPSS]  , [test x$cuda = xtrue && 
+                               test x$ompss = xtrue])
+AM_CONDITIONAL([CUDAOMPSS2] , [test x$cuda = xtrue && 
+                               test x$ompss2 = xtrue])
+\end{lstlisting}
+
+Esto sería todo lo relacionado con el \textit{configure.ac}, ahora entraríamos con el \textit{Makefile.am}. Recordemos que lo único que necesitamos compilar con \textit{-{}-ompss-2} es el fichero que contiene las funciones a ser ejecutadas como tareas, por lo tanto necesitamos hacer una distinción de los \textit{flags} que se utilizan para compilar este fichero. Para conseguir esto, hemos decidido indicar en el \textit{Makefile.am} que se haga una librería de este fichero y se compile con unos \textit{flags} en especial, para así aislarlo del resto. En la siguiente imagen se muestra como se hace esto.
+\smallskip
+
+\begin{lstlisting} [caption={Crear una librería en el Makefile.am.},captionpos=b, label={lst:am-lib}, language=bash]
+noinst_LIBRARIES = libfunctions.a
+libfunctions_a_SOURCES = PACKAGE-functions.cc
+
+libfunctions_a_CPPFLAGS =  -I../../src -I../../include
+                           -Wno-write-strings -I$(JAVA_HOME)/include 
+                           -I$(JAVA_HOME)/include/linux/ -Wall
+                           -I$(CS_HOME)/../bindings-common/include
+                           -I$(CS_HOME)/include 
+
+libfunctions_a_CFLAGS =
+\end{lstlisting}
+\smallskip
+
+La primera librería indica que \textit{libfunctions.a} es una librería que no debe ser instalada, y la segunda que el fichero fuente de esta librería es \textit{PACKAGE-functions.cc} donde \textit{PACKAGE} es el nombre del paquete. Las siguientes líneas indican los \textit{flags} base que se utilizarán para compilar los ficheros fuente. 
+\smallskip
+
+A esta altura, ya tenemos la base para compilar la librería, pero si no podemos poner los \textit{flags} para \textit{OmpSs-2} o \textit{OmpSs} no habremos conseguido nada. Utilizaremos las variables que hemos definido anteriormente en \ref{lst:ac-vars}. Sencillamente, en función de si las variables correspondientes tienen el valor adecuado, añadimos a las variables adecuadas los \textit{flags} que requerimos. Por ejemplo, si el usuario está compilando con \textit{OmpSs-2}, los \textit{flags} para compilar \textit{libfunctions.a} deben contener \textit{-{}-ompss-2} entre otros. En la imagen \ref{lst:am-cond-flags} se procede a asignar los \textit{flags} de esta manera.
+
+\smallskip
+\begin{lstlisting} [caption={Flags de manera condicional en Makefile.am.},captionpos=b, label={lst:am-cond-flags}, language=bash]
+if OMPSS2
+libfunctions_a_CPPFLAGS  += --ompss-2 -DOMPSS2_ENABLED
+libfunctions_a_CFLAGS    += --ompss-2 -DOMPSS2_ENABLED
+
+nio_worker_c_CPPFLAGS    += -DOMPSS2_ENABLED
+worker_c_CPPFLAGS        += -DOMPSS2_ENABLED
+endif
+
+if OMPSS
+libfunctions_a_CPPFLAGS  += --ompss -DOMPSS_ENABLED
+libfunctions_a_CFLAGS    += --ompss -DOMPSS_ENABLED
+
+nio_worker_c_CPPFLAGS    += --ompss -DOMPSS_ENABLED
+worker_c_CPPFLAGS        += --ompss -DOMPSS_ENABLED
+
+nio_worker_c_LDFLAGS += --ompss
+worker_c_LDFLAGS     += --ompss
+endif
+
+if CUDAOMPSS
+libfunctions_a_CPPFLAGS  += --cuda -DCUDA_ENABLED
+libfunctions_a_CFLAGS    += --cuda -DCUDA_ENABLED
+
+nio_worker_c_CPPFLAGS    += --cuda -DCUDA_ENABLED
+worker_c_CPPFLAGS        += --cuda -DCUDA_ENABLED
+
+nio_worker_c_LDFLAGS += --cuda
+worker_c_LDFLAGS     += --cuda
+endif
+
+if CUDAOMPSS2
+libfunctions_a_CPPFLAGS  += --cuda -DCUDA_ENABLED
+libfunctions_a_CFLAGS    += --cuda -DCUDA_ENABLED
+endif
+\end{lstlisting}
+\smallskip
+
+Está claro que después de haber compilado la libería habrá que hacer el \textit{linking} de ella con \textit{nio\_worker\_c} o \textit{worker\_c}. Con esto ya habríamos hecho las modificaciones necesarias para poder compilar la aplicación de \textit{COMPSs+OmpSs-2}.
 
 \subsubsection{Tipo enum y cabeceras en la interfaz}
 
