@@ -324,11 +324,76 @@ En cuánto a los tres bloques, el primero incluye cabeceras necesarias para \tex
 
 \subsubsection{Generación del código de cada tarea}
 
-\todo{spawn en sí}
+En el caso de \textit{OmpSs}, hay que registrar exactamente los \textit{threads} de un proceso que ejecutarán tareas, que hacemos el \textit{spawn}) y también hay que compilar necesariamente toda la aplicación con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss}, pero por otra parte, no hay necesidad de añadir más código a parte del que se encarga de registrar los \textit{threads}. En \textit{OmpSs-2} como bien vimos en el ejemplo, es necesario hacer una gestión más compleja en cuánto a generación de código, pero menos compleja porque es independiente del \textit{thread} en el cuál se ejecute.
+\par\bigskip
+Con tal de cambiar el código que se genera en el \textit{executor}, hay que hacer modificaciones en el programa que compila la interfaz del programa para generar el \textit{stubs}, el \textit{executor} y el resto de ficheros necesarios. En la estructura que tenemos nosotros del compilador, el fichero que contiene el código para autogenerarlo todo es \textit{c-backend.c}, en el cuál deberemos hacer unas modificaciones.
+\par\smallskip
+Vamos a centrarnos en las modificaciones que harán que podamos generar el \textit{struct} personalizado para cada tarea y la llamada a \textit{nanos6\_spawn\_function}, pero cómo se genera el mecanismo de sincronización (\textit{pthread\_cond\_wait}, \textit{pthread\_cond\_signal} y las estructuras de datos necesarias) es trivial, ya que no varía según la aplicación que se compile, es siempre el mismo.
+\par\bigskip
+\todo{hablar primero de generar el struct}
+Para generar el \textit{wrapper} de la tarea, necesitamos tener información sobre la función que se ejecutará, contamos con una estructura \textit{function} que almacena toda la información necesaria. Lo primero que necesitamos hacer es generar el nombre de la función, que es del estilo ''funcion\_wrapper'' y tiene por argumento un puntero a \textit{void} que apunta a la estructura que contiene los argumentos para la función que vamos a ejecutar y el valor de retorno de esta en caso que tenga. Entonces, si la función tiene retorno distinto del tipo \textit{void}, se generará \textit{struct\_->ret =}, y a continuación se genera la llamada a la función y se efectúa el paso de argumentos en caso que los haya. Para acceder a los argumentos de la función desde el compilador, se utiliza el campo de la estructura \textit{function}, \textit{first\_argument} para recorrerlos todos en caso de que sea distinto del puntero nulo. 
+\smallskip
+La imagen \ref{lst:wrapper} muestra como se hace esto, siguiendo los pasos descritos.
+\smallskip
+\begin{lstlisting} [caption={Función para generar el wrapper de la tarea.},captionpos=b, label={lst:wrapper}, language=C++]
+
+static void generate_nanos6_wrapper(FILE *outFile, function* func) {
+    fprintf(outFile, "void %s_wrapper(void* args) {\n", 
+                     func->methodname);
+
+    fprintf(outFile, 
+            "\t%s_struct_t* struct_ = (%s_struct_t*) args;\n", 
+            func->methodname, 
+            func->methodname);
+
+    char* func_to_execute;
+    int printed_chars = 0;
+
+    if (func->return_type != NULL && func->return_type != void_dt) {
+        fprintf(outFile, "\tstruct_->ret = ", func->return_type);
+    }
+
+    if ((func->classname != NULL) && (func->access_static == 0)) {
+        printed_chars = asprintf(&func_to_execute, 
+                                 "\t%s->%s(", 
+                                 func->name, 
+                                 func->methodname);
+    } else {
+        printed_chars = asprintf(&func_to_execute, "\t%s(", func->name);
+    }
+
+    if (printed_chars < 0) {
+        asprintf_error(func_to_execute, 
+                       "ERROR: Not possible to 
+                       generate method execution.\n");
+    }
+
+    fprintf(outFile, "%s", func_to_execute);
+
+    argument* args = func->first_argument;
+
+    int first = 1;
+    while (args != NULL) {
+        if (first) {
+            first = 0;
+        }
+        else {
+            fprintf(outFile, ", ");
+        }
+        fprintf(outFile, "struct_->%s", args->name);
+
+        args = args->next_argument;
+    }
+    
+    fprintf(outFile, ");\n");
+    fprintf(outFile, "}\n");
+}  
+\end{lstlisting}
+\smallskip
+
+\todo{acabarlo}
 
 \subsubsection{Modificaciones en la compilación actual}
-
-\todo{modificacion de los scripts, autotools, etc}
 
 Para compilar una aplicación que utilice \textit{OmpSs} se necesita poner el \textit{flag} \textit{-{}-ompss} en \textit{Mercurium}, y el \textit{flag} \textit{-{}-ompss-2} para \textit{OmpSs-2}. En la anterior integración se compilaba la totalidad de los ficheros con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss} debido a que no existía el modo librería. Ahora, es estrictamente necesario compilar con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss-2} tan sólo un único fichero, el que contiene las funciones a ejecutar como tareas. 
 \par\bigskip
@@ -347,7 +412,7 @@ Para el usuario compilar una aplicación con \textit{OmpSs} es muy sencillo, eje
 
 En la imagen \ref{fig:compilado} vemos que existen dos \textit{scripts}, \textit{compss\_build\_app} y \textit{compss\_build}, el primero es el encargado de recoger los argumentos que el usuario haya introducido para la compilación de su aplicación (si se utiliza \textit{OmpSs}, donde está la instalación de \textit{OmpSs}, si se utiliza \textit{OpenCL}, o \textit{Cuda}, etc) y procesarlos configurando el entorno correcto para la compilación según estos argumentos que ha introducido el usuario. Una vez configurado el entorno se ejecuta el segundo \textit{script} \textit{compss\_build} tanto para el \textit{master} como para el \textit{worker}, que será realmente quién efectúe la compilación. 
 \par\bigskip
-Para ello se utiliza un conjunto de herramientas muy populares desarrolladas por \textit{GNU},  \textit{Autotools}\ref{appendix:autotools}. Estas herramientas tienen como objetivo facilitar a los usuarios (que no a los desarrolladores...) la compilación y portabilidad entre plataformas. Pese a que es un campo interesante y muy útil, no entraremos demasiado en detalles, daremos una visión general y entraremos en las modificaciones que se han realizado con tal de poder compilar aplicaciones del tipo \textit{COMPSs+OmpSs-2}. 
+Para ello se utiliza un conjunto de herramientas muy populares desarrolladas por \textit{GNU},  \textit{Autotools} \ref{appendix:autotools}. Estas herramientas tienen como objetivo facilitar a los usuarios (que no a los desarrolladores...) la compilación y portabilidad entre plataformas. Pese a que es un campo interesante y muy útil, no entraremos demasiado en detalles, daremos una visión general y entraremos en las modificaciones que se han realizado con tal de poder compilar aplicaciones del tipo \textit{COMPSs+OmpSs-2}. 
 \par\bigskip
 Como ya hemos visto, \textit{compss\_build\_app} hace de alguna manera de \textit{wrapper} de \textit{compss\_build}, es decir, lo ejecuta con los parámetros adecuados las veces que sea necesario. Este segundo, es el que toca de primera mano \textit{Autotools}, con tal de utilizarlo para compilar una aplicación hay que generar una serie de ficheros. La siguiente imagen nos muestra una porción del \textit{script}  \textit{compss\_build} para generar el \textit{script} \textit{autogen.sh}, que al ser ejecutado nos generará estos ficheros que \textit{Autotools} necesita.
 \smallskip
@@ -391,8 +456,9 @@ fi
 
 /bin/cat >> autogen.sh << EOF
 ./configure --with-cs-prefix=$CS_HOME $conf_opts \ 
-            CXXFLAGS="$CXXFLAGS $cflags_aux" CFLAGS="$CFLAGS  \
-            $cflags_aux" LDFLAGS="$LDFLAGS $ldflags_aux" 
+            CXXFLAGS="$CXXFLAGS $cflags_aux"     \  
+            CFLAGS="$CFLAGS $cflags_aux"         \
+            LDFLAGS="$LDFLAGS $ldflags_aux" 
 EOF
 
 /bin/chmod +x autogen.sh
