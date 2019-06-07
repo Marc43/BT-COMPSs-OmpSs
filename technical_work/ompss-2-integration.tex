@@ -166,7 +166,7 @@ Requerimos de un mecanismo de sincronización por que la función que se registr
 \end{comment}
  
 \subsubsection{Mecanismo de sincronización} 
- 
+\label{sec:mecanismosync} 
 Un \textit{thread} perteneciente al \textit{worker} de \textit{COMPSs} registra una tarea y un segundo thread perteneciente a \textit{OmpSs-2} espera a poder ejecutar alguna tarea. El primer \textit{thread} una vez haya registrado la tarea procederá a bloquearse, el segundo cuando acabe de ejecutar la tarea registrada, ejecutará un \textit{callback} donde desbloquearemos al primer \textit{thread}. \bigskip
 
 El mecanismo abstracto es sencillo, pero la implementación real depende de los \textit{Pthreads}. Las estructuras utilizadas para realizar la sincronización son \textit{mutexes} y \textit{condition variables}. Un \textit{mutex} es una estructura que sirve para definir regiones de exclusión mútua mediante métodos de adquisición y liberación de la región, en este mecanismo se utilizan tan sólo por que son necesarios para utilizar \textit{condition variables}. Las \textit{condition variables} nos permiten que un \textit{thread} espere a un evento de manera no bloqueante, si no, habría que hacer \textit{polling} y consumir tiempo de cómputo inútilmente.
@@ -289,35 +289,6 @@ La ejecución de las tareas de \textit{OmpSs-2} generará otro grafo, dónde fig
 Para la implementación de los \textit{workers} hay dos ficheros distintos \textit{nio\_worker\_c.cc} y \textit{worker\_c.cc} respectivamente para el persistente y el no persistente. En cada uno de estos ficheros deberemos añadir el código para que cuando los compilemos con la opción de \textit{OmpSs-2} y \textit{COMPSs} los ejecute (en función de si es persistente o no) y activen el modo librería.
 \bigskip
 
-\begin{lstlisting} [caption={Código necesario para la gestión del modo librería de Nanos6 en nio\_worker\_c.cc y worker\_c.cc},captionpos=b, label={lst:managementnanosworkers}, language=C++]
-
-#ifdef OMPSS2_ENABLED
-#include <pthread.h>
-#include <nanos6/bootstrap.h>
-#include <nanos6/library-mode.h>
-#endif
-
-    ...
-
-#ifdef OMPSS2_ENABLED
-    char const *error = nanos6_library_mode_init();
-    if (error != NULL)
-    {
-        fprintf(stderr, "Error initializing Nanos6: %s\n", error);
-        return 1;
-    }
-    std::cout << "[C-BINDING] Nanos6 initialized" << std::endl;
-#endif
-
-    ...
-    
-#ifdef OMPSS2_ENABLED
-    nanos6_shutdown();
-    std::cout << "[C-BINDING] Nanos6 shutdown" << std::endl;
-#endif
-
-\end{lstlisting}
-
 El código mostrado en la imagen \ref{lst:managementnanosworkers} se divide en tres bloques divididos por puntos suspensivos, el código que hubiera entre estos, depende de si el fichero es \textit{nio\_worker\_c.cc} o \textit{worker\_c.cc} y es independiente de ellos. Se hace uso de macros del preprocesador de \textit{C}, la macro \textit{\#ifdef VAR} comprueba en tiempo de compilación si la variable \textit{OMPSS2\_ENABLED} está definida, si lo está las líneas contenidas entre la primera y el \textit{\#endif} serán incluidas en el fichero, sino no lo serán.
 \par\medskip
 
@@ -325,163 +296,37 @@ En cuánto a los tres bloques, el primero incluye cabeceras necesarias para \tex
 
 \subsubsection{Generación del código de cada tarea}
 
-En el caso de \textit{OmpSs}, hay que registrar exactamente los \textit{threads} de un proceso que ejecutarán tareas y también hay que compilar necesariamente toda la aplicación con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss}, pero por otra parte, no hay necesidad de añadir más código a parte del que se encarga de registrar los \textit{threads}. En \textit{OmpSs-2} como bien vimos en el ejemplo, es necesario hacer una gestión más compleja en cuánto a generación de código, pero menos compleja porque es independiente del \textit{thread} en el cuál se ejecuta.
+Con tal de dar una explicación más sencilla, nos abstenemos de poner todo el código en esta sección, si se quiere más detalle o alguna parte no se entiende tan sólo con la explicación escrita, en el apéndice \ref{appendix:integration} se encuentran los códigos modificados. 
+\par\bigskip
+En el caso de \textit{OmpSs}, hay que registrar exactamente los \textit{threads} de un proceso que ejecutarán tareas y también hay que compilar necesariamente toda la aplicación con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss}, pero por otra parte, no hay necesidad de añadir más código a parte del que se encarga de registrar los \textit{threads}. En \textit{OmpSs-2} como vimos en el ejemplo, es necesario hacer una gestión más compleja en cuánto a generación de código, pero es independiente del \textit{thread} en el cuál se ejecuta.
 \par\bigskip
 Con tal de cambiar el código que se genera en el \textit{executor}, hay que hacer modificaciones en el programa que compila la interfaz del programa para generar el \textit{stubs}, el \textit{executor} y el resto de ficheros necesarios. En la estructura que tenemos nosotros del compilador, el fichero que contiene el código para autogenerarlo todo es \textit{c-backend.c}, en el cuál deberemos hacer unas modificaciones.
 \par\smallskip
 Vamos a centrarnos en las modificaciones que harán que podamos generar el \textit{struct} personalizado para cada tarea y la llamada a \textit{nanos6\_spawn\_function}, pero cómo se genera el mecanismo de sincronización (\textit{pthread\_cond\_wait}, \textit{pthread\_cond\_signal} y las estructuras de datos necesarias) es trivial, ya que no varía según la aplicación que se compile, es siempre el mismo.
 \par\bigskip
 Con tal de generar el \textit{struct} para cada tarea, incluiremos su definición en los ficheros que hacen la función de cabecera. Cada \textit{struct} será único para cada tarea (podría tener los mismos campos, pero nunca el mismo nombre). Para generar el \textit{struct} de la tarea, necesitamos tener información sobre la función que se ejecutará, contamos con una estructura \textit{function} que almacena toda la información necesaria.
-
-\smallskip
-\begin{lstlisting} [caption={Función para generar la definición de los structs.},captionpos=b, label={lst:structs}, language=C++]
-static void generate_struct_nanos6_wrapper(FILE *outFile, 
-										   Types current_types,
-										   function *func) {
-argument *arg;
-fprintf(outFile, "typedef struct {\n", func->methodname);
-
-char* return_type = construct_returntype(func);
-
-if (func->return_type != void_dt && return_type != NULL) {
-fprintf(outFile, "\t%s ret;\n", return_type);
-}
-
-arg = func->first_argument;
-while (arg != NULL) {
-fprintf(outFile, "\t%s;\n", construct_type_and_name(arg));
-arg = arg->next_argument;
-}
-fprintf(outFile, "} %s_struct_t;\n", func->methodname);
-}
-\end{lstlisting}
-\smallskip
-
-La imagen \ref{lst:structs} contiene el código necesario para incluir en la cabecera la definición del \textit{struct} de una función en concreto. Para ello se comprueba si tiene retorno con la función \textit{construct\_returntype} y se recorren los argumentos para generar los campos que la tarea necesitará.
-%Está claro que hace falta declarar y acceder a los campos del \textit{struct} que acabamos de ver como generar, pero esto se verá más adelante, cuando nos haga falta.
 \bigskip
 
-Para generar el código del \textit{wrapper} lo primero que necesitamos hacer es generar el nombre de la función, que es del estilo ''funcion\_wrapper'' y tiene por argumento un puntero a \textit{void} que apunta a la estructura que contiene los argumentos para la función que vamos a ejecutar y el valor de retorno de esta en caso que tenga. Entonces, si la función tiene retorno distinto del tipo \textit{void}, se generará \textit{struct\_->ret =}, y a continuación se genera la llamada a la función y se efectúa el paso de argumentos en caso que los haya. Para acceder a los argumentos de la función desde el compilador, se utiliza el campo de la estructura \textit{function}, \textit{first\_argument} para recorrerlos todos en caso de que sea distinto del puntero nulo. 
+La imagen \ref{lst:structs} contiene el código necesario para incluir en la cabecera la definición del \textit{struct} de una función en concreto. Se recorrerán los argumentos de la función y se comprobará si tiene retorno, habrá un campo del \textit{struct} por cada argumento que tenga la función y uno adicional en caso de que tenga retorno.
+\bigskip
+
+Para generar el código del \textit{wrapper} lo primero que necesitamos hacer es generar el nombre de la función, que es del estilo ''function\_wrapper'' y tiene por argumento un puntero a \textit{void} que apunta al \textit{struct} que contiene los argumentos para la función que vamos a ejecutar y el valor de retorno de esta en caso que tenga. Entonces, si la función tiene retorno distinto del tipo \textit{void}, la ejecutaremos asignándole el valor al \textit{struct}, en caso contrario tan sólo la ejecutaremos, si algún valor de los argumentos se modifica, la única posibilidad para que esto se refleje en \textit{COMPSs} es que fuera un puntero, por lo que quedará modificado también dentro del \textit{struct}.
+
+\begin{comment} 
+se generará \textit{struct\_->ret =}, y a continuación se genera la llamada a la función y se efectúa el paso de argumentos en caso que los haya. Para acceder a los argumentos de la función desde el compilador, se utiliza el campo de la estructura \textit{function}: \textit{first\_argument}. Recorrerá los argumentos que están enlazados entre sí de forma semejante a una lista (tan solo que no está doblemente enlazada), hasta que llegue al final.
+\end{comment}
 \smallskip
-La imagen \ref{lst:wrapper} muestra como se hace esto, siguiendo los pasos descritos.
-\smallskip
-\begin{lstlisting} [caption={Función para generar el wrapper de la tarea.},captionpos=b, label={lst:wrapper}, language=C++]
+La imagen \ref{lst:wrapper} muestra como está hecho.
 
-static void generate_nanos6_wrapper(FILE *outFile, function* func) {
-    fprintf(outFile, "void %s_wrapper(void* args) {\n", 
-                     func->methodname);
+\bigskip
 
-    fprintf(outFile, 
-            "\t%s_struct_t* struct_ = (%s_struct_t*) args;\n", 
-            func->methodname, 
-            func->methodname);
+Ahora ya tenemos lo que necesitamos, \textit{structs} para pasar los argumentos, el \textit{wrapper} del que haremos \textit{spawn} y la propia tarea que se acabará ejecutando, tan sólo falta hacer la llamada a \textit{nanos6\_spawn\_function}. Para hacer esto, tenemos que declarar el \textit{struct} y asignarle los valores que vienen de \textit{COMPSs}, acto seguido se generará la llamada a \textit{nanos6\_spawn\_function} con el \textit{wrapper} como función a ejecutar desde \textit{OmpSs-2}, la dirección del \textit{struct} que contiene los argumentos y todo lo necesario para efectuar los mecanismos de sincronización que vimos en la sección \ref{sec:mecanismosync}. Una vez hemos esperado a que la tarea se haya ejecutado, si el retorno era distinto del tipo \textit{void} hay que asignarlo al retorno de la tarea a nivel de \textit{COMPSs}. En la imagen \ref{lst:spawncompss} se ve el código que se encarga de generar esta parte.
 
-    char* func_to_execute;
-    int printed_chars = 0;
-
-    if (func->return_type != NULL && func->return_type != void_dt) {
-        fprintf(outFile, "\tstruct_->ret = ", func->return_type);
-    }
-
-    if ((func->classname != NULL) && (func->access_static == 0)) {
-        printed_chars = asprintf(&func_to_execute, 
-                                 "\t%s->%s(", 
-                                 func->name, 
-                                 func->methodname);
-    } else {
-        printed_chars = asprintf(&func_to_execute, 
-        						 "\t%s(", func->name);
-    }
-
-    if (printed_chars < 0) {
-        asprintf_error(func_to_execute, 
-                       "ERROR: Not possible to 
-                       generate method execution.\n");
-    }
-
-    fprintf(outFile, "%s", func_to_execute);
-
-    argument* args = func->first_argument;
-
-    int first = 1;
-    while (args != NULL) {
-        if (first) {
-            first = 0;
-        }
-        else {
-            fprintf(outFile, ", ");
-        }
-        fprintf(outFile, "struct_->%s", args->name);
-
-        args = args->next_argument;
-    }
-    
-    fprintf(outFile, ");\n");
-    fprintf(outFile, "}\n");
-}  
-\end{lstlisting}
-\smallskip
-
-Ahora ya tenemos lo que necesitamos, \textit{structs} para pasar los argumentos, el \textit{wrapper} del cual tendremos que hacer \textit{spawn} y la propia tarea que se acabará ejecutando, tan sólo falta hacer la llamada a \textit{nanos6\_spawn\_function}. 
-
-\begin{lstlisting} [caption={Función para generar el wrapper de la tarea.},captionpos=b, label={lst:wrapper}, language=C++]
-fprintf(outFile, "\t\t\t%s_struct_t %s_struct;\n", func->methodname, 
-				 								   func->methodname);
-
-assign_arguments_to_struct(outFile, func);
-
-fprintf(outFile, "\t\t\t \n");
-
-//Add function call
-printf("\t\t Adding function call unmarshalling...\n");
-fflush(NULL);
-
-fprintf(outFile, "\t\t\tcondition_variable_t cond_var = 
-				 {PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER, 0};\n");
-
-char* nanos6_spawner;
-printed_chars = asprintf(&nanos6_spawner, 
-						 "\t\t\tnanos6_spawn_function(%s_wrapper,
-						 &%s_struct, 
-						 %s, %s, 
-						 \"%s_spawned_task\");\n",
-						func->methodname, 
-						func->methodname, 
-						"condition_variable_callback", 
-						"&cond_var", 
-						func->methodname);
-
-if (printed_chars < 0) {
-	asprintf_error(nanos6_spawner, "Not possible to generate function spawn.\n");
-}
-
-fprintf(outFile, "%s\n", nanos6_spawner);
-
-fprintf(outFile, "\t\t\twait_condition_variable(&cond_var);\n");
-
-if (func->return_type == int_dt && func->return_type != NULL) {
-	printf("\t\t WARNING: Return type int_dt is not implemented, but permited.\n");
-}
-else if (func->return_type != void_dt && func->return_type != NULL) {
-	char* return_var;
-	printed_chars = asprintf(&return_var, "return_obj = %s_struct.ret;\n", 
-										  func->methodname);
-	
-	fprintf(outFile, "%s", return_var);
-	
-	if (printed_chars < 0) {
-		asprintf_error(return_var, 
-					   "Not possible to generate return variable.\n");
-	}
-}
-
-fprintf(outFile, "#endif\n");
-\end{lstlisting}
-
-\todo{acabarlo}
+Con esto ya somos capaces de ejecutar una aplicación \textit{COMPSs+OmpSs-2}, pero antes de nada habrá que conseguir compilarla correctamente. En la siguiente sección se muestran las modificaciones necesarias para ello.
 
 \subsubsection{Modificaciones en la compilación actual}
 
+\todo{Quitar todos los listings que sean demasiado grandes y ponerlos en un apéndice}
 Para compilar una aplicación que utilice \textit{OmpSs} se necesita poner el \textit{flag} \textit{-{}-ompss} en \textit{Mercurium}, y el \textit{flag} \textit{-{}-ompss-2} para \textit{OmpSs-2}. En la anterior integración se compilaba la totalidad de los ficheros con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss} debido a que no existía el modo librería. Ahora, es estrictamente necesario compilar con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss-2} tan sólo un único fichero, el que contiene las funciones a ejecutar como tareas. 
 \par\bigskip
 Habrá que modificar el método actual de compilación de una aplicación del \textit{binding} de \textit{C/C++} con tal de que aplique lo relativo a la compilación explicado en la sección \ref{sec:compilado}.
@@ -715,6 +560,13 @@ Está claro que después de haber compilado la libería habrá que hacer el \tex
 
 \todo{Añadido del tipo enum y el include de las cabeceras}
 
+Un añadido al proyecto ha sido soportar el tipo \texit{enum} y añadir la posibilidad de incluir cabeceras en la interfaz de una aplicación \textit{C/C++}. Para hacer esto, ha habido que hacer modifcaciones en la gramática del compilador y en la generación de código. 
+
 \subsection{Estudio previo del rendimiento}
+
+En la sección \todo{referenciar donde se dice que queremos hacer} se enunció el objetivo de este proyecto. En este apartado, se realiza un estudio previo del rendimiento para saber si una parte  de los objetivos propuestos. Para ello, se crean tests especializados en ver los problemas y se confirman utilizando \textit{Extrae} y \textit{Paraver}.
+\bigskip
+
+
 \section{Aplicación COMPSs+OmpSs-2}
 \section{Estudio del rendimiento}

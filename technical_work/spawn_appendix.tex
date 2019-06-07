@@ -1,0 +1,157 @@
+\section{Código para realizar la integración COMPSs+OmpSs-2}
+\label{appendix:integration}
+
+\begin{lstlisting} [caption={Código necesario para la gestión del modo librería de Nanos6 en nio\_worker\_c.cc y worker\_c.cc},captionpos=b, label={lst:managementnanosworkers}, language=C++]
+
+#ifdef OMPSS2_ENABLED
+#include <pthread.h>
+#include <nanos6/bootstrap.h>
+#include <nanos6/library-mode.h>
+#endif
+
+    ...
+
+#ifdef OMPSS2_ENABLED
+    char const *error = nanos6_library_mode_init();
+    if (error != NULL)
+    {
+        fprintf(stderr, "Error initializing Nanos6: %s\n", error);
+        return 1;
+    }
+    std::cout << "[C-BINDING] Nanos6 initialized" << std::endl;
+#endif
+
+    ...
+    
+#ifdef OMPSS2_ENABLED
+    nanos6_shutdown();
+    std::cout << "[C-BINDING] Nanos6 shutdown" << std::endl;
+#endif
+
+\end{lstlisting}
+
+\bigskip
+
+\begin{lstlisting} [caption={Función para generar la definición de los structs.},captionpos=b, label={lst:structs}, language=C++]
+static void generate_struct_nanos6_wrapper(FILE *outFile, 
+Types current_types,
+function *func) {
+argument *arg;
+fprintf(outFile, "typedef struct {\n", func->methodname);
+
+char* return_type = construct_returntype(func);
+
+if (func->return_type != void_dt && return_type != NULL) {
+fprintf(outFile, "\t%s ret;\n", return_type);
+}
+
+arg = func->first_argument;
+while (arg != NULL) {
+fprintf(outFile, "\t%s;\n", construct_type_and_name(arg));
+arg = arg->next_argument;
+}
+fprintf(outFile, "} %s_struct_t;\n", func->methodname);
+}
+\end{lstlisting}
+
+\bigskip
+
+\begin{lstlisting} [caption={Función para generar el wrapper de la tarea.},captionpos=b, label={lst:wrapper}, language=C++]
+
+static void generate_nanos6_wrapper(FILE *outFile, function* func) {
+fprintf(outFile, "void %s_wrapper(void* args) {\n", 
+func->methodname);
+
+fprintf(outFile, 
+"\t%s_struct_t* struct_ = (%s_struct_t*) args;\n", 
+func->methodname, 
+func->methodname);
+
+char* func_to_execute;
+int printed_chars = 0;
+
+if (func->return_type != NULL && func->return_type != void_dt) {
+fprintf(outFile, "\tstruct_->ret = ", func->return_type);
+}
+
+if ((func->classname != NULL) && (func->access_static == 0)) {
+printed_chars = asprintf(&func_to_execute, 
+"\t%s->%s(", 
+func->name, 
+func->methodname);
+} else {
+printed_chars = asprintf(&func_to_execute, 
+"\t%s(", func->name);
+}
+
+if (printed_chars < 0) {
+asprintf_error(func_to_execute, 
+"ERROR: Not possible to 
+generate method execution.\n");
+}
+
+fprintf(outFile, "%s", func_to_execute);
+
+argument* args = func->first_argument;
+
+int first = 1;
+while (args != NULL) {
+if (first) {
+first = 0;
+}
+else {
+fprintf(outFile, ", ");
+}
+fprintf(outFile, "struct_->%s", args->name);
+
+args = args->next_argument;
+}
+
+fprintf(outFile, ");\n");
+fprintf(outFile, "}\n");
+}  
+\end{lstlisting}
+
+\bigskip
+
+\begin{lstlisting} [caption={Código para hacer un spawn de una tarea para OmpSs-2 en COMPSs.},captionpos=b, label={lst:spawncompss}, language=C++]
+fprintf(outFile, "\t\t\t%s_struct_t %s_struct;\n", func->methodname, 
+func->methodname);
+
+assign_arguments_to_struct(outFile, func);
+
+char* nanos6_spawner;
+printed_chars = asprintf(&nanos6_spawner, 
+"\t\t\tnanos6_spawn_function(%s_wrapper,
+&%s_struct, 
+%s, %s, 
+\"%s_spawned_task\");\n",
+func->methodname, 
+func->methodname, 
+"condition_variable_callback", 
+"&cond_var", 
+func->methodname);
+
+if (printed_chars < 0) {
+asprintf_error(nanos6_spawner, 
+"Not possible to generate function spawn.\n");
+}
+
+fprintf(outFile, "%s\n", nanos6_spawner);
+
+fprintf(outFile, "\t\t\twait_condition_variable(&cond_var);\n");
+
+if (func->return_type != void_dt && func->return_type != NULL) {
+char* return_var;
+printed_chars = asprintf(&return_var, 
+"return_obj = %s_struct.ret;\n", 
+func->methodname);
+
+fprintf(outFile, "%s", return_var);
+
+if (printed_chars < 0) {
+asprintf_error(return_var, 
+"Not possible to generate return variable.\n");
+}
+}
+\end{lstlisting}
