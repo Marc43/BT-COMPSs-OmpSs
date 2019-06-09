@@ -1,0 +1,98 @@
+\section{Estudio previo del rendimiento: código del test}
+\label{appendix:estudioprevio}
+
+\begin{lstlisting} [caption={Programa principal del test},captionpos=b, 
+label={lst:tltmain}, style=JStyle]
+#include <iostream>
+#include <c_compss.h>
+#include "tlt.h"
+
+using namespace std;
+
+int main() {
+
+cout << "Encendemos el runtime... " << endl;
+compss_on();
+
+int* array_a = (int*) malloc(30 * sizeof(int));
+
+int* array_b = (int*) malloc(30 * sizeof(int));
+
+for (int i = 0; i < 30; ++i) {
+
+coarse_grain_task(array_a, 30);
+
+fine_grain_task(array_b, 30);
+
+}
+
+compss_wait_on(array_a);
+compss_wait_on(array_b);   
+
+for (int i = 0; i < 30; ++i) {
+if (array_a[i] != array_b[i]) {
+cout << "Arrays differ at position " << i << " array_a: " << array_a[i] << " array_b: " << array_b[i];
+}
+else {
+cout << array_a[i] << " ";
+}
+}
+cout << endl;
+
+cout << "Apagamos el runtime... "   << endl;
+compss_off();
+
+}   
+\end{lstlisting}
+
+\begin{lstlisting} [caption={Código necesario para la gestión del modo librería de Nanos6 en nio\_worker\_c.cc y worker\_c.cc},captionpos=b, 
+label={lst:Interfaz de la aplicación de test}, style=idlstyle] 
+interface tlt {
+
+void coarse_grain_task(inout int[N] a, in int N);
+
+void fine_grain_task(inout int[N] a, in int N);
+
+};
+\end{lstlisting}
+
+\newpage
+
+\begin{lstlisting} [caption={Código necesario para la gestión del modo librería de Nanos6 en nio\_worker\_c.cc y worker\_c.cc},captionpos=b,
+label={lst:Funciones a ejecutar como tareas del test}, style=JStyle] 
+#include <unistd.h>
+#include <stdio.h>
+
+#define COARSE_GRAIN_SLEEP 300000
+#define FINE_GRAIN_SLEEP 50000
+
+void coarse_grain_task(int* a, int N) {
+
+printf("COMPSS_JOB: a: %d N: %d ", a, N);
+
+int i;
+for (i = 0; i < N; ++i) {
+#pragma oss task in([N]a) label(COARSE_GRAIN_TASK) 
+{
+a[i] = i;
+usleep(COARSE_GRAIN_SLEEP);
+}
+}
+#pragma oss taskwait
+}
+
+void fine_grain_task(int* a, int N) {
+
+printf("COMPSS_JOB: a: %d N: %d ", a, N);
+
+int i;
+for (i = 0; i < N; ++i) {
+#pragma oss task in([N]a) label(FINE_GRAIN_TASK)
+{
+a[i] = i;
+usleep(FINE_GRAIN_SLEEP);
+}
+} 
+#pragma oss taskwait
+}  
+\end{lstlisting}

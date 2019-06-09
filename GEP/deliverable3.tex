@@ -1,4 +1,6 @@
-\section{Autoevaluación sobre la sostenibilidad}
+\section{Gestión económica y de sostenibilidad del proyecto}
+\label{sec:sostenibilidad}
+\subsection{Autoevaluación sobre la sostenibilidad}
 
 Todos los alumnos que estén realizando un trabajo de final de grado este cuatrimestre, saben qué supone el impacto de un proyecto sobre la sostenibilidad. Es difícil para mí, analizar de manera crítica y de alguna manera metódica estos impactos que se describen en la encuesta. 
 \par\medskip
@@ -12,7 +14,7 @@ Sobre aspectos económicos es donde más fallo, pese a que tengo cierta formaci�
 \par\medskip
 Básicamente, se quiere poder analizar de igual manera los tres aspectos, ambiental, social y económico, existe una voluntad fehaciente que por desgracia puede resultar insuficente cuando se ahonda en el análisis.
 
-\section{Gestión económica y sostenibilidad}
+\subsection{Gestión económica y sostenibilidad}
 
 %Cuando se desarrolla un proyecto siempre hay un cierto impacto ambiental, económico, social. Cómo el proyecto impacta sobre estas tres componentes indica cuánto de sostenbile es el proyecto. Aunque \textit{a priori} desconocemos las técnicas para medir el impacto, se conseguirá hacer una aproximación del impacto del proyecto. 
 
@@ -20,7 +22,7 @@ Básicamente, se quiere poder analizar de igual manera los tres aspectos, ambien
 
 A lo largo de esta sección, se detallará la gestión económica del proyecto. Se estudiarán los costes tanto directos e indirectos y las posibles desviaciones en términos económicos. Además se estudiará también el componente que queda olvidado en la mayoría de proyectos informáticos, la sostenibilidad de este.
 
-\subsection{Costes directos e indirectos}
+\subsubsection{Costes directos e indirectos}
 
 Los costes directos de este proyecto, vienen a partir de los recursos definidos para el proyecto y las actividades que se llevan a cabo en este. Es importante tener en cuenta que por mucho que los recursos tenga un coste directo en el proyecto y estén asociados a este, los recursos tienen una vida útil por lo cuál habrá un grado de amortización del coste por recurso. Estos costes se recapitulan a continuación en forma de tabla.
 
@@ -34,7 +36,7 @@ Los costes directos de este proyecto, vienen a partir de los recursos definidos 
     \rowcolor{gray!50}
     Recursos hardware \\
     \hline
-    Dell Latitude 7480          & 1 & 1,500  & 4 & 0.21\\
+    Dell Latitude 7480          & 1 & 1500  & 4 & 0.21\\
     \hline 
     Dell Professional P2217H    & 1 & 250   & 4 & 0.03\\
     \hline
@@ -89,7 +91,7 @@ Los costes directos de este proyecto, vienen a partir de los recursos definidos 
 Los recursos \textit{GitHub}, \textit{IntelliJ IDEA} y \textit{PyCharm}, no añaden ningún coste al proyecto ya que se utilizan versiones y subscripciones para estudiantes. Por otra parte \textit{Gantter} proporciona una versión de prueba de 30 días, por lo cuál tampoco añade ningún coste.
 \par\bigskip
 
-En la anterior tabla se han omitido los dos clústers, ya que querríamos costearlos a \euro$/$h y no por unidad. Se puede considerar que \textit{MinoTauro} y \textit{CTE-Power} no suponen ningún coste al proyecto, ni de adquisición de este ni eléctrico, ya que son proporcionados por el \textit{BSC}, aún así para proporcionar una visión más realista se ha seleccionado una máquina de \textit{Amazon Web Services} \textit{AWS} con caracterísitcas similares a cada clúster, con tal de seleccionar un precio \euro$/$h adecuado. Para \textit{MinoTauro} se ha considerado que la instáncia \textit{Amazon EC2 G3} de modelo \textit{g3.8xlarge} a un coste de 2.02 \euro/h, y para \textit{CTE-Power} la instáncia \textit{Amazon EC2 P3} modelo \textit{p3.8xlarge} a un coste de 10.85 \euro/h.
+En la anterior tabla se han omitido los dos clústers, ya que querríamos costearlos a \euro$/$h y no por unidad. Se puede considerar que \textit{MareNostrum4} y \textit{CTE-Power} no suponen ningún coste al proyecto, ni de adquisición de este ni eléctrico, ya que son proporcionados por el \textit{BSC}, aún así para proporcionar una visión más realista se ha seleccionado una máquina de \textit{Amazon Web Services} \textit{AWS} con características similares a cada clúster, con tal de seleccionar un precio \euro$/$h adecuado. Para \textit{MareNostrum4} se ha considerado que la instancia de modelo \textit{r5.12xlarge} a un coste de 2.7 \euro/h, y para \textit{CTE-Power} la instancia \textit{Amazon EC2 P3} modelo \textit{p3.8xlarge} a un coste de 10.85 \euro/h.
 \par\bigskip
 
 En cuanto a costes directos solo nos falta comentar los que provienen de los recursos humanos del proyecto.
@@ -121,12 +123,12 @@ begin{table}[ht!]
 \begin{tabular}{l|l|l|l|}
 \cline{2-4}
                                                     & Horas (h) & Precio/Hora(\euro) & Total(\euro) \\ \hline
-\multicolumn{1}{|l|}{Desarrollador}                 & 489       & 10               & 4,890     \\ \hline
-\multicolumn{1}{|l|}{Director}                      & 55        & 30               & 1,650     \\ \hline
-\multicolumn{1}{|l|}{Codirector}                    & 50        & 30               & 1,500     \\ \hline
+\multicolumn{1}{|l|}{Desarrollador}                 & 489       & 10               & 4890     \\ \hline
+\multicolumn{1}{|l|}{Director}                      & 55        & 30               & 1650     \\ \hline
+\multicolumn{1}{|l|}{Codirector}                    & 50        & 30               & 1500     \\ \hline
 \multicolumn{1}{|l|}{Soporte}                       & 20        & 20               & 400      \\ \hline
 \rowcolor{gray!50}
-\multicolumn{1}{|l|}{Total} &    -       &  -              &  8,440        \\ \hline
+\multicolumn{1}{|l|}{Total} &    -       &  -              &  8440        \\ \hline
 \end{tabular}
 \caption{Costes directos provenientes de recursos humanos.}
 \end{table}
@@ -135,7 +137,7 @@ Es difícil cuantificar las horas que entran en soporte, dado que este puede ser
 
 \par\bigskip
 
-Los costes indirectos del proyecto engloban el alquiler de la oficina (edificio K2M) el gasto energético de esta , su debido mantenimiento la contratación de servicios como internet, u otros servicios que se ofrezcan al conjunto de trabajadores en general. Del enlace \cite{k2msuperficie} se extrae que la superfície de la primera planta del edifico K2M es de $445.6 m^{2}$ y de \cite{k2mpreu} que el coste para una empresa es de 17.8 \euro$/m^{2}$ al mes. El gasto en consumo eléctrico de la planta se da por hecho que entra en el precio estipulado por el alquiler.
+Los costes indirectos del proyecto engloban el alquiler de la oficina (edificio K2M) el gasto energético de esta , su debido mantenimiento la contratación de servicios como internet, u otros servicios que se ofrezcan al conjunto de trabajadores en general. Del enlace \cite{k2msuperficie} se extrae que la superfície de la primera planta del edifico K2M es de $445,6 m^{2}$ y de \cite{k2mpreu} que el coste para una empresa es de 17.8 \euro$/m^{2}$ al mes. El gasto en consumo eléctrico de la planta se da por hecho que entra en el precio estipulado por el alquiler.
 % preu https://govern.upc.edu/ca/consell-de-govern/consell-de-govern/sessio-3-2017-de-consell-de-govern/aprovacio-de-la-modificacio-de-les-tarifes-dels-espais-parc-upc/9-11-modificacio-de-les-tarifes-desl-espais-parc-upc.pdf/@@display-file/visiblefile/9.11%20Modificaci%C3%B3%20de%20les%20tarifes%20desl%20espais%20Parc%20UPC.pdf
 % superficie https://wwwbupc.webs.upc.edu/bupc/hemeroteca/2008/b107/05-06-2008.pdf
 
@@ -143,9 +145,9 @@ Los costes indirectos del proyecto engloban el alquiler de la oficina (edificio 
 \begin{tabular}{l|l|l|l|l|}
 \cline{2-5}
                                                     & Meses   & $m^{2}$ & Precio mensual(\euro$/m^{2})$ & Total(\euro) \\ \hline
-\multicolumn{1}{|l|}{Alquiler oficinas }            & 4  & 445.6   & 17.8 & 31,726.72     \\ \hline
+\multicolumn{1}{|l|}{Alquiler oficinas }            & 4  & 445,6   & 17,8 & 31.726,72     \\ \hline
 \rowcolor{gray!50}
-\multicolumn{1}{|l|}{Total} & - &   -       &  -              &   31,726.72       \\ \hline
+\multicolumn{1}{|l|}{Total} & - &   -       &  -              &   31.726,72       \\ \hline
 \end{tabular}
 \caption{Costes indirectos derivados del alquiler de las oficinas.}
 \end{table}
@@ -162,18 +164,18 @@ En el mejor de los casos no tendremos imprevistos o bien será una cantidad tan 
 
 \begin{longtable}{l|l|l|l|l|l|}
 \cline{2-6}
-                                                                                                                                    & Uds.                            & Precio(\euro o \euro/h)         & Vida útil(años)         & Amortización(\euro/h)       & Precio(\euro)                       \\ \hline
+                                                                                                                                    & Uds.                            & Precio(\euro\ o \euro/h)         & Vida útil(años)         & Amortización(\euro/h)       & Precio(\euro)                       \\ \hline
 \endfirsthead
 %
 \endhead
 %
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes directos}                                                                       &                                 &                         &                         &                         & {\color[HTML]{343434} 16,463.38} \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes directos}                                                                       &                                 &                         &                         &                         & {\color[HTML]{343434} 17.034,58} \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{343434} Gestión del proyecto}}                                           & {\color[HTML]{343434} 60 horas} & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} 620.45}   \\ \hline
-\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 17.05                           \\ \hline
-\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 2.84                            \\ \hline
-\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.57                            \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{343434} Gestión del proyecto}}                                           & {\color[HTML]{343434} 60 horas} & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} 620,45}   \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1500                    & 4                       & 0,2841                  & 17,05                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0,0473                  & 2,84                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0,0095                  & 0,57                            \\ \hline
 \multicolumn{1}{|l|}{Ubuntu 18.04}                                                                                                  & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{GitHub}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Gantter}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
@@ -183,48 +185,48 @@ En el mejor de los casos no tendremos imprevistos o bien será una cantidad tan 
 \multicolumn{1}{|l|}{LibreOffice}                                                                                                   & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 600                             \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Uso de la API Nanos6}                                                                  & 60 horas                        &                         &                         &                         & 620.45                          \\ \hline
-\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 17.05                           \\ \hline
-\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 2.84                            \\ \hline
-\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.57                            \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Uso de la API Nanos6}                                                                  & 60 horas                        &                         &                         &                         & 620,45                          \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0,2841                  & 17,05                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0,0473                  & 2,84                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0,0095                  & 0,57                            \\ \hline
 \multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       &                         & 0                               \\ \hline
 \multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 600                             \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Integrar OmpSs-2 en C/C++}                                                             & 96 horas                        &                         &                         &                         & 992.72                          \\ \hline
-\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 27.27                           \\ \hline
-\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 4.54                            \\ \hline
-\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.912                           \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Integrar OmpSs-2 en C/C++}                                                             & 96 horas                        &                         &                         &                         & 992,72                          \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0,2841                  & 27,27                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0,0473                  & 4,54                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0,0095                  & 0,912                           \\ \hline
 \multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 960                             \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Integrar OmpSs-2 en Python\\ y Java\end{tabular}}           & 93 horas                        &                         &                         &                         & 961.7                           \\ \hline
-\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 26.42                           \\ \hline
-\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 4.40                            \\ \hline
-\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.88                            \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Integrar OmpSs-2 en Python\\ y Java\end{tabular}}           & 93 horas                        &                         &                         &                         & 961,7                           \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0,2841                  & 26,42                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0,0473                  & 4,40                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0,0095                  & 0,88                            \\ \hline
 \multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 930                             \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Desarrollo de una aplicación\\ COMPSs+OmpSs-2\end{tabular}} & 84 horas                        &                         &                         &                         & 868.63                          \\ \hline
-\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1500                    & 4                       & 0.2841                  & 23.86                           \\ \hline
-\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 3.97                            \\ \hline
-\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.80                            \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Desarrollo de una aplicación\\ COMPSs+OmpSs-2\end{tabular}} & 84 horas                        &                         &                         &                         & 868,63                          \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1500                    & 4                       & 0,2841                  & 23,86                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0,0473                  & 3,97                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0,0095                  & 0,80                            \\ \hline
 \multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 840                             \\ \hline
 \rowcolor[HTML]{C0C0C0} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Estudio del rendimiento}                                                               & 84 horas                        &                         &                         &                         & 11,679.43                        \\ \hline
-\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0.2841                  & 23.86                           \\ \hline
-\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0.0473                  & 3.97                            \\ \hline
-\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0.0095                  & 0.80                            \\ \hline
-\multicolumn{1}{|l|}{MinoTauro}                                                                                                     & 10                              & 2.02                    & -                       & -                       & 1,696.8                          \\ \hline
-\multicolumn{1}{|l|}{CTE-Power}                                                                                                     & 10                              & 10.85                   & -                       & -                       & 9,114                            \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Estudio del rendimiento}                                                               & 84 horas                        &                         &                         &                         & 12.250,63                        \\ \hline
+\multicolumn{1}{|l|}{Dell Latitude 7480}                                                                                            & 1                               & 1,500                    & 4                       & 0,2841                  & 23,86                           \\ \hline
+\multicolumn{1}{|l|}{Dell Professional P2217H}                                                                                      & 1                               & 250                     & 4                       & 0,0473                  & 3,97                            \\ \hline
+\multicolumn{1}{|l|}{Periféricos}                                                                                                   & 1                               & 50                      & 4                       & 0,0095                  & 0,80                            \\ \hline
+\multicolumn{1}{|l|}{MareNostrum4}                                                                                                     & 10                              & 2,7                    & -                       & -                       & 2268,0                          \\ \hline
+\multicolumn{1}{|l|}{CTE-Power}                                                                                                     & 10                              & 10,85                   & -                       & -                       & 9,114                            \\ \hline
 \multicolumn{1}{|l|}{OmpSs-2}                                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{COMPSs}                                                                                                        & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{GNU Compiler Collection}                                                                                       & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
@@ -238,22 +240,22 @@ En el mejor de los casos no tendremos imprevistos o bien será una cantidad tan 
 \multicolumn{1}{|l|}{LibreOffice}                                                                                                   & 1                               & 0                       & -                       & -                       & 0                               \\ \hline
 \multicolumn{1}{|l|}{Desarrollador}                                                                                                 & 1                               & 10                      & -                       & -                       & 720                             \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes indirectos}                                                                     &                                 &                         &                         &                         & 31,726.72                        \\ \hline
-\multicolumn{1}{|l|}{Alquiler oficinas K2M}                                                                                         & -                               & -                       & -                       & -                       & 31,726.72                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes indirectos}                                                                     &                                 &                         &                         &                         & 31.726,72                        \\ \hline
+\multicolumn{1}{|l|}{Alquiler oficinas K2M}                                                                                         & -                               & -                       & -                       & -                       & 31.726,72                        \\ \hline
 \multicolumn{1}{|l|}{Servicios}                                                                                                     & -                               & -                       & -                       & -                       & -                               \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total acumulado}                                                                       &                                 &                         &                         &                         & 48,190.1                         \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total acumulado}                                                                       &                                 &                         &                         &                         & 48.761,3                         \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Contingencia}                                                                          & 10\%                            &                         &                         &                         & 53,009.11                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Contingencia}                                                                          & 10\%                            &                         &                         &                         & 53.637,43                        \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total sin IVA}                                                                         &                                 &                         &                         &                         & 53,009.11                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total sin IVA}                                                                         &                                 &                         &                         &                         & 53.637,43                        \\ \hline
 \rowcolor[HTML]{9B9B9B} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total con IVA}                                                                         & 21\%                            &                         &                         &                         & 64,141.02                        \\ \hline
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total con IVA}                                                                         & 21\%                            &                         &                         &                         & 64.901,29                        \\ \hline
 \end{longtable}
 
 En la anterior tabla de detalla el presupuesto final del proyecto, se define la contingencia y se aplica el impuesto \textit{IVA}. En esta última tabla no siempre se ha hecho referencia a todos los recursos, esto ha sido así siempre que el recurso tuviera un papel secundario (por ejemplo editores o terminales, que son cosas a elección del desarrollador...) y el coste fuera nulo.
 
-\section{Dimensión económica}
+\subsection{Dimensión económica}
 
 \begin{itemize}
  \item \textbf{Reflexión sobre el coste estimado para la realización del proyecto.}\newline
@@ -265,7 +267,7 @@ En la anterior tabla de detalla el presupuesto final del proyecto, se define la 
  El problema actualmente se aborda de diversas maneras, el problema es que estas son costosas en términos de tiempo, se pretende aportar una nueva manera de resolverlo que ahorre en términos de tiempo, que se traduce en dinero.
 \end{itemize}
 
-\section{Dimensión ambiental}
+\subsection{Dimensión ambiental}
 
 \begin{itemize}
  \item \textbf{Has estimado el impacto ambiental que tendrá la realización del proyecto?}\newline
@@ -281,7 +283,7 @@ En la anterior tabla de detalla el presupuesto final del proyecto, se define la 
 Como se ha dicho anteriormente, hay diversas maneras de abordar el problema, el caso es que no se cree que mejore ambientalmente respecto al resto, será interesante de igual manera intentar efectuar una medición del consumo energético  bien la eficiencia energética.
 \end{itemize}
 
-\section{Dimensión social}
+\subsection{Dimensión social}
 
 \begin{itemize}
  \item \textbf{Qué crees que te aportará a nivel personal la realización del proyecto?}\newline

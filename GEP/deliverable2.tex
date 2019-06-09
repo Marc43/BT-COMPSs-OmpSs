@@ -1,4 +1,5 @@
 \section{Planificación temporal}
+\label{sec:planificacion}
 
 Esta sección presenta como se utilizarán los aproximadamente cuatro meses de duración que tiene el proyecto, desde Febrero de 2019 hasta Junio de 2019. Se especificarán las tareas a realizar junto a su durada aproximada, teniendo en cuenta las posibles desviaciones en la realización de estas. Dado que cualquier desviación puede resultar en la alteración de la planificación, se debe tener en cuenta que la especificación que sigue no debe tomarse al pie de la letra, sino que debe reinterpretarse y modificarse siempre que sea necesario. 
 
@@ -45,6 +46,10 @@ Esta tarea es la que más tiempo nos llevará, ya que será el primer intento se
 \subsubsection{Estudiar la integración de OmpSs-2 en Java y binding de Python}
 
 En caso de que la primera integración haya funcionado, se estudiará la posibilidad de hacer lo mismo con \textit{Java} y el \textit{binding} de \textit{Python}. Consistirá exactamente de los mismos pasos, y puede ayudar a mejorar la implementación anterior. La duración estimada de esta tarea dependerá de si se decide realizar o no esta actividad. Mínimo se emplearán 15 horas en el estudio preliminar, y en caso de realizar la integración, 78 horas más, es decir, 15 horas o bien 93 horas. Pese a que la tarea es muy similar a la anterior, el tiempo previsto es algo menor por el hecho de que ya se ha podido realizar una integración y la implementación debería ser parecida. Los recursos necesarios son un ordenador con \textit{COMPSs} instalado, un compilador nativo de \textit{C}, otro de \textit{C++}, y \textit{Mercurium} y \textit{Nanos6} instalados.
+
+\subsubsection{Estudio previo del rendimiento}
+
+Dado que este proyecto parte de la premisa de resolver unos problemas concretos con el rendimiento, se efectúa un estudio muy concreto hacia estos problemas para ver si están resueltos o no. Que este estudio vaya mal o no, no afecta realmente al proyecto, ya que se intentará ver si \textit{OmpSs-2} mejora respecto a \textit{OmpSs} de todas formas.
 
 \subsubsection{Desarrollo de una aplicación que use COMPSs+OmpSs-2}
 
@@ -112,7 +117,9 @@ La tabla anterior muestra la relación de dependencia, se respetará esta relaci
     \hline
     Integrar OmpSs-2 en Python & Integrar OmpSs-2 en Java \\
     \hline
-    Desarrollo aplicación COMPSs+OmpSs-2 & Integrar OmpSs-2 en Python \\
+    Estudio previo del rendimiento & Integrar OmpSs-2 en Python \\
+    \hline
+    Desarrollo aplicación COMPSs+OmpSs-2 & Estudio previo del rendimiento \\
     \hline
     Estudio del rendimiento & Desarrollo aplicación COMPSs+OmpSs-2 \\
     \hline
@@ -163,7 +170,7 @@ En los apéndices
 
 \begin{table}[H]
  \centering
- \begin{tabular}{|| l | l ||}
+ \begin{tabular}{| l | l |}
  \hline
  Tarea & Recursos necesarios \\
  \hline\hline  
