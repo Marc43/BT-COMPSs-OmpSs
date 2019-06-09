@@ -63,13 +63,14 @@
     commentstyle=\color{green}, % comment color
     keywordstyle=\color{blue}, % keyword color
     stringstyle=\color{red},
-    backgroundcolor=\color{lbcolor}
+    %backgroundcolor=\color{lbcolor}
 }
 
 \definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
 \definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
 \definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
 \definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+
 \lstdefinestyle{idlstyle}
 {
     language = C++,
@@ -77,6 +78,32 @@
     keywordstyle = [3]{\color{blue}},
     otherkeywords = {in, int ,interface, out, inout},
     morekeywords = [3]{in, out, inout}
+}
+
+\lstdefinestyle{JStyle}{
+	numberbychapter=false,
+	backgroundcolor=\color{white},   
+	commentstyle=\color{teal},
+	% 	keywordstyle=\,
+	% numberstyle=\tiny\color{mGray},
+	% 	stringstyle=\color{red},
+	% 	basicstyle=\scriptsize,
+	basicstyle=\small,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=3pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	language=C++,
+	frame=lines,
+	classoffset=1,
+	morekeywords={\#pragma, omp, oss, parallel, single, task, depend, firstprivate, priority},keywordstyle=\color{blue}\bfseries,
+	otherkeywords = {\#pragma, omp, oss, parallel, single, task, depend, firstprivate, priority}
 }
 
 \setcounter{secnumdepth}{3}

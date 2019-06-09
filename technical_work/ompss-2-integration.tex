@@ -135,8 +135,8 @@ Por supuesto, esta función será compilada con \textit{Mercurium}, si no fuera 
     args.array = &A;
     
     nanos6_spawn_function(ejemplo_wrapper, &args, 
-    condition_variable_callback, &cond_var, 
-    "spawned ejemplo");
+    					  condition_variable_callback, &cond_var, 
+    					  "spawned ejemplo");
 
     wait_condition_variable(&cond_var);
 
@@ -396,8 +396,6 @@ EOF
 /bin/chmod +x autogen.sh
 \end{lstlisting}
 
-\todo{he quitado el fragmento de TARGET HOST... lo vuelvo a poner?}
-
 Anteriormente hemos mencionado que el \textit{script} \textit{compss\_build\_app} es el encargado de recolectar los \textit{flags} que nos interesan del usuario en el proceso de compilación y servirlos al \textit{script} \textit{compss\_build}, como se puede ver en la imagen \ref{lst:customconfigure} en función de si las variables de entorno \textit{OMPSS2\_ENABLED}, \textit{OMPSS\_ENABLED}, o \textit{CUDA\_ENABLED} tienen por valor la cadena de carácteres \textit{enabled}, definirá el valor de los \textit{flags} para la fase de compilación \textit{CXXFLAGS} y \textit{CFLAGS}, que se asignarán via la variable \textit{cflags\_aux} y para la fase de \textit{linking} \textit{LDFLAGS} que se asignará via la variable \textit{ldflags\_aux}, además de las opciones personalizadas (que serán pasadas mediante la variable \textit{conf\_opts}).
 \par\smallskip
 Dos ficheros esenciales en todo este proceso, son \textit{configure.ac} y \textit{Makefile.am}, uno utiliza una serie de \textit{macros} para generar de manera customizada \textit{configure} (por ejemplo, con las opciones mencionadas anteriormente), y el otro indica cuáles son los ficheros que deben ser compilados, cómo y adónde irán una vez compilados.
@@ -558,21 +556,67 @@ Está claro que después de haber compilado la libería habrá que hacer el \tex
 
 \subsubsection{Tipo enum y cabeceras en la interfaz}
 
-\todo{Añadido del tipo enum y el include de las cabeceras}
+\todo{pongo detalles? O solo explico por encima}
 
-Un añadido al proyecto ha sido soportar el tipo \texit{enum} y añadir la posibilidad de incluir cabeceras en la interfaz de una aplicación \textit{C/C++}. Para hacer esto, ha habido que hacer modificaciones en la gramática del compilador y en la generación de código. Este añadido puede ser muy útil para cuando se utilicen librerías externas en la interfaz y se precise de cabeceras adicionales que incluyan tipos que se necesitan.
+Un añadido al proyecto ha sido soportar el tipo \textit{enum} y añadir la posibilidad de incluir cabeceras en la interfaz de una aplicación \textit{C/C++}. Para hacer esto, ha habido que hacer modificaciones en la gramática del compilador y en la generación de código. Este añadido puede ser muy útil para cuando se utilicen librerías externas en la interfaz y se precise de cabeceras adicionales que incluyan tipos que se necesitan.
 \bigskip
-
-
-
+El compilador está hecho con las herramientas \textit{Lex} un generador de analizadores léxicos y \textit{Yacc} un generador de analizadores sintácticos, es decir, las dos piezas fundamentales para hacer un compilador, ya que uno nos facilitará crear un autómata para la gramática de la interfaz y el otro nos permite comprobar que realmente tiene sentido la interfaz escrita.
+\bigskip
+Para añadir el tipo \textit{enum}, hemos tenido que permitir que la gramática reconozca algo del estilo "\textit{in/out enum} tipo nombre\_variable", una vez hecho esto ya solo hay que asociar el comportamiento que el compilador tiene con el tipo entero al del \textit{enum}, ya que al final ambos son enteros. De forma similar, para el \textit{include} hubo que hacer que la gramática reconociera un patrón "\textit{include} nombre\_cabecera;" y al generar el código incluir la cabecera.
 
 
 \subsection{Estudio previo del rendimiento}
 
-En la sección \todo{referenciar donde se dice qué queremos hacer} se enunció el objetivo de este proyecto. En este apartado, se realiza un estudio previo del rendimiento para saber si una parte  de los objetivos propuestos están cumplidos. Para ello, se crean tests especializados para ver los problemas comentados y se verifican utilizando \textit{Extrae} y \textit{Paraver}.
-\bigskip
+En la sección \ref{sec:compssompss} se enunciaron los problemas que tuvimos con la integración inicial \textit{COMPSs+OmpSs}. En este apartado, se realiza un estudio previo del rendimiento para saber si finalmente estos problemas están resueltos con la nueva integración. Para ello, hemos desarrollado una aplicación con dos tareas de diferente granularidad, con \textit{Extrae} y \textit{Paraver} veremos como se comporta la integración ante este caso. A grandes rasgos, la aplicación básicamente ejecuta 30 tareas de granularidad fina y gruesa, ésta se emula haciendo un \textit{usleep} de 50000 y 300000 microsegundos respectivamente. La implementación se encuentra en el apéndice \todo{insertar apéndice con el código}.
+\par\bigskip
+Entonces, en una ejecución de esta aplicación, si sacásemos una traza, el tiempo que dura cada traza debería ser notoriamente distinto, del orden de la espera que hacen cada una. La siguiente imagen muestra una traza de \textit{COMPSs} en la cuál se han utilizado 12 CPUs para la ejecución.
 
+\begin{figure}[H]
+	\centering 
+	\caption{Traza COMPSs con 12 CPUs.}
+	\includegraphics[scale=0.4]{estudio_previo/NER_COMPSS_TLT.png}
+	\label{fig:tltcompss12cpus}
+\end{figure}
 
+En esta traza, los bloques azules son las tareas de granularidad gruesa y de color blanco, fina. El tamaño hace referencia a la duración de la tarea, si nos fijamos, las de granularidad fina tienen una duración muy irregular y a veces es similar a las de granularidad gruesa, esto no tiene sentido. Con tal de investigar por qué sucede esto, vamos a sacar una traza de la misma ejecución pero de \textit{OmpSs-2}.
+
+\begin{figure}[H]
+	\centering 
+	\caption{Traza OmpSs-2 con 12 CPUs.}
+	\includegraphics[scale=0.4]{estudio_previo/NER_OmpSs-2_TLT.png}
+	\label{fig:tltompss12cpus}
+\end{figure}
+
+Los bloques de color rojo son las tareas de granularidad gruesa y los de color rosa, fina. Si nos fijamos bien hay incluso de color verde claro y un rojo más oscuro, pero estas tareas hacen referencia al \textit{spawn} por lo que no tienen importancia en este caso. Recordemos que dentro de un mismo nodo, se comparte el \textit{runtime} de \textit{OmpSs-2} por lo cuál las tareas de \textit{COMPSs} que se ejecutan en un mismo nodo están sujetas a \textit{OmpSs-2}. El hecho de que las tareas de \textit{COMPSs} tarden más o menos, es así por que \textit{OmpSs-2} constantemente ejecuta tareas en las CPUs que le parece mejor para explotar el paralelismo dentro del nodo, haciendo que una tarea de \textit{COMPSs} que podría ejecutar tan sólo lo que a ella le concierne ejecute también trabajo del resto, prolongando su duración (lo que vimos en la traza \ref{fig:tltcompss12cpus}).
+\par\bigskip
+Esto que hemos visto, ha sucedido cuando teníamos 12 CPUs, pero ¿Qué pasaría si en vez de 12 tuviéramos 160? Puesto que la situación anterior es provocada por cómo \textit{OmpSs-2} gestiona los recursos, seguramente si tuviéramos más, observaríamos un comportamiento más parecido al que habíamos pensado en primer momento.
+\par\bigskip
+
+\begin{figure}[H]
+	\centering 
+	\caption{Traza COMPSs con 160 CPUs.}
+	\includegraphics[scale=0.6]{estudio_previo/ER_COMPSS_TLT.png}
+	\label{fig:tltcompss160cpus}
+\end{figure}
+
+Si la comparamos con la traza \ref{fig:tltcompss12cpus}, la duración de las tareas es mucho más regular, siempre son de la misma magnitud, y nunca una tarea de granularidad fina dura más que una gruesa. Esto se debe a que tenemos más recursos, y por lo general no hay dos o más tareas que necesiten una misma CPU al mismo momento, por lo cuál no se nos alargan las tareas de \textit{COMPSs}. En la siguiente imagen se muestra una traza desde el punto de vista de \textit{OmpSs-2}.
+
+\begin{figure}[H]
+	\centering 
+	\caption{Traza OmpSs-2 con 160 CPUs.}
+	\includegraphics[scale=0.45]{estudio_previo/ER_OmpSs-2_TLT.png}
+	\label{fig:tltompss160cpus}
+\end{figure}
+
+Hay una diferenciación mucho más clara entre los dos tipos de tareas, y por lo general no existen estos conflictos por recursos que comentábamos. De todas formas, el comportamiento negativo que se ha enunciado con el primer par de trazas puede suceder eventualmente, ya que la manera en la que se gestionan los recursos no ha cambiado, pero mejora mucho.
+\par\bigskip
+No hemos solucionado uno de los problemas que enunciamos, pero esto no quiere decir que la nueva integración no aporte mejoras en el rendimiento. Para decidir si realmente lo que hemos visto en estas trazas es un comportamiento negativo para \textit{COMPSs}, deberemos efectuar el estudio de rendimiento en comparación con \textit{COMPSs+OmpSs}.
 
 \section{Aplicación COMPSs+OmpSs-2}
+
+\subsection{KMeans}
+
+\subsection{Cholesky}
+
 \section{Estudio del rendimiento}
+

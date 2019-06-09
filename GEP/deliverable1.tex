@@ -149,7 +149,7 @@ El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que d
 
 El modelo de programación de \textit{OmpSs} se basa en la generación de tareas sencillamente insertando pragmas en código secuencial y a su vez facilitando la gestión de recursos heterogéneos. Veamos un pequeño ejemplo que muestre estas facultades.
 
-\begin{lstlisting}[caption={Multiplicación de un bloque de una matriz utilizando GPUs.}, captionpos=b, label={lst:ompssmatmul.cc}, language=C++]
+\begin{lstlisting}[caption={Multiplicación de un bloque de una matriz utilizando GPUs.}, captionpos=b, label={lst:ompssmatmul.cc}, style=JStyle]
 for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
         for (int k = 0; k < N; ++k) {
@@ -174,7 +174,8 @@ El modelo de ejecución consiste en un \textit{thread-pool}, es decir, al genera
 
 Cabe decir que para compilar una aplicación de \textit{OmpSs}, se utiliza el compilador \textit{source-to-source Mercurium} y el runtime \textit{Nanos++} para gestionar el paralelismo, es decir, la creación de tareas, sincronización entre estas, etc.
 
-\subsection{COMPSs+OmpSs} \label{compssompss}
+\subsection{COMPSs+OmpSs} 
+\label{sec:compssompss}
 
 Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs}. 
 \par\bigskip
