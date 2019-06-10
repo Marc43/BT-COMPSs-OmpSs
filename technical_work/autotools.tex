@@ -4,3 +4,150 @@
 \label{appendix:autotools}
  
 \textit{Autotools} es un conjunto de herramientas que pretenden facilitar la difícil tarea de crear codigo fuente portable entre plataformas del tipo \textit{UNIX} de manera sencilla, es decir, de poder compilar el código fuente de una aplicación en en varias plataformas implicando un esfuerzo pequeño (para el usuario). \textit{Autotools} forma parte de la \textit{GNU Toolchain} desarrollado por el \textit{GNU Project\footnote{https://www.gnu.org/gnu/thegnuproject.html}}.
+
+En la siguiente sección se muestran las modificaciones en los códigos relativos a \textit{Autotools} comentadas en la sección \ref{sec:modificacioncompilacion}.
+
+\subsection{Modificaciones en los códigos de Autotools}
+
+\smallskip
+
+\begin{lstlisting} [caption={Macros necesarias en configure.ac para habilitar la opcion --ompss en configure.},captionpos=b, label={lst:ac-ompss}, language=bash]
+AC_ARG_WITH([ompss],
+AS_HELP_STRING([ --with-ompss], [Enables the use of OmpSs and 
+specificates its directory.]),
+[
+ompss=true
+]
+)
+\end{lstlisting}
+
+\smallskip
+
+\begin{lstlisting} [caption={Macros necesarias en configure.ac para habilitar la opcion --ompss-2 en configure.},captionpos=b, label={lst:ac-ompss-2}, language=bash]
+AC_ARG_WITH([ompss-2],
+AS_HELP_STRING([ --with-ompss-2], [Enables the use of OmpSs2 
+and specificates its 
+directory.]),
+[
+ompss2=true
+
+AC_CHECK_LIB([pthread], 
+[pthread_cond_signal], 
+[],
+[
+AC_MSG_ERROR([Pthread library not found, 
+is needed to enable OmpSs2.])
+])
+
+AC_CHECK_LIB([dl], 
+[dlopen], 
+[],
+[
+AC_MSG_ERROR([dl library not found, 
+is needed to enable OmpSs2.])
+])
+
+AC_CHECK_LIB([nanos6], 
+[nanos6_spawn_function], 
+[],
+[
+AC_MSG_ERROR([Nanos6 library not found, 
+is needed to enable OmpSs2.])
+])
+
+AC_CHECK_LIB([custom-nanos6], 
+[nanos6_library_mode_init], 
+[],
+[
+AC_MSG_ERROR([nanos6-library-mode.o is needed, 
+we make a custom library from it.])
+])
+]
+)
+\end{lstlisting}
+
+\smallskip
+
+\begin{lstlisting} [caption={Macros necesarias en configure.ac para habilitar la opcion --cuda en configure.},captionpos=b, label={lst:ac-cuda}, language=bash]
+AC_ARG_WITH([cuda],
+AS_HELP_STRING([ --with-cuda], [Enables the use of CUDA.]),
+[
+cuda=true
+
+AC_CHECK_LIB([cudart], 
+[cudaMalloc], 
+[],
+[
+AC_MSG_ERROR([cudart library not found, 
+is needed to enable CUDA.])
+])
+]
+)
+\end{lstlisting}
+
+\smallskip
+
+\begin{lstlisting} [caption={Creación de las variables para el Makefile.am.},captionpos=b, label={lst:ac-vars}, language=bash]
+AM_CONDITIONAL([OMPSS]      , [test x$ompss = xtrue])
+AM_CONDITIONAL([OMPSS2]     , [test x$ompss2 = xtrue])
+AM_CONDITIONAL([CUDAOMPSS]  , [test x$cuda = xtrue && 
+test x$ompss = xtrue])
+AM_CONDITIONAL([CUDAOMPSS2] , [test x$cuda = xtrue && 
+test x$ompss2 = xtrue])
+\end{lstlisting}
+
+\smallskip
+
+\begin{lstlisting} [caption={Crear una librería en el Makefile.am.},captionpos=b, label={lst:am-lib}, language=bash]
+noinst_LIBRARIES = libfunctions.a
+libfunctions_a_SOURCES = PACKAGE-functions.cc
+
+libfunctions_a_CPPFLAGS =  -I../../src -I../../include
+-Wno-write-strings -I$(JAVA_HOME)/include 
+-I$(JAVA_HOME)/include/linux/ -Wall
+-I$(CS_HOME)/../bindings-common/include
+-I$(CS_HOME)/include 
+
+libfunctions_a_CFLAGS =
+\end{lstlisting}
+
+\smallskip
+
+\begin{lstlisting} [caption={Flags de manera condicional en Makefile.am.},captionpos=b, label={lst:am-cond-flags}, language=bash]
+if OMPSS2
+libfunctions_a_CPPFLAGS  += --ompss-2 -DOMPSS2_ENABLED
+libfunctions_a_CFLAGS    += --ompss-2 -DOMPSS2_ENABLED
+
+nio_worker_c_CPPFLAGS    += -DOMPSS2_ENABLED
+worker_c_CPPFLAGS        += -DOMPSS2_ENABLED
+endif
+
+if OMPSS
+libfunctions_a_CPPFLAGS  += --ompss -DOMPSS_ENABLED
+libfunctions_a_CFLAGS    += --ompss -DOMPSS_ENABLED
+
+nio_worker_c_CPPFLAGS    += --ompss -DOMPSS_ENABLED
+worker_c_CPPFLAGS        += --ompss -DOMPSS_ENABLED
+
+nio_worker_c_LDFLAGS += --ompss
+worker_c_LDFLAGS     += --ompss
+endif
+
+if CUDAOMPSS
+libfunctions_a_CPPFLAGS  += --cuda -DCUDA_ENABLED
+libfunctions_a_CFLAGS    += --cuda -DCUDA_ENABLED
+
+nio_worker_c_CPPFLAGS    += --cuda -DCUDA_ENABLED
+worker_c_CPPFLAGS        += --cuda -DCUDA_ENABLED
+
+nio_worker_c_LDFLAGS += --cuda
+worker_c_LDFLAGS     += --cuda
+endif
+
+if CUDAOMPSS2
+libfunctions_a_CPPFLAGS  += --cuda -DCUDA_ENABLED
+libfunctions_a_CFLAGS    += --cuda -DCUDA_ENABLED
+endif
+\end{lstlisting}
+
+
