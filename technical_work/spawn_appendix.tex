@@ -42,28 +42,28 @@ fprintf(outFile, "typedef struct {\n", func->methodname);
 char* return_type = construct_returntype(func);
 
 if (func->return_type != void_dt && return_type != NULL) {
-fprintf(outFile, "\t%s ret;\n", return_type);
+fprintf(outFile, "\t% s ret;\n", return_type);
 }
 
 arg = func->first_argument;
 while (arg != NULL) {
-fprintf(outFile, "\t%s;\n", construct_type_and_name(arg));
+fprintf(outFile, "\t% s;\n", construct_type_and_name(arg));
 arg = arg->next_argument;
 }
-fprintf(outFile, "} %s_struct_t;\n", func->methodname);
+fprintf(outFile, "} % s_struct_t;\n", func->methodname);
 }
 \end{lstlisting}
 
-\bigskip
+\newpage
 
 \begin{lstlisting} [caption={Función para generar el wrapper de la tarea.},captionpos=b, label={lst:wrapper}, language=C++]
 
 static void generate_nanos6_wrapper(FILE *outFile, function* func) {
-fprintf(outFile, "void %s_wrapper(void* args) {\n", 
+fprintf(outFile, "void % s_wrapper(void* args) {\n", 
 func->methodname);
 
 fprintf(outFile, 
-"\t%s_struct_t* struct_ = (%s_struct_t*) args;\n", 
+"\t% s_struct_t* struct_ = (% s_struct_t*) args;\n", 
 func->methodname, 
 func->methodname);
 
@@ -76,12 +76,12 @@ fprintf(outFile, "\tstruct_->ret = ", func->return_type);
 
 if ((func->classname != NULL) && (func->access_static == 0)) {
 printed_chars = asprintf(&func_to_execute, 
-"\t%s->%s(", 
+"\t% s->% s(", 
 func->name, 
 func->methodname);
 } else {
 printed_chars = asprintf(&func_to_execute, 
-"\t%s(", func->name);
+"\t% s(", func->name);
 }
 
 if (printed_chars < 0) {
@@ -90,7 +90,7 @@ asprintf_error(func_to_execute,
 generate method execution.\n");
 }
 
-fprintf(outFile, "%s", func_to_execute);
+fprintf(outFile, "% s", func_to_execute);
 
 argument* args = func->first_argument;
 
@@ -102,7 +102,7 @@ first = 0;
 else {
 fprintf(outFile, ", ");
 }
-fprintf(outFile, "struct_->%s", args->name);
+fprintf(outFile, "struct_->% s", args->name);
 
 args = args->next_argument;
 }
@@ -112,20 +112,20 @@ fprintf(outFile, "}\n");
 }  
 \end{lstlisting}
 
-\bigskip
+\newpage
 
 \begin{lstlisting} [caption={Código para hacer un spawn de una tarea para OmpSs-2 en COMPSs.},captionpos=b, label={lst:spawncompss}, language=C++]
-fprintf(outFile, "\t\t\t%s_struct_t %s_struct;\n", func->methodname, 
+fprintf(outFile, "\t\t\t% s_struct_t % s_struct;\n", func->methodname, 
 func->methodname);
 
 assign_arguments_to_struct(outFile, func);
 
 char* nanos6_spawner;
 printed_chars = asprintf(&nanos6_spawner, 
-"\t\t\tnanos6_spawn_function(%s_wrapper,
-&%s_struct, 
-%s, %s, 
-\"%s_spawned_task\");\n",
+"\t\t\tnanos6_spawn_function(% s_wrapper,
+&% s_struct, 
+% s, % s, 
+\"% s_spawned_task\");\n",
 func->methodname, 
 func->methodname, 
 "condition_variable_callback", 
@@ -137,17 +137,17 @@ asprintf_error(nanos6_spawner,
 "Not possible to generate function spawn.\n");
 }
 
-fprintf(outFile, "%s\n", nanos6_spawner);
+fprintf(outFile, "% s\n", nanos6_spawner);
 
 fprintf(outFile, "\t\t\twait_condition_variable(&cond_var);\n");
 
 if (func->return_type != void_dt && func->return_type != NULL) {
 char* return_var;
 printed_chars = asprintf(&return_var, 
-"return_obj = %s_struct.ret;\n", 
+"return_obj = % s_struct.ret;\n", 
 func->methodname);
 
-fprintf(outFile, "%s", return_var);
+fprintf(outFile, "% s", return_var);
 
 if (printed_chars < 0) {
 asprintf_error(return_var, 
