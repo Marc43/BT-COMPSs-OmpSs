@@ -29,7 +29,7 @@ La siguiente imagen muestra la estructura general de los \textit{bindings} actua
 La aplicación que desarrolla el usuario, \textit{a priori} no envía las tareas a ejecutar ni las dependencias entre estas, no gestiona el \textit{runtime}, pero es desarrollada siguiendo unas directrices que nos permitirán generar código que sí gestione todo lo que es necesario con tal de que la aplicación se distribuya correctamente. 
 \end{comment}
 
-La aplicación que desarrolle el usuario, tiene que ser transparente al \textit{runtime}, para conseguirlo tan sólo se necesita una interfaz indicando las tareas a detectar al ejecutar la aplicación. Entonces, una vez compilemos la aplicación de COMPSs en C/C++, se generará automáticamente (a partir de ahora \textit{autogenerar}) código para las tareas, que gestionarán la comunicación con el \textit{runtime}.
+La aplicación que desarrolle el usuario, tiene que ser transparente al \textit{runtime}, se necesita una interfaz indicando las tareas a detectar al ejecutar la aplicación. Entonces, una vez compilemos la aplicación de COMPSs en C/C++, se generará automáticamente (a partir de ahora \textit{autogenerar}) código para las tareas, que gestionarán la comunicación con el \textit{runtime}.
 \smallskip
 La siguiente imagen describe de manera visual cómo se compila una aplicación. 
 
@@ -37,17 +37,17 @@ La siguiente imagen describe de manera visual cómo se compila una aplicación.
     \centering 
     \caption{Proceso de compilación de una aplicación COMPSs C/C++.}
     %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
-    \includegraphics[scale=0.5]{workflowCompilado.png}
+    \includegraphics[scale=0.7]{workflowComp.pdf}
     \label{fig:workflowcompilado}
 \end{figure}
 
 \par\bigskip
 Para facilitar el compilado de la aplicación se utiliza el script \textit{compss\_build\_app}, y para hacer la generación de código a partir de la interfaz, el binario \textit{compss\_generator}.
-La aplicación una vez desarrollada por el usuario, compilada sin \textit{COMPSs} por el medio también funcionaría, pero sencillamente las tareas serían ejecutadas \textit{in situ} en el \textit{master}.  Lo que pretendemos hacer al introducir \textit{COMPSs} es que el \textit{master}, en vez de ejecutar la tarea, comunique al \textit{runtime} que se debe ejecutar una tarea, y este se encargue de ejecutarla en un \textit{worker}, todo evidentemente, de manera transparente al usuario.
+La aplicación una vez desarrollada por el usuario, compilada sin \textit{COMPSs} por el medio también funcionaría, pero sencillamente las tareas serían ejecutadas \textit{in situ} en el \textit{master}.  Lo que pretendemos hacer al introducir \textit{COMPSs} es que el \textit{master}, en vez de ejecutar la tarea, comunique al \textit{runtime} que se debe ejecutar una tarea, y este se encargue de ejecutarla en un \textit{worker}, todo de manera transparente al usuario.
 \par\bigskip
 
 \bigskip
-En la figura \ref{fig:workflowcompilado} veíamos la caja negra de ficheros intermedios, estos ficheros son el \textit{stubs} y \textit{executor} (siempre del estilo, \textit{ejemplo-stubs.cc} y \textit{ejemplo-executor.cc} donde ejemplo es el nombre de la aplicación compilada). El fichero \textit{stubs} corresponde con la parte del \textit{master} que se encargará de comunicarse con el \textit{runtime} para registrar la tarea. Esto lo consigue implementando las funciones de las tareas con el código para gestionar su registro, es decir, sustituyendo el código que sería propio de la ejecución de cada tarea por un código para efectuar el registro en el \textit{runtime}. Una vez registrada la tarea, eventualmente el \textit{runtime} designará a un \textit{worker} a ejecutarla. El \textit{worker} recibirá la tarea que debe ejecutar, los datos necesarios y más parámetros, el \textit{executor} ha sido \textit{autogenerado} con el código principal de la aplicación, por lo que conoce como gestionar los datos y parámetros recibidos para ejecutar la tarea pertinente. 
+En la figura \ref{fig:workflowcompilado} aparecen los ficheros generados con \textit{compss\_generator} y la interfaz, estos ficheros son el \textit{stubs} y \textit{executor} (siempre del estilo, \textit{ejemplo-stubs.cc} y \textit{ejemplo-executor.cc} donde ejemplo es el nombre de la aplicación compilada). El fichero \textit{stubs} corresponde con la parte del \textit{master} que se encargará de comunicarse con el \textit{runtime} para registrar la tarea. Esto lo consigue implementando las funciones de las tareas con el código para gestionar su registro, es decir, sustituyendo el código que sería propio de la ejecución de cada tarea por un código para efectuar el registro en el \textit{runtime}. Una vez registrada la tarea, eventualmente el \textit{runtime} designará a un \textit{worker} a ejecutarla. El \textit{worker} recibirá la tarea que debe ejecutar, los datos necesarios y más parámetros, el \textit{executor} ha sido \textit{autogenerado} con el código principal de la aplicación, por lo que conoce como gestionar los datos y parámetros recibidos para ejecutar la tarea pertinente. 
 
 \begin{comment}
 \begin{figure}[H]
@@ -266,18 +266,32 @@ Se divide el \textit{Makefile} en cuatro etapas, la primera compila el \textit{m
 
 \subsection{Integración}
 
-Ahora que tenemos claro el funcionamiento de ambas partes, podemos plantear un prototipo de la integración e implementarlo. Está claro que \textit{OmpSs-2} tomará parte únicamente en los nodos del tipo \textit{worker}, ya que es dónde realmente se ejecutarán las tareas detectadas por el \textit{master}. 
-\par\medskip
+Una vez realizada la integración, el proceso de compilación es el de la imagen \ref{fig:workflowcompintegration}.
+
+\begin{figure}[H]
+	\centering 
+	\caption{Proceso de compilación de una aplicación COMPSs+OmpSs-2 C/C++.}
+	%\includegraphics[width=\textwidth]{sta-masterworker.jpg}
+	\includegraphics[scale=0.7]{workflowCompIntegration.pdf}
+	\label{fig:workflowcompintegration}
+\end{figure}
+
+\par\bigskip
+
+La única parte de toda la aplicación que hay que compilar con \textit{Mercurium} y el \textit{flag} \textit{-{}-ompss-2} es el fichero fuente que contiene las funciones del \textit{worker}. Con este fichero crearemos una librería que llamaremos \textit{libfunctions.a}, conjuntamente con las dependencias del modo librería de \textit{OmpSs-2} y los ficheros autogenerados para el \textit{worker} se compilarán los binarios \textit{worker\_c} y \textit{nio\_worker\_c}. El resto de binarios, objetos y librerías se pueden compilar con \textit{gcc} o cualquier otro compilador, esto hace mucho más flexible todo el proceso de compilado de una aplicación \textit{COMPSs+OmpSs-2}.
+\par\bigskip
+El nuevo proceso de compilado mantiene las características del anterior ya que genera los mismos binarios que antes y pasa por etapas similares para compilarlos, de esta manera la ejecución de una aplicación se lleva a cabo como antes. Hemos hecho la integración \textit{COMPSs+OmpSs-2} de manera transparente al resto de componentes, lo cuál es muy positivo.
+\par\bigskip 
 
 En el ejemplo para utilizar el modo librería \ref{spawnfunction}, aprendimos como activar el \textit{runtime} de \textit{OmpSs-2} en este modo y como ejecutar las tareas, por lo que bastará con activarlo en los \textit{workers} (persistente y no persistente) y modificar la generación del código \textit{executor} (queremos hacerlo en el \textit{worker}) para generar la misma estructura del ejemplo en cada tarea de la interfaz de la aplicación.
 \par\medskip
-Entonces, con la activación de \textit{OmpSs-2} en los nodos \textit{worker} conseguiremos la siguiente estructura y modelo de ejecución.
+Está claro que \textit{OmpSs-2} tomará parte únicamente en los nodos del tipo \textit{worker}, ya que es donde se ejecutarán las tareas detectadas por el \textit{master}, entonces con la activación de \textit{OmpSs-2} en los nodos \textit{worker} conseguiremos la siguiente estructura y modelo de ejecución.
 
 \begin{figure}[H]
     \centering 
     \caption{Estructura y modelo de ejecución master-worker de la integración COMPSs+OmpSs-2}
     %\includegraphics[width=\textwidth]{sta-masterworker.jpg}
-    \includegraphics[scale=0.5]{compss2rt.png}
+    \includegraphics[scale=0.5]{compss2rt.pdf}
     \label{fig:compssompssrt}
 \end{figure}
 
