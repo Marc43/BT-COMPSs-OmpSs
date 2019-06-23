@@ -1,15 +1,18 @@
-% La siguiente seccion enmarca el contexto
-% que envuelve al proyecto y de alguna
-% manera el por qué
+\chapter{Introducción}
+
 \section{Contexto}
 
 Hoy en día se tiende a tener distintos recursos de cómputo en un solo dispositivo, por ejemplo, en un teléfono móvil ya tenemos al menos un procesador y una tarjeta gráfica, pero no tan sólo en el ámbito más cotidiano (aunque no nos demos cuenta), sino que en los más profesionales y especializados está siendo también cada vez más común la heterogeneidad de los recursos de computación en servidores, \textit{clusters} y supercomputadores. 
+
 \par\bigskip
+
 Programar estos dispositivos, que cuentan con esta heterogeneidad no es una tarea sencilla, un procesador no se programa de la misma manera que un acelerador, ni dos aceleradores tienen por qué programarse de la misma manera, existen una gran variedad de modelos de programación que nos brindan estas facilidades pero esta gran variedad se torna abrumadora y a veces repercute en la portabilidad de las aplicaciones. Es por esto que nos hemos decidido a hacer este proyecto, para mejorar en la medida de lo posible la facilidad de desarrollo y portabilidad de una aplicación en estas plataformas cada vez más complejas.
+
 \par\bigskip
+
 Si se facilita a la comunidad este tipo de programación, no solo habría una disminución del esfuerzo a realizar por parte del programador (hasta ahora, abismal), si no que mejoraría el desempeño de las aplicaciones que utilizasen todos los recursos que hay a su disposición en una máquina. Esto motiva la realización del proyecto, que pretende facilitar la gestión de estos recursos de computación en entornos distribuidos, brindando un método robusto y eficiente para programar aplicaciones en estos entornos.
 
-\subsection{Introducción}
+\par\bigskip
 
 Este proyecto es un Trabajo de Fin de Grado del Grado en Ingeniería Informática, especializado en el área de Ingeniería de Computadores. El grado es impartido por la \textit{Facultat d'Informàtica de Barcelona (FIB)} centro perteneciente a la \textit{Universitat Politècnica de Catalunya (UPC)}. 
 \par\bigskip
@@ -51,7 +54,7 @@ La diferencia más elemental entre los modelos, es en como se gestiona la memori
 \par\bigskip
 La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos otorgará la posibilidad de utilizar todos los recursos de la máquina, e incluso de otras máquinas, ya que estaríamos usando la conjunción de un modelo basado en memoria compartida con uno en memoria distribuida, a continuación se ahonda en las características de ambos.
 
-\subsection{COMPSs}
+\section{COMPSs}
 
 \textit{COMPSs} está desarrollado por el grupo \textit{Workflows and Distributed Computing} que pertenece al departamento de \textit{CS - Computer Science}.
 \par\bigskip
@@ -62,7 +65,7 @@ La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos o
 
 El modelo está dotado de un sistema de \textit{runtime} que coexiste con la aplicación. A medida que el programa principal encuentra las tareas y las envía al \textit{runtime} este genera un grafo de tareas y se detectan las dependencias entre estas para ejecutarlas en el orden correcto. Dado que está preparado para ejecutarse en entornos distribuidos el \textit{runtime} también detecta cuando son necesarias transferencias entre nodos.
 
-\subsubsection{Modelo de programación} 
+\subsection{Modelo de programación} 
 \label{compss_pm}
 
 El \textit{runtime} de \textit{COMPSs} está implementado en \textit{Java} por lo cuál se soporta dicho lenguaje, además se desarrollaron los \textit{bindings} de \textit{Python}\cite{tejedor2017pycompss} y \textit{C/C++} para facilitar el portaje de aplicaciones en estos lenguajes a \textit{COMPSs}. 
@@ -128,7 +131,7 @@ Para compilar la aplicacion en \textit{COMPSs} de \textit{C/C++},
 \end{figure}
 \end{comment}
 
-\subsubsection{Modelo de ejecución\label{modeloejecucion}}
+\subsection{Modelo de ejecución\label{modeloejecucion}}
 
 El modelo de ejecución es sencillo, muy similar al modelo \textit{thread-pool}, al iniciar el \textit{runtime} se levanta el \textit{master} y un conjunto de \textit{workers}, a medida que se vayan generando tareas se estudiará qué \textit{workers} están libres y si cumplen los requisitos para ejecutar dicha tarea, y en ese caso la ejecutarán. 
 
@@ -151,7 +154,7 @@ En \textit{C/C++} existen dos tipos de \textit{worker}, uno \textbf{no persisten
 \end{itemize}
 
 
-\subsection{OmpSs}
+\section{OmpSs}
 
 \textit{OmpSs} es desarrollado por el grupo \textit{PM - Programming Models}, perteneciente también al departamento de \textit{CS - Computer Science}.
 \par\bigskip
@@ -160,7 +163,7 @@ En \textit{C/C++} existen dos tipos de \textit{worker}, uno \textbf{no persisten
 \par\bigskip
 El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que desarrolló el \textit{BSC}), este integra funcionalidades presentes en ambos. Por parte de \textit{OpenMP} se quiere tomar la facilidad de paralelizar una aplicación secuencial insertando pragmas, y de \textit{StarSs} el modelo de ejecución basado en un \textit{thread-pool} y que permite la ejecución de código en más recursos que únicamente el procesador, es decir, que ofrece fácil gestión del resto de recursos de cómputo (\textit{GPUs}, \textit{FPGAs}, ...)\cite{sainz2014leveraging}\cite{filgueras2013heterogeneous}.
 
-\subsubsection{Modelo de programación y ejecución}
+\subsection{Modelo de programación y ejecución}
 
 El modelo de programación de \textit{OmpSs} se basa en la generación de tareas sencillamente insertando pragmas en código secuencial y a su vez facilitando la gestión de recursos heterogéneos. Veamos un pequeño ejemplo que muestre estas facultades.
 
@@ -191,7 +194,7 @@ El modelo de ejecución consiste en un \textit{thread-pool}, es decir, al genera
 
 Cabe decir que para compilar una aplicación de \textit{OmpSs}, se utiliza el compilador \textit{source-to-source Mercurium} y el runtime \textit{Nanos++} para gestionar el paralelismo, es decir, la creación de tareas, sincronización entre estas, etc.
 
-\subsection{Trabajo previo} 
+\section{Trabajo previo} 
 \label{sec:compssompss}
 
 Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs}. 
@@ -271,7 +274,7 @@ Dado que se realizará una integración de otro proyecto del \textit{BSC} el des
 
 \textbf{Solución:} Después de haber intentado solucionarlo por sus propios medios se pondrá en contacto con el grupo de \textit{Programming Tools} con la descripción del error e intentos de solucionarlo.
 
-\section{Metodología}
+\subsection{Metodología}
 
 Para decidir la metodología a utilizar, hay que tener en cuenta que el proyecto consta únicamente de tres personas que se envolverán en él. El desarrollador, que hará todo el desarrollo tangible, el director y el co-director. 
 \par\bigskip
@@ -280,6 +283,6 @@ La metodología que más se ciñe a las características del ``equipo'' es la it
 \par\bigskip
 Esta metodología nos permitirá reaccionar rápidamente a los imprevistos, además de hacer un bueno monitoreo del estado del proyecto, por lo cual se ha decidido emplearla.
 
-\subsection{Herramientas}
+\subsubsection{Herramientas}
 
 Para efectuar el seguimiento del proyecto junto a mi director y codirector, se empleará un \textit{workspace} de \textit{Slack} para las comunicaciones directas (decidir dónde y cuándo hacer las reuniones por ejemplo), y \textit{Trello} para gestionar las tareas a desempeñar en cada iteración. Como ya se ha mencionado anteriormente, para el control de versiones del proyecto, código y documentación se utilizará respectivamente \textit{GitLab} y \textit{GitHub}.

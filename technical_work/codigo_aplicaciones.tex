@@ -1,7 +1,7 @@
-\section{Código aplicaciones}
+\chapter{Código aplicaciones}
 En este apéndice se incluye el código principal y la interfaz de las aplicaciones de \textit{COMPSs} que se utilizan para evaluar la integración con \textit{OmpSs-2}.
 
-\subsection{K-Means}
+\section{K-Means}
 \label{sec:codigokmeans}
 
 %\begin{minipage}{\linewidth}
@@ -17,8 +17,10 @@ void kmeans(int numClusters,
 			int isBinaryFile, 
 			int is_output_timing)
 {
-    printf("Execution: K = % d, Frags = % d, NpF = % d, d = % d, max_iters = % d\n", 
-		   numClusters, numFrags, objsFrag, numCoords, loop_iteration);
+    printf("Execution: K = % d, 
+    		Frags = % d, NpF = % d, 
+    		d = % d, max_iters = % d\n", 
+		    numClusters, numFrags, objsFrag, numCoords, loop_iteration);
  
     int  i, j, index, loop=1;
     double  timing, io_timing, clustering_timing;
@@ -58,7 +60,6 @@ void kmeans(int numClusters,
 									 objsFrag*numCoords,
 									 filePath,
 									 frag_index[i]);
-
     }
     compss_barrier();
 
@@ -166,7 +167,7 @@ interface kmeans{
 
 \newpage
 
-\subsection{Cholesky}
+\section{Cholesky}
 \label{sec:codigocholesky}
 
 %\begin{minipage}{\linewidth}
@@ -253,7 +254,6 @@ int main(int argc, char** argv) {
 \end{lstlisting}
 %\end{minipage}
 
-\begin{minipage}{\linewidth}
 \begin{lstlisting} [caption={Interfaz de la aplicación Cholesky.},captionpos=b, 
 label={lst:idlcholesky}, style=idlstyle]
 include lass.h;
@@ -286,7 +286,6 @@ interface cholesky
                     in double[K*N] B, in int LDB,
                     in double BETA,  inout double[M*N] C, in int LDC );
 
-
     @Constraints(ComputingUnits=4);
     int ddss_dsyrk( in enum DDSS_UPLO UPLO, in enum DDSS_TRANS TRANS,
                     in int N, in int K,
@@ -296,4 +295,3 @@ interface cholesky
 
 };
 \end{lstlisting}
-\end{minipage}

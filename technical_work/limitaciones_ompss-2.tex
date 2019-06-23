@@ -1,5 +1,4 @@
-
-\section{Limitaciones de la integración COMPSs+OmpSs-2}
+\chapter{Limitaciones de la integración COMPSs+OmpSs-2}
 \label{sec:estudiopreviorend}
 
 En la sección \ref{sec:compssompss} se enunciaron los problemas que tuvimos con la integración inicial \textit{COMPSs+OmpSs}. En este apartado, se enuncian las limitaciones de la integración \textit{COMPSs+OmpSs-2}. En la anterior encontrábamos que las tareas de \textit{OmpSs} generadas dentro de una tarea de \textit{COMPSs} no tenían ningún tipo de aislamiento para el \textit{worker persistente}, y cuando se efectuaban esperas esto repercutía a absolutamente todas las tareas de \textit{OmpSs}. Utilizando el modo librería de \textit{OmpSs-2} proporcionamos a las tareas generadas dentro de una tarea de \textit{COMPSs} un ámbito propio, por lo cual las esperas tan sólo afectaran a las generadas dentro de esta, y no al resto.

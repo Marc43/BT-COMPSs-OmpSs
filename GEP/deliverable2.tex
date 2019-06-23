@@ -1,19 +1,13 @@
-\subsection{Herramientas}
-
-Para efectuar el seguimiento del proyecto junto a mi director y co-director, se ha utilizado un \textit{workspace} de \textit{Slack} para las comunicaciones directas (para decidir dónde y cuándo hacer las reuniones por ejemplo), y \textit{Trello} para gestionar las tareas a desempeñar en cada iteración. Como ya se ha mencionado anteriormente, para el control de versiones del proyecto, código y documentación se ha utilizado respectivamente \textit{GitLab} y \textit{GitHub}.
-
-%%%%%%%
-
-\section{Planificación temporal}
+\chapter{Planificación temporal}
 \label{sec:planificacion}
 
-Esta sección presenta cómo planificamos los cuatro meses de duración que tiene el proyecto, desde Febrero de 2019 hasta Junio de 2019 y cómo han sucedido realmente. Se especificarán las tareas a realizar junto a su durada aproximada y la duración que creemos que han tenido finalmente, también se han tenido en cuenta las posibles desviaciones en la realización de estas.
+Este apéndice presenta cómo planificamos los cuatro meses de duración que tiene el proyecto, desde Febrero de 2019 hasta Junio de 2019 y cómo han sucedido realmente. Se especificarán las tareas a realizar junto a su durada aproximada y la duración que creemos que han tenido finalmente, también se han tenido en cuenta las posibles desviaciones en la realización de estas.
 
-\subsection{Especificación de las tareas}
+\section{Especificación de las tareas}
 
 Detallamos a continuación las tareas a realizar.
 
-\subsubsection{GEP - Gestión de proyectos}
+\subsection{GEP - Gestión de proyectos}
 
 La primera tarea del proyecto es la gestión de este, se han elaborado cuatro entregables que sintetizan la temática del proyecto, los objetivos, como se realizaría cuando se planificó y como se ha realizado, la metodología que se ha seguido, las actividades que se han realizado, y un estudio de sostenibilidad.
 
@@ -30,7 +24,7 @@ Con estos cuatro apartados se finaliza el primer bloque de tareas. En princpio, 
 
 Para realizar esta actividad, se ha utilizado un ordenador, \textit{GitHub} para subir la documentación, \textit{Kile} para redactar el documento en \textit{LaTeX},\textit{Trello} para organizar las actividades en forma de tarjetas, \textit{Gantter} para elaborar el diagrama de \textit{Gantt} y \textit{Google Drive}.
 
-\subsubsection{Uso de la API de Nanos6}
+\subsection{Uso de la API de Nanos6}
 
 Para poder llevar acabo exitosamente la integración, se necesita entender qué hace y saber utilizar la \textit{API} de \textit{Nanos6}. Requiere mirar documentación e interactuar con los desarrolladores de \textit{Nanos6}. 
 \par\bigskip
@@ -40,7 +34,7 @@ Hemos aprendido a utilizar la llamada \textit{nanos6\_spawn\_function}, que nos 
 
 La duración de esta tarea ha sido de 60 horas. Los recursos necesarios son un ordenador con un compilador nativo de \textit{C}, otro de \textit{C++}, y \textit{Mercurium} y \textit{Nanos6} instalados. 
 
-\subsubsection{Integrar OmpSs-2 en el binding de C/C++}
+\subsection{Integrar OmpSs-2 en el binding de C/C++}
 
 La tarea principal que da sentido al proyecto es esta, comprende el estudio y la integración de \textit{OmpSs-2} en el \textit{binding} de \textit{C/C++}. Requiere del estudio de la estructura interna de \textit{COMPSs} por una banda y del \textit{binding} por otra, hemos tenido que decidir dónde se puede inicializar el \textit{runtime} de \textit{Nanos6} y cuándo se debe apagar. También se necesita hacer la llamada a la \textit{API} en el \textit{worker}, cosa que ha habido que estudiar dónde situar dentro del código.
 \par\bigskip
@@ -53,7 +47,7 @@ En segundo lugar se ha implementado toda la gestión. Claro que también ha habi
 
 Esta tarea ha sido la que más tiempo nos ha llevado, pero nos ha conocimiento pleno de cómo funciona el modo librería y el \textit{binding} de\textit{C/C++}. La duración ha estado alrededor de 96 horas. Los recursos necesarios han sido un ordenador con \textit{COMPSs} instalado, un compilador nativo de \textit{C}, otro de \textit{C++}, y \textit{Mercurium} y \textit{Nanos6} instalados.
 
-\subsubsection{Estudiar la integración de OmpSs-2 en Java y binding de Python}
+\subsection{Estudiar la integración de OmpSs-2 en Java y binding de Python}
 
 \begin{comment}
 En caso de que la primera integración haya funcionado, se estudiará la posibilidad de hacer lo mismo con \textit{Java} y el \textit{binding} de \textit{Python}. Consistirá exactamente de los mismos pasos, y puede ayudar a mejorar la implementación anterior. La duración estimada de esta tarea dependerá de si se decide realizar o no esta actividad. Mínimo se emplearán 15 horas en el estudio preliminar, y en caso de realizar la integración, 78 horas más, es decir, 15 horas o bien 93 horas. Pese a que la tarea es muy similar a la anterior, el tiempo previsto es algo menor por el hecho de que ya se ha podido realizar una integración y la implementación debería ser parecida. Los recursos necesarios son un ordenador con \textit{COMPSs} instalado, un compilador nativo de \textit{C}, otro de \textit{C++}, y \textit{Mercurium} y \textit{Nanos6} instalados.
@@ -61,26 +55,26 @@ En caso de que la primera integración haya funcionado, se estudiará la posibil
 
 Finalmente esta tarea se descartó, fue preferible invertir tiempo en el resto de funcionalidades y evaluar la integración de la mejor manera posible. Aún así, se invirtió tiempo en sopesar posibilidades para realizar tanto la integración de \textit{Java} como la de \textit{Python}, por lo que la duración ha sido alrededor de 15 horas.
 
-\subsubsection{Desarrollo de una aplicación que use COMPSs+OmpSs-2}
+\subsection{Desarrollo de una aplicación que use COMPSs+OmpSs-2}
 
 En esta tarea se han desarrollado dos aplicaciones, \textit{K-Means} y \textit{Cholesky} utilizando \textit{COMPSs+OmpSs-2}, se han utilizado para evaluar el rendimiento en otra tarea. Hemos empleado aproximadamente 84 horas en desarrollar ambas aplicaciones y testear que funcionasen. Los recursos necesarios son un ordenador con \textit{COMPSs} instalado, un compilador nativo de \textit{C}, otro de \textit{C++}, y \textit{Mercurium} y \textit{Nanos6} instalados
 
-\subsubsection{Estudio del rendimiento}
+\subsection{Estudio del rendimiento}
 
 Utilizando las aplicaciones desarrolladas en la tarea anterior hemos estudiado el rendimiento de la integración. Se ha hecho uso de opciones de \textit{COMPSs} para medir cuánto tarda cada tarea enviada a un nodo. 
 \par\bigskip
 
 Estudiar el rendimiento ha incluido intentar optimizar al máximo todas las pérdidas de rendimiento en la medida de lo posible, por lo cual el tiempo aproximado para llevarla a cabo, ha sido de 84 horas. Los recursos necesarios son un ordenador con \textit{COMPSs} instalado, un compilador nativo de \textit{C}, otro de \textit{C++}, y \textit{Mercurium} y \textit{Nanos6} instalados.
 
-\subsubsection{Limitaciones de COMPSs+OmpSs-2}
+\subsection{Limitaciones de COMPSs+OmpSs-2}
 
 Dado que este proyecto parte de la premisa de resolver unos problemas concretos con el rendimiento, se efectúa un estudio muy concreto hacia estos problemas para ver si están resueltos o no. Que este estudio vaya mal o no, no afecta realmente al proyecto, ya que se intentará ver si \textit{OmpSs-2} mejora respecto a \textit{OmpSs} de todas formas.
 
-\subsubsection{Redactar la memoria}
+\subsection{Redactar la memoria}
 
 Por último se ha redactado la memoria del proyecto además de preparar todo el material audiovisual para la defensa de este. La duración de esta actividad ha sido de unas 72 horas. Los recursos que utilizados son \textit{Kile} para redactar el documento en \textit{LaTeX}, \textit{GitHub} para guardar la documentación y \textit{LibreOffice} para el apoyo audiovisual que se utilizará durante la defensa.
 
-\subsection{Dependencias}
+\section{Dependencias}
 
 La siguiente tabla define la relación de dependencia entre las tareas que conciernen a la gestión del proyecto.
 
@@ -146,11 +140,11 @@ La tabla anterior muestra la relación de dependencia, se respetará esta relaci
 
 Salvo por algún motivo que implique bloquear una tarea, no se deberán adelantar tareas dependientes a las predecesoras, entre estos posibles motivos se contemplan errores en la implementación que nos bloqueen y se puedan ir haciendo otras cosas y cambios generales en las tareas a realizar.
 
-\subsection{Estimación temporal de las tareas y recursos necesarios}
+\section{Estimación temporal de las tareas y recursos necesarios}
 
 En el momento en el que se han enumerado y explicado las tareas se ha comentado la duración temporal y los recursos necesarios para cada actividad. En las siguientes dos secciones se recopilan estos datos en forma de tabla.
 
-\subsection{Estimación temporal de las tareas}
+\section{Estimación temporal de las tareas}
 
 \begin{table}[H]
  \centering
@@ -178,7 +172,7 @@ En el momento en el que se han enumerado y explicado las tareas se ha comentado 
  \caption{Estimación temporal de las tareas.}
 \end{table}
 
-\subsection{Duración real de las tareas}
+\section{Duración real de las tareas}
 
 Todas las tareas han durado lo esperado a excepción de la tarea que consiste en realizar la integración de \textit{OmpSs-2} en \textit{Java} y \textit{Python}, nos hemos limitado a hacer el estudio preliminar, por lo que ha durado 15 horas.
 
@@ -208,7 +202,7 @@ Todas las tareas han durado lo esperado a excepción de la tarea que consiste en
  \caption{Estimación temporal de las tareas.}
 \end{table}
 
-\subsection{Recursos necesarios para las tareas}
+\section{Recursos necesarios para las tareas}
 
 \begin{table}[H]
  \centering
@@ -234,7 +228,7 @@ Todas las tareas han durado lo esperado a excepción de la tarea que consiste en
 
 En la tabla anterior, se muestran los recursos estrictamente necesarios para realizar cada tarea, sin embargo, se ofrece ahora una lista de los recursos \textit{hardware} y \textit{software} que se han utilizado para la realización del proyecto en general. Además hay que tener en cuenta todos los recursos humanos necesarios.
 
-\subsubsection{Recursos hardware}
+\subsection{Recursos hardware}
 
 \begin{itemize}
 
@@ -250,7 +244,7 @@ En la tabla anterior, se muestran los recursos estrictamente necesarios para rea
  
 \end{itemize}
 
-\subsubsection{Recursos software}
+\subsection{Recursos software}
 
 \begin{itemize}
     \item \textbf{Ubuntu 18.04:} Con tal de desarrollar se necesita un sistema operativo, el portátil tiene instalado \textit{Ubuntu 18.04}.
@@ -270,7 +264,7 @@ En la tabla anterior, se muestran los recursos estrictamente necesarios para rea
     \item \textbf{Editores de texto: } Para escribir el \textit{LaTeX} se utiliza \textit{Kile}.
 \end{itemize}
 
-\subsubsection{Recursos humanos}
+\subsection{Recursos humanos}
 
 \begin{itemize}
  \item \textbf{Director y co-director: } Han efectuado el seguimiento del proyecto de manera rutinaria y han ayudado a que el desarrollador sea capaz de llevarlo a cabo. 
@@ -278,7 +272,7 @@ En la tabla anterior, se muestran los recursos estrictamente necesarios para rea
  \item \textbf{Desarrollador: } Persona encargada de llevar a cabo en última instancia el proyecto.
 \end{itemize}
 
-\subsection{Valoración de alternativas y plan de acción}
+\section{Valoración de alternativas y plan de acción}
 
 En un proyecto de este tipo, es probable que haya desviaciones respecto el plan original. Esto es normal, tan sólo hay que saber cómo actuar ante estas desviaciones. Cualquier error en una implementación puede acarrear tiempo de más para solucionarlo, e incluso algo que se implementó hace mucho puede influir en las del futuro, por ello nuestra planificación intenta ser flexible, aún así, debemos planear como actuar en estos casos.
 
