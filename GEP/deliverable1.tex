@@ -3,55 +3,64 @@
 % manera el por qué
 \section{Contexto}
 
-Hoy en día se tiende a tener distintos recursos de cómputo en un solo dispositivo, por ejemplo, en un teléfono móvil ya tenemos al menos un procesador y una tarjeta gráfica, pero no tan sólo en el ámbito más cotidiano (aunque no nos demos cuenta), sino que en los más profesionales y especializados está siendo también cada vez más común la heterogeneidad de los recursos de computación. 
+Hoy en día se tiende a tener distintos recursos de cómputo en un solo dispositivo, por ejemplo, en un teléfono móvil ya tenemos al menos un procesador y una tarjeta gráfica, pero no tan sólo en el ámbito más cotidiano (aunque no nos demos cuenta), sino que en los más profesionales y especializados está siendo también cada vez más común la heterogeneidad de los recursos de computación en servidores, \textit{clusters} y supercomputadores. 
 \par\bigskip
-
-El proyecto pretende facilitar la gestión de estos recursos de computación en entornos distribuidos, brindando un método robusto y eficiente para programar aplicaciones en estos entornos.
-%Quienes son los actores? Quien se beneficia?
-
+Programar estos dispositivos, que cuentan con esta heterogeneidad no es una tarea sencilla, un procesador no se programa de la misma manera que un acelerador, ni dos aceleradores tienen por qué programarse de la misma manera, existen una gran variedad de modelos de programación que nos brindan estas facilidades pero esta gran variedad se torna abrumadora y a veces repercute en la portabilidad de las aplicaciones. Es por esto que nos hemos decidido a hacer este proyecto, para mejorar en la medida de lo posible la facilidad de desarrollo y portabilidad de una aplicación en estas plataformas cada vez más complejas.
+\par\bigskip
+Si se facilita a la comunidad este tipo de programación, no solo habría una disminución del esfuerzo a realizar por parte del programador (hasta ahora, abismal), si no que mejoraría el desempeño de las aplicaciones que utilizasen todos los recursos que hay a su disposición en una máquina. Esto motiva la realización del proyecto, que pretende facilitar la gestión de estos recursos de computación en entornos distribuidos, brindando un método robusto y eficiente para programar aplicaciones en estos entornos.
 
 \subsection{Introducción}
 
 Este proyecto es un Trabajo de Fin de Grado del Grado en Ingeniería Informática, especializado en el área de Ingeniería de Computadores. El grado es impartido por la \textit{Facultat d'Informàtica de Barcelona (FIB)} centro perteneciente a la \textit{Universitat Politècnica de Catalunya (UPC)}. 
 \par\bigskip
 
-El proyecto se desarrollará conjuntamente con el \textit{Barcelona Supercomputing Center (BSC)}, estudiaremos como podemos integrar los modelos de programación \textit{COMPSs} y \textit{OmpSs} para alcanzar este objetivo, implementaremos un prototipo y evaluaremos su rendimiento y características deseadas. 
+El proyecto se ha desarrollado conjuntamente con el \textit{Barcelona Supercomputing Center (BSC)}, hemos estudiado como integrar los modelos de programación \textit{COMPSs} y \textit{OmpSs} para alcanzar este objetivo, se ha implementado y evaluado un prototipo.
 %Indagar en cuales son estas caracteristicas? 
 
 \subsection{Actores}
 
-Los actores en este proyecto serán las personas que tomen parte en él, ya sea de manera directa o indirecta. Con esto quiero decir, que tanto las personas que tomen parte en el desarrollo \textit{per se} como las personas que se nutran de este, serán los actores.
+Los actores en este proyecto son las personas que tomen parte en él, ya sea de manera directa o indirecta. Con esto quiero decir, que tanto las personas que han tomado parte en el desarrollo \textit{per se} como las personas que se nutran de este, son los actores.
 
 \begin{itemize}
- \item \textbf{Desarrollador:} La figura del desarrollador \textbf{debe} ser la persona que trabaje de manera más directa en el proyecto. En este proyecto únicamente habrá un desarrollador que ha elaborado la documentación que leerás a continuación y dará forma a los objetivos tangibles del proyecto.  
- \item \textbf{Director y codirector:} Pese a que el desarrollador tendrá el papel principal en el proyecto, el director y el codirector le guiarán en el camino abierto que es el desarrollo del proyecto. Se establecerán reuniones de seguimiento donde serán capaces de hacer un correcto supervisamiento de las actividades propuestas para el proyecto.
+ \item \textbf{Desarrollador:} La figura del desarrollador \textbf{es} la persona que ha trabajado de manera más directa en el proyecto. En este proyecto únicamente hay un desarrollador que ha elaborado la documentación que leerás a continuación y ha dado forma a los objetivos tangibles del proyecto.  
+ \item \textbf{Director y codirector:} Pese a que el desarrollador ha tenido el papel principal en el proyecto, el director y el codirector han guiado a este en el camino abierto que es el desarrollo del proyecto. Periódicamente ha habido reuniones de seguimiento donde se han supervisado las actividades del proyecto y su correcta realización.
  \item \textbf{Barcelona Supercomputing Center:} De manera directa el centro otorga al desarrollador un lugar de trabajo y un equipo informático. Por otra parte, cuenta con el soporte por parte de los equipos de desarrollo de \textit{COMPSs} (del cual forma parte el desarrollador) y de \textit{OmpSs} para cualquier incidencia relacionada con su \textit{software} y derivados.
- \item \textbf{Beneficiarios:} \textit{COMPSs} es utilizado para proyectos europeos en los cuales el \textit{BSC} toma parte, el proyecto podrá ser útil para algunos de ellos, además todo departamento del \textit{BSC} que utilice \textit{COMPSs} para el desarrollo de aplicaciones podrá utilizarlo.
+ \item \textbf{Beneficiarios:} El proyecto facilita el desarrollo de aplicaciones paralelas en entornos heterogéneos distribuidos, de manera que se espera que los beneficiarios sean cualquier desarrollador de esta, sea de la organización que sea.
 \end{itemize}
 
 \section{Estado del arte}
 
-%check si te estas patillando lo de ``centenares''
-Existen centenares de modelos de programación, véanse \textit{OpenMP}, \textit{OmpSs}, \textit{MPI}, \textit{COMPSs} y un largo etcétera. De alguna manera el objetivo en común fue y es aprovechar los cada vez más abundantes recursos en las máquinas, que finalmente no sólo han crecido en abundancia si no en diversidad. La filosofía sigue siendo la misma, sacar el mayor rendimiento posible a nuestras máquinas. 
+Existen muchos modelos de programación, véanse \textit{OpenMP}\cite{dagum1998openmp}, \textit{OmpSs}\cite{duran2011ompss}, \textit{MPI}\cite{walker1996mpi}, \textit{COMPSs}\cite{badia2015comp} y un largo etcétera. De alguna manera el objetivo en común fue y es aprovechar los cada vez más abundantes recursos en las máquinas, que finalmente no sólo han crecido en abundancia si no en diversidad. La filosofía sigue siendo la misma, sacar el mayor rendimiento posible a nuestras máquinas. 
 \par\bigskip
 
 Para esto son necesarios modelos de programación que nos den la posibilidad de utilizar los recursos y nos ayuden a explotar la posible sinergia entre estos en ciertas aplicaciones. 
 \par\bigskip
 
-La diferencia más elemental entre los modelos, es en como se gestiona la memoria, o bien como la memoria está dispuesta en el modelo. Con \textit{shared memory} (\textit{OpenMP}, \textit{OmpSs}...), se aprovecha que el conjunto de hilos de ejecución (\textit{threads}) comparten la memoria, con \textit{distributed memory} (\textit{MPI}...) que se utilizan diferentes procesos con la posibilidad de que estos estén distribuidos entre distintos nodos, existen también modelos como \textit{CUDA} y \textit{OpenCL} que transfieren memoria de la \textit{CPU} a la memoria del acelerador en cuestión.
-\par\bigskip
+La diferencia más elemental entre los modelos, es en como se gestiona la memoria, o más bien cómo se estructura en el modelo.
 
-La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos otorgará la posibilidad de utilizar todos los recursos de la máquina, a continuación se ahonda en las características de ambos.
+\begin{itemize}
+\item \textbf{Memoria compartida:} En un modelo con memoria compartida como \textit{OpenMP} o \textit{OmpSs}, el paralelismo se consigue a través de hilos o \textit{threads} que ejecutan porciones de código. Los \textit{threads} dentro de una aplicación comparten la memoria, es decir que el espacio de direcciones es el mismo para todos. De esta manera cualquier modificación será inmediatamente visible en el resto de \textit{threads}.
+\item \textbf{Memoria distribuida:} En un modelo con memoria distribuida esta no es compartida entre los procesos que llevan a cabo el cómputo (en memoria compartida hilos), esto es que tienen su propio espacio de direcciones y en caso de necesitar un dato en concreto se debe efectuar una comunicación. Existen distintas formas de implementar un modelo con memoria distribuida.
+		\subitem \textbf{Paso de mensajes:} \textit{MPI} es un modelo de programación con memoria distribuida por paso de mensajes (\textit{Message Passing Interface}) , cada proceso goza de un espacio de direcciones único y el programador es consciente de esto cuando programa la aplicación, es encargado de reservar la memoria y también de efectuar las comunicaciones, todo esto mediante llamadas a una \textit{API}.
+
+		\subitem \textbf{Memoria global:} A diferencia del anterior, el programador tiene una visión global de la memoria, pero cada proceso tiene su propio espacio de direcciones, en caso de que intente acceder a memoria perteneciente al espacio de direcciones de otro proceso, se hará la transferencia de uno a otro. Modelos de programación que hagan uso de memoria global son \textit{UPC}\cite{berkupc}, y \textit{GASPI}\cite{grunewald2013gaspi} \todo{Y COMPSs??}.
+ 
+		\subitem \textbf{Entornos heterogéneos:} La memoria se encuentra dividida entre la correspondiente al \textit{host} (el procesador) y el \textit{device} (el dispositivo, que será un acelerador), para que este dispositivo compute hay que enviarle todos los datos que vaya a necesitar, por lo que la memoria entre el procesador y el acelerador está distribuida, modelos que hagan uso son \textit{CUDA}\cite{luebke2008cuda} y \textit{OpenCL}\cite{stone2010opencl}, por ejemplo.
+\end{itemize}
+
+\par\bigskip
+La integración de los modelos propuestos \textit{COMPSs} y \textit{OmpSs} nos otorgará la posibilidad de utilizar todos los recursos de la máquina, e incluso de otras máquinas, ya que estaríamos usando la conjunción de un modelo basado en memoria compartida con uno en memoria distribuida, a continuación se ahonda en las características de ambos.
 
 \subsection{COMPSs}
 
-\textit{COMPSs} es desarrollado por el grupo \textit{Workflows and Distributed Computing} que pertenece al departamento de \textit{CS - Computer Science}.
+\textit{COMPSs} está desarrollado por el grupo \textit{Workflows and Distributed Computing} que pertenece al departamento de \textit{CS - Computer Science}.
 \par\bigskip
 
-\textit{COMPSs} es un modelo de programación para entornos distribuidos basado en la generación de tareas, el objetivo es hacer más sencilla la programación de aplicaciones y su ejecución en entornos distribuidos (clústers y \textit{clouds}, por ejemplo)\cite{badia2015comp}.La generación de tareas la efectua un programa principal ejecutado en secuencial, las tareas se especifican mediante la anotación de las funciones que se deseen, en tiempo de ejecución se genera un grafo de tareas y se detectan las dependencias entre estas para ejecutarlas en el orden correcto. Dado que está preparado para ejecutarse en entornos distribuidos también se detecta cuando son necesarias transferencias entre nodos.   \par\bigskip
+\textit{COMPSs} es un modelo de programación para entornos distribuidos basado en la generación de tareas. El objetivo es hacer más sencilla la programación de aplicaciones y su ejecución en entornos distribuidos (clústers y \textit{clouds}, por ejemplo). La generación de tareas la efectua un programa principal ejecutado en secuencial donde las tareas se especifican mediante la anotación de las funciones que se deseen.   
 
-Para facilitar más aún el uso del modelo, está dotado de un sistema de \textit{runtime} compuesto por un \textit{master} y un conjunto de \textit{workers}, el \textit{runtime} coexiste con la aplicación. Se encarga de detectar las dependencias que puedan surgir entre las tareas que genera el programa principal y las ejecuta a medida que las dependencias se resuelven. 
-%\par\bigskip
+\par\bigskip
+
+El modelo está dotado de un sistema de \textit{runtime} que coexiste con la aplicación. A medida que el programa principal encuentra las tareas y las envía al \textit{runtime} este genera un grafo de tareas y se detectan las dependencias entre estas para ejecutarlas en el orden correcto. Dado que está preparado para ejecutarse en entornos distribuidos el \textit{runtime} también detecta cuando son necesarias transferencias entre nodos.
 
 \subsubsection{Modelo de programación} 
 \label{compss_pm}
@@ -59,21 +68,24 @@ Para facilitar más aún el uso del modelo, está dotado de un sistema de \texti
 El \textit{runtime} de \textit{COMPSs} está implementado en \textit{Java} por lo cuál se soporta dicho lenguaje, además se desarrollaron los \textit{bindings} de \textit{Python}\cite{tejedor2017pycompss} y \textit{C/C++} para facilitar el portaje de aplicaciones en estos lenguajes a \textit{COMPSs}. 
 \par\bigskip
 
-Dicho esto, centraremos nuestros esfuerzos en \textit{C} y \textit{C++}. Para desarrollar una aplicación de \textit{COMPSs} en \textit{C/C++} necesitamos el programa principal (ejecutado en secuencial), una interfaz que especificará las funciones que \textit{a posteriori} serán tareas, y el código que realmente implementan estas tareas. 
+En este proyecto centraremos nuestros esfuerzos en \textit{C} y \textit{C++}. Para desarrollar una aplicación de \textit{COMPSs} en \textit{C/C++} necesitamos el programa principal (ejecutado en secuencial), una interfaz que especificará las funciones que \textit{a posteriori} serán tareas, y el código que realmente implementan estas tareas. 
 \par\bigskip
 
 Veamos en orden de enumeración ejemplos de los componentes de una aplicación.
 
 %EJEMPLO INTERFACE
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Interfaz de la aplicación 'ejemplo'.},captionpos=b, label={lst:ejemplo.idl}, style=idlstyle]
 interface ejemplo {
     void funcionEjemplo(in int a, out int[a] array_a);
 };
 \end{lstlisting}
+\end{minipage}
 
-La interfaz de la imagen superior define una función llamada funcionEjemplo con un parámetro de entrada y uno de salida, las palabras clave \textit{in} y \textit{out} respectivamente otorgan estas propiedades a los parámetros, también se puede combinar con \textit{inout}. Cualquier llamada a la función será ejecutada como tarea.\smallskip
+La interfaz de la imagen superior define una función llamada \textit{funcionEjemplo} con un parámetro de entrada y uno de salida, las palabras clave \textit{in} y \textit{out} respectivamente otorgan estas propiedades a los parámetros, también se puede utilizar \textit{inout}, el parámetro será de entrada y salida. Cualquier llamada a la función será ejecutada como tarea.\smallskip
 
 %EJEMPLO MASTER CODE
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Fracción del código del programa principal}, captionpos=b, label={lst:ejemplo.cc}, language=C++]
     compss_on();
 
@@ -86,9 +98,11 @@ La interfaz de la imagen superior define una función llamada funcionEjemplo con
 
     compss_off();
 \end{lstlisting}
+\end{minipage}
 
-Esta imagen muestra el código del programa principal de manera reducida. Es tan sencillo como prometía, encendemos el \textit{runtime} de \textit{COMPSs}, preparamos los parámetros de la función, ejecutamos y finalmente esperamos a los parámetros de salida y apagamos el \textit{runtime}. \smallskip
+Esta imagen muestra el código del programa principal. Es tan sencillo como prometía, encendemos el \textit{runtime} de \textit{COMPSs}, preparamos los parámetros de la función, ejecutamos y finalmente esperamos a los parámetros de salida y apagamos el \textit{runtime}. \smallskip
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Implementación de la función 'funcionEjemplo'}, captionpos=b, label={lst:ejemplo-functions.cc}, language=C++]
 void funcionEjemplo(int a, int array_a[]) {
     for (int i = 0; i < a; ++i) {
@@ -96,8 +110,9 @@ void funcionEjemplo(int a, int array_a[]) {
     }
 }
 \end{lstlisting}
+\end{minipage}
 
-Las tareas se implementan como funciones que serán ejecutadas por los workers. Salvo convenciones en los nombres de los ficheros para hacer la compilación de la aplicación esto es todo lo necesario para desarrollar una aplicación en \textit{COMPSs} de \textit{C/C++}.
+Las tareas se implementan como funciones que serán ejecutadas por los \textit{workers}. Salvo convenciones en los nombres de los ficheros para hacer la compilación de la aplicación esto es todo lo necesario para desarrollar una aplicación en \textit{COMPSs} de \textit{C/C++}.
 
 \begin{comment}
 \subsubsection{Compilación}
@@ -149,6 +164,7 @@ El nombre del modelo proviene de \textit{OpenMP} y \textit{StarSs} (modelo que d
 
 El modelo de programación de \textit{OmpSs} se basa en la generación de tareas sencillamente insertando pragmas en código secuencial y a su vez facilitando la gestión de recursos heterogéneos. Veamos un pequeño ejemplo que muestre estas facultades.
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Multiplicación de un bloque de una matriz utilizando GPUs.}, captionpos=b, label={lst:ompssmatmul.cc}, style=JStyle]
 for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
@@ -165,6 +181,7 @@ for (int i = 0; i < N; ++i) {
     }
 }
 \end{lstlisting}
+\end{minipage}
 
 El código muestra una multiplicación de matrices por bloques. Con el primer pragma se indica que el dispositivo objetivo es una tarjeta gráfica que soporte \textit{CUDA}, y el segundo la declaración de una tarea y el tamaño de los bloques junto a las dependencias de esta.
 \par\bigskip
@@ -174,25 +191,26 @@ El modelo de ejecución consiste en un \textit{thread-pool}, es decir, al genera
 
 Cabe decir que para compilar una aplicación de \textit{OmpSs}, se utiliza el compilador \textit{source-to-source Mercurium} y el runtime \textit{Nanos++} para gestionar el paralelismo, es decir, la creación de tareas, sincronización entre estas, etc.
 
-\subsection{COMPSs+OmpSs} 
+\subsection{Trabajo previo} 
 \label{sec:compssompss}
 
 Actualmente existe la posibilidad de desarrollar aplicaciones que utilicen \textit{OmpSs} dentro de \textit{COMPSs}. 
 \par\bigskip
-Para poder interactuar con el \textit{runtime} de \textit{OmpSs} \textit{Nanos++}, necesitamos gestionarlo nosotros manualmente o bien utilizar los pragmas que nos propone el modelo de programación y compilar con \textit{Mercurium}. Entonces, asegurándonos de registrar los \textit{workers} en el \textit{runtime} y compilando su código fuente con \textit{Mercurium} aseguramos la interacción con el \textit{runtime} y por lo tanto la integración de ambos modelos.
+Para poder interactuar con el \textit{runtime} de \textit{OmpSs} \textit{Nanos++}, necesitamos gestionarlo nosotros manualmente o bien utilizar los \textit{pragmas} que nos propone el modelo de programación y compilar con \textit{Mercurium}. Entonces, asegurándonos de registrar los \textit{workers} en el \textit{runtime} y compilando su código fuente con \textit{Mercurium} aseguramos la interacción con el \textit{runtime} y por lo tanto la integración de ambos modelos.
 
-Es posible desarrollar aplicaciones, como ya se ha comentado, pero con ciertas restricciones. Las problemáticas aparecen con los dos tipos de \textit{worker} que hemos visto antes. Para el worker no persistente, no suele valer la pena debido a la granularidad de las tareas de \textit{OmpSs}. El \textit{overhead} proviene de crear el \textit{thread} del \textit{worker}, registrarlo en el \textit{runtime Nanos++} y levantar las \textit{pipes}. El persistente carece del \textit{overhead} de levantar las \textit{pipes} y el resto, vale la pena ya que el \textit{worker} persiste durante la ejecución de la aplicación. Pese a que el persistente mejora respecto al no persitente, hay problemas de migración de \textit{threads} entre aplicaciones cuando se ejecutan varias a la vez.
+Es posible desarrollar aplicaciones, como ya se ha comentado, pero con ciertas limitaciones. Dado que el worker \textit{no persistente}, se debe levantar para cada tarea, conseguimos aislar las tareas entre sí, cada tarea tendrá un \textit{runtime} de \textit{OmpSs} para el mismo, pero este mismo motivo añade mucho \textit{overhead} para la granularidad de las tareas de \textit{OmpSs}. El \textit{worker persistente} carece del \textit{overhead} de poner en marcha el \textit{runtime} de \textit{OmpSs}, pero también pierde la característica de aislar cada tarea del resto. Por una parte, no existe el \textit{overhead} que hay en el \textit{no persistente} pero el hecho de que no haya aislamiento provoca vale la pena ya que el \textit{worker} persiste durante la ejecución de la aplicación. Pese a que el \textit{persistente} mejora respecto al \textit{no persitente}, cuando se ejecutan varias tareas de \textit{COMPSs} que haga uso de \textit{OmpSs} en uno de estos \textit{workers} hay interferencias entre ellos.
 \par\bigskip
-
+El factor de aislamiento se vuelve todavía más crítico cuando en \textit{OmpSs} efectuar un \textit{taskwait} (\textit{pragma} que espera hasta que las tareas acaben) conlleva a que la espera se haga sobre todas las tareas de \textit{OmpSs} que estén en el \textit{runtime} por lo cual si no contamos con el aislamiento esperaremos a todas, hayan sido creadas o no por la misma tarea de \textit{COMPSs}. Para solucionarlo hay que efectuar accesos concurrentes sobre los datos que estemos tratando y hace que el \textit{taskwait} tenga como dependencia esos datos, así no esperaremos a absolutamente todas las tareas.
+\par\bigskip
 Estos problemas pretenden arreglarse integrando \textit{OmpSs-2}, que ofrece un \textit{runtime} nuevo llamado \textit{Nanos6} y nuevas características que vienen con este cambio como por ejemplo:
 
 \begin{itemize}
-\item \textbf{Liberación de las dependencias:} Las dependencias en esta versión se liberen de manera temprana, es decir, una vez una tarea acaba con un dato lo notifica al \textit{runtime} y este se encarga de notificar a las tareas que quedan libres de esta dependencia.
+\item \textbf{Liberación de las dependencias:} Las dependencias en esta versión se liberan de manera temprana, es decir, una vez una tarea acaba con un dato lo notifica al \textit{runtime} y este se encarga de notificar a las tareas que quedan libres de esta dependencia.
  \item \textbf{Relajación de las dependencias:} Ahora se pueden utilizar nuevos pragmas para determinar dependencias más suaves, no tan estrictas como en la versión anterior.
- \item \textbf{Ejecución de funciones de manera asíncrona:} La \textit{API} del nuevo \textit{runtime} \textit{Nanos6} permite ejecutar de manera asíncrona funciones en forma de tarea a partir de un puntero a una función.
+ \item \textbf{Ejecución de funciones de manera asíncrona:} La \textit{API} del nuevo \textit{runtime} \textit{Nanos6} permite ejecutar de manera asíncrona funciones en forma de tarea a partir de un puntero a una función, este método proporciona aislamiento del resto de tareas.
 \end{itemize}
 
-Hemos listado las que de alguna manera eran clave para el proyecto, \textit{OmpSs-2} implementa muchas otras mejorías a parte de estas\cite{OmpSs2reference}. Una vez integrado, el proyecto estudiará si realmente han sido solucionadas las problemáticas anteriormente planteadas.
+Hemos listado las que de alguna manera han sido clave para el proyecto, \textit{OmpSs-2} implementa muchas otras mejorías a parte de estas\cite{OmpSs2reference}. El proyecto estudia en las secciones \ref{sec:estudiopreviorend} y \ref{sec:estudiorend} si los problemas planteados han sido solucionados y el rendimiento que desempeña la nueva integración.
 
 \section{Alcance del proyecto}
 
@@ -255,12 +273,11 @@ Dado que se realizará una integración de otro proyecto del \textit{BSC} el des
 
 \section{Metodología}
 
-Para decidir la metodología a utilizar, hay que tener en cuenta que el proyecto consta únicamente de tres personas que se envolverán en él. El desarrollador, que hará todo el desarrollo tangible, el director y el codirector. 
+Para decidir la metodología a utilizar, hay que tener en cuenta que el proyecto consta únicamente de tres personas que se envolverán en él. El desarrollador, que hará todo el desarrollo tangible, el director y el co-director. 
 \par\bigskip
 
-La metodología que más se ciñe a las características del ``equipo'' es \textit{SCRUM}. Esta metodología forma parte de las populares (y bastante de moda) metodologías ágiles, consiste en planear al milímetro las tareas a realizar, y hacer una predicción de qué se conseguira hacer y que no en cortos periodos de tiempo llamados iteraciones. Además de estas predicciones, se consultará el estado del proyecto a diario, con cuestiones como ``¿Desde la última reunión que he conseguido?'', ``¿Desde entonces que haré para llegar a los objetivos de la iteración?'', ``¿Algún impedimento que no me permita alcanzar estos objetivos?''.
+La metodología que más se ciñe a las características del ``equipo'' es la iterativa. Consiste en planear las tareas a realizar y hacer una predicción de qué se conseguirá hacer en cortos periodos de tiempo llamados iteraciones. Además de estas predicciones, se consultará el estado del proyecto a menudo y se realizarán las tareas, una vez acabada una iteración empezará la siguiente, así hasta finalizar el proyecto.
 \par\bigskip
-
 Esta metodología nos permitirá reaccionar rápidamente a los imprevistos, además de hacer un bueno monitoreo del estado del proyecto, por lo cual se ha decidido emplearla.
 
 \subsection{Herramientas}

@@ -1,0 +1,299 @@
+\section{Código aplicaciones}
+En este apéndice se incluye el código principal y la interfaz de las aplicaciones de \textit{COMPSs} que se utilizan para evaluar la integración con \textit{OmpSs-2}.
+
+\subsection{K-Means}
+\label{sec:codigokmeans}
+
+%\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Programa principal de la aplicación K-Means.},captionpos=b, 
+label={lst:mpkmeans}, language=C++]
+
+void kmeans(int numClusters, 
+			int numFrags, 
+			int objsFrag, 
+			int numCoords, 
+			int loop_iteration, 
+			char* filePath, 
+			int isBinaryFile, 
+			int is_output_timing)
+{
+    printf("Execution: K = % d, Frags = % d, NpF = % d, d = % d, max_iters = % d\n", 
+		   numClusters, numFrags, objsFrag, numCoords, loop_iteration);
+ 
+    int  i, j, index, loop=1;
+    double  timing, io_timing, clustering_timing;
+
+    if (numCoords<1){
+        fprintf(stderr,"Error reading number of coordinates");
+        exit(-1);
+    }
+    srand(1000);
+
+    float *clusters = (float*) malloc(numClusters*numCoords*sizeof(float));
+    for (i=0; i<numClusters; i++){
+        for (j=0; j<numCoords; j++){
+            clusters[i*numCoords+j] = (float) ((rand()) / (float)((RAND_MAX))*2 - 1);
+        }
+    
+    int **newClusterSize = (int **) malloc(numFrags*sizeof(int*));
+    float **newClusters = (float **) malloc(numFrags*sizeof(float*));
+    int **frag_index = (int **)malloc(numFrags*sizeof(int*));
+    float **fragments = (float **)malloc(numFrags*sizeof(float*));
+
+    for (j=0; j<numFrags; j++){
+        frag_index[j] = (int*) malloc(sizeof(int));
+        newClusters[j] = (float*) malloc(numClusters*numCoords*sizeof(float));
+    	newClusterSize[j]=(int*) malloc(numClusters* sizeof(int));
+        for (i=0; i<numClusters; i++){
+		 newClusterSize[j][i]=0;
+        }
+    }
+    compss_on();
+
+    if (is_output_timing) io_timing = wtime();
+
+    for (i=0; i<numFrags; i++){
+        fragments[i] = init_Fragment(objsFrag, 
+									 numCoords,
+									 objsFrag*numCoords,
+									 filePath,
+									 frag_index[i]);
+
+    }
+    compss_barrier();
+
+    if (is_output_timing) {
+        timing            = wtime();
+        io_timing         = timing - io_timing;
+        clustering_timing = timing;
+    }
+
+    do {
+        for (i=0; i<numFrags; i++){
+	    	compute_newCluster(objsFrag, numCoords, 
+							   numClusters, objsFrag*numCoords,
+							   numClusters*numCoords,
+							   frag_index[i], fragments[i],
+							   clusters, newClusters[i],
+							   newClusterSize[i]);
+        }
+        int neighbor = 1;
+        while (neighbor < numFrags) {
+            for (int f = 0; f < numFrags; f += 2 * neighbor) {
+                if (f + neighbor < numFrags) {
+        			merge_newCluster(numCoords, numClusters, 
+									 numClusters*numCoords, 
+									 newClusters[f], 
+									 newClusters[f+neighbor],
+									 newClusterSize[f], 
+									 newClusterSize[f+neighbor]);
+                }
+            }
+            neighbor *= 2;
+        }
+        update_Clusters(numCoords, numClusters, 
+						numClusters*numCoords,
+						clusters, newClusters[0],
+						newClusterSize[0]);
+
+    } while (loop++ < loop_iteration);
+    compss_barrier();
+
+    if (is_output_timing) {
+        timing            = wtime();
+        clustering_timing = timing - clustering_timing;
+        printf("\nPerforming **** Regular Kmeans (compss version) ****\n");
+        printf("Input file:     % s\n", filePath);
+        printf("numFrags     =  % d\n", numFrags);
+        printf("numClusters   = % d\n", numClusters);
+        printf("Loop iterations    = % d\n", loop_iteration);
+        printf("I/O time           = % 10.4f sec\n", io_timing);
+        printf("Computation timing = % 10.4f sec\n", clustering_timing);
+    }
+    compss_off();
+}
+\end{lstlisting}
+%\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Programa principal de la aplicación Cholesky.},captionpos=b, 
+label={lst:idlkmeans},style=idlstyle]
+interface kmeans{
+
+        @Constraints(ComputingUnits=5);
+        float[size] init_Fragment(in int numCoords,
+								  in int numObjs,
+								  in int size,
+								  in File filename,
+								  out int[1] ff);
+
+        @Constraints(ComputingUnits=150);
+        void compute_newCluster(in int objsFrag, in int numCoords, 
+								in int numClusters, in int sizeFrags, 
+								in int sizeClusters, in int[1] ff, 
+								in float[sizeFrags] frag, 
+								in float[sizeClusters] clusters, 
+								out float[sizeClusters] newClusters, 
+								out int[numClusters] newClustersSize);
+
+        @Constraints(processors={@Processor(ProcessorType=GPU, 
+											ComputingUnits=1)});
+        @Implements(compute_newCluster);
+        void compute_newCluster_GPU(in int objsFrag, in int numCoords,
+									in int numClusters, in int sizeFrags,
+									in int sizeClusters, in int[1] ff,
+									in float[sizeFrags] frag,
+									in float[sizeClusters] clusters,
+									out float[sizeClusters] newClusters, 
+									out int[numClusters] newClustersSize);
+
+       void merge_newCluster(in int numCoords, in int numClusters, 
+							 in int sizeClusters, 
+							 inout float[sizeClusters] clusters1, 
+							 in float[sizeClusters] clusters2,
+							 inout int[numClusters] newClustersSize1, 
+							 in int[numClusters] newClustersSize2);
+
+       void update_Clusters(in int numCoords, in int numClusters,
+							in int sizeClusters, 
+							inout float[sizeClusters] clusters1,
+							in float[sizeClusters] clusters2,
+							in int[numClusters] newClustersSize2);
+};
+
+\end{lstlisting}
+\end{minipage}
+
+\newpage
+
+\subsection{Cholesky}
+\label{sec:codigocholesky}
+
+%\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Programa principal de la aplicación Cholesky.},captionpos=b, 
+label={lst:mpcholesky}, language=C++]
+int main(int argc, char** argv) {
+
+    int MSIZE = atoi(argv[1]);
+    int BSIZE = atoi(argv[2]);
+
+    compss_on();
+    
+    struct timeval start_io, end_io, start_comp, end_comp;
+    double io_timing, cholesky_timing;
+    
+    gettimeofday(&start_io, NULL);
+
+    double** MATRIX = (double**)malloc(sizeof(double*)*MSIZE*MSIZE);
+    
+    for (int i = 0; i < MSIZE*MSIZE; ++i) {
+      MATRIX[i] = (double*)malloc(sizeof(double)*BSIZE*BSIZE);
+    }   
+ 
+   for (int i = 0; i < MSIZE; i++) {
+      generate_block(MATRIX[i*MSIZE+i], BSIZE, 1);
+      for (int j = i+1; j < MSIZE; j++) {
+            generate_block(MATRIX[i*MSIZE+j], BSIZE, 0);
+            generate_block(MATRIX[j*MSIZE+i], BSIZE, 0);
+        }
+    } 
+
+    compss_barrier();
+
+    gettimeofday(&end_io, NULL);
+
+    io_timing = (end_io.tv_sec - start_io.tv_sec) * 1e6;
+    io_timing = (io_timing + (end_io.tv_usec - start_io.tv_usec)) * 1e-6; 
+
+    gettimeofday(&start_comp, NULL);
+
+    for (int k = 0; k < MSIZE; ++k) {
+        ddss_dpotrf(Lower, BSIZE, MATRIX[k*MSIZE+k], BSIZE);
+
+        for (int i = k+1; i < MSIZE; ++i) {
+            ddss_dtrsm(Right, Lower, 
+		               Trans, NonUnit, 
+                	   BSIZE, BSIZE,
+                       BSIZE, MATRIX[k*MSIZE+k], BSIZE,
+                       MATRIX[i*MSIZE+k], BSIZE);
+        }        
+
+        for (int i = k+1; i < MSIZE; ++i) {
+
+            ddss_dsyrk(Lower, NoTrans,
+                       BSIZE, BSIZE,
+                       BSIZE, MATRIX[i*MSIZE+k], BSIZE,
+                      -BSIZE, MATRIX[i*MSIZE+i], BSIZE);
+        
+            for (int j = i; j < MSIZE; ++j) {
+
+                ddss_dgemm(NoTrans, Trans,
+                    	   BSIZE, BSIZE, BSIZE,
+                           BSIZE, MATRIX[i*MSIZE+k], BSIZE,
+                           MATRIX[j*MSIZE+k], BSIZE,
+                           -BSIZE, MATRIX[i*MSIZE+j], BSIZE);
+            }
+        }
+    }
+
+    compss_barrier();
+
+    gettimeofday(&end_comp, NULL);
+
+    cholesky_timing = (end_comp.tv_sec - start_comp.tv_sec) * 1e6;
+    cholesky_timing = (cholesky_timing + 
+					   (end_comp.tv_usec - start_comp.tv_usec)) * 1e-6; 
+
+    printf("\nPerforming **** Cholesky ****\n");
+    printf("I/O time           = %10.4f sec\n", io_timing);
+    printf("Computation timing = %10.4f sec\n", cholesky_timing);
+
+    compss_off(); 
+}
+\end{lstlisting}
+%\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Interfaz de la aplicación Cholesky.},captionpos=b, 
+label={lst:idlcholesky}, style=idlstyle]
+include lass.h;
+  
+interface cholesky
+{
+
+    @Constraints(ComputingUnits=2);
+    void generate_block(inout double[N*N] A, in int N, in int D);
+
+    @Constraints(ComputingUnits=4);
+    int ddss_dpotrf(in enum DDSS_UPLO UPLO, 
+					in int N, 
+					inout double[N*LDA] A, 
+					in int LDA);
+
+    @Constraints(ComputingUnits=4);
+    int ddss_dtrsm( in enum DDSS_SIDE SIDE, in enum DDSS_UPLO UPLO,
+                    in enum DDSS_TRANS TRANS_A, 
+					in enum DDSS_DIAG DIAG,
+                    in int M, in int N,
+                    in double ALPHA, in double[N*N] A, in int LDA,
+                    inout double[M*N] B, in int LDB);
+
+    @Constraints(ComputingUnits=4);
+    int ddss_dgemm( in enum DDSS_TRANS TRANS_A, 
+					in enum DDSS_TRANS TRANS_B,
+                    in int M, in int N, in int K,
+                    in double ALPHA, in    double[M*K] A, in int LDA,
+                    in double[K*N] B, in int LDB,
+                    in double BETA,  inout double[M*N] C, in int LDC );
+
+
+    @Constraints(ComputingUnits=4);
+    int ddss_dsyrk( in enum DDSS_UPLO UPLO, in enum DDSS_TRANS TRANS,
+                    in int N, in int K,
+                    in double ALPHA, in    double[N*K] A, 
+					in int LDA, in double BETA,  
+					inout double[N*N] C, in int LDC );
+
+};
+\end{lstlisting}
+\end{minipage}

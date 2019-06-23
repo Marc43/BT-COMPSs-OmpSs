@@ -75,9 +75,11 @@
 {
     language = C++,
     keywordstyle = {\color{key-color}},
-    keywordstyle = [3]{\color{blue}},
-    otherkeywords = {in, int ,interface, out, inout},
-    morekeywords = [3]{in, out, inout}
+    keywordstyle = [4]{\color{blue}},
+    keywordstyle = [3]{\color{red}},
+    otherkeywords = {in, int, interface, out, inout},
+	morekeywords = [3]{Implements, processors, Processor, ProcessorType},
+    morekeywords = [4]{in, out, inout},
 }
 
 \lstdefinestyle{JStyle}{
@@ -102,13 +104,35 @@
 	language=C++,
 	frame=lines,
 	classoffset=1,
-	morekeywords={\#pragma, omp, oss, parallel, single, taskwait, task, depend, firstprivate, priority},keywordstyle=\color{blue}\bfseries,
-	otherkeywords = {\#pragma, omp, oss, parallel, single, taskwait, task, depend, firstprivate, priority}
+	keywordstyle = \color{blue},
+	otherkeywords={\#pragma, omp, oss, parallel, single, taskwait, task, depend, firstprivate, priority, target, device, ndrange, in, out, inout},keywordstyle=\color{blue}\bfseries,
+}
+
+\lstdefinestyle{YStyle}{
+	numberbychapter=false,
+	backgroundcolor=\color{white},   
+	commentstyle=\color{teal},
+	basicstyle=\tiny,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=3pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	language=C++,
+	frame=lines,
+	classoffset=1,
+    literate={\%}{{\textcolor{blue}{\%}}}1
 }
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
+\begin{comment}
 % \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
 \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
 \author
@@ -121,30 +145,86 @@ Jorge Ejarque
 }
 
 \date{Junio 2019}
+\end{comment}
 
 \begin{document}
 
-\maketitle
+  {\centering
+    {\Huge Trabajo de Fin de Grado}\\
+    \vspace{5mm}
+    {\Large \textbf{Grado en Ingeniería Informática}}\\
+    \vspace{15mm}
+    \LARGE {Integrating COMPSs and OmpSs Programming Models to
+	support distributed heterogeneous computing environments}\\
+    \vspace{15mm}
+    \Large {En colaboración con Barcelona Supercomputing Center (BSC)}\\
+    \vspace{5mm}
+    \includegraphics[scale=0.3]{images/portada/BSC-Logo.png}\\
+    \vspace{5mm}
+    \Large \today \\
+    }
+    \vspace{17mm}
+    \hspace{2mm}
+    \begin{tabular}{l@{ } l}
+        \vspace{5mm}
+        \Large \textbf{Autor:} & \Large{Marc Domínguez de la Rocha} \\
+        \vspace{5mm}
+        \Large\textbf{Director:} & \Large{Rosa M. Badia}\\
+        \vspace{5mm}
+        \Large\textbf{Co-director:} & \Large{Jorge Ejarque}\\
+        \vspace{5mm}
+         \Large\textbf{Convocatoria: } & \Large{Primavera 2019}\\
+    \end{tabular}\par
+    \vspace{10mm}
+    {\centering
+    {\Large Facultat d'Informàtica de Barcelona (FIB)}\\
+    \vspace{3mm}
+    \includegraphics[scale=0.25]{images/portada/logo-fib.png}
+    \par
+}
+
+%\author Marc Domínguez de la Rocha
+%\title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
+
+%\maketitle
 
 \newpage
 \renewcommand{\contentsname}{Índice}
 \tableofcontents
 \newpage
 
-\input{GEP/GEP.tex}
+%\input{abstract.tex}
+
+%\newpage
+
+%\input{agradecimientos.tex}
+
+\newpage
+
+%\input{GEP/GEP.tex}
+
+\input{GEP/deliverable1.tex}
 
 \input{technical_work/technical_work.tex}
+
+\newpage
+
+\input{conclusions.tex}
+
+\input{technical_work/limitaciones_ompss-2.tex}
 
 \newpage
 
 \appendixpage
 \appendix
 
-\input{GEP/appendix.tex}
+\input{technical_work/pthreads.tex}
 
 \newpage
 
-\input{technical_work/pthreads.tex}
+\input{GEP/deliverable2.tex}
+\input{GEP/deliverable3.tex}
+\input{GEP/appendix.tex}
 
 \newpage
 
@@ -154,9 +234,11 @@ Jorge Ejarque
 
 \input{technical_work/autotools.tex}
 
+\input{technical_work/codigo_aplicaciones.tex}
+
 \newpage
 
-\input{technical_work/estudio_previo.tex}
+\input{technical_work/limitaciones_ompss-2-apendice.tex}
 
 \newpage
 
