@@ -8,6 +8,15 @@
 %% Sets page size and margins
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
+\usepackage{afterpage}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{0}
+	\newpage
+}
+
 %% Useful packages
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{longtable}
@@ -189,20 +198,13 @@ Jorge Ejarque
 
 %\maketitle
 
-\newpage
-\renewcommand{\contentsname}{Índice}
-\tableofcontents
-\newpage
-
 \input{abstract.tex}
-
-\newpage
 
 \input{agradecimientos.tex}
 
+\renewcommand{\contentsname}{Índice}
+\tableofcontents
 \newpage
-
-%\input{GEP/GEP.tex}
 
 \input{GEP/deliverable1.tex}
 
@@ -233,20 +235,15 @@ Jorge Ejarque
 
 \input{technical_work/spawn_appendix.tex}
 
-\newpage
-
-\input{technical_work/autotools.tex}
+%\input{technical_work/autotools.tex}
 
 \input{technical_work/codigo_aplicaciones.tex}
 
-\newpage
-
 \input{technical_work/limitaciones_ompss-2-apendice.tex}
-
-\newpage
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \nocite{*}
 \end{document}
+
 \printbibliography
