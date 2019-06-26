@@ -1,0 +1,89 @@
+\chapter{Informe de sostenibilidad}
+
+\section{Dimensión ambiental}
+
+\begin{itemize}
+	\item \textbf{¿Has cuantificado el impacto ambiental de la realización del proyecto? ¿Qué medidas has
+		tomado para reducir el impacto? ¿Has cuantificado esta reducción?} \\
+	
+	Por desgracia no ha habido tiempo para cuantificar el impacto ambiental del proyecto. Se podría haber estimado el consumo de energía de \textit{CTE-Power} y \textit{MareNostrum4} al ejecutar los experimentos, en caso de haberlo estimado, las únicas medidas posibles para reducir el impacto hubieran sido minimizar el uso de estas máquinas, usarlas solo cuando estuviera completamente seguro que el experimento iba a funcionar, de esta manera el consumo se reduciría drásticamente a utilizar todos los recursos desde 1 a 10 nodos en ambas máquinas. 
+	
+	\item \textbf{¿Si hicieras de nuevo el proyecto, ¿Podrías realizarlo con menos recursos?} \\
+	
+	Desde luego podría haber invertido menos tiempo conociendo de antemano qué me depara en cada fase del proyecto, pero los recursos utilizados son estrictamente los necesarios, no falta ni sobra ninguno.
+	
+	\item \textbf{¿Qué recursos estimas que se usarán durante la vida útil del proyecto? ¿Cuál será el
+		impacto ambiental de estos recursos?} \\
+	
+	Es difícil conocerlo, durante la vida útil del proyecto puede ser utilizado en clústers y supercomputadores de manera que los recursos no son pocos, pero el proyecto no hace uso de recursos por si solo, siempre será en el contexto de otro proyecto o investigación científica. Quizá el único recurso estricto es mantener las versiones del proyecto en la nube con controles de versión como \textit{GitHub} o \textit{GitLab}, donde el impacto ambiental viene derivado del consumo de sus servidores.
+	
+	\item \textbf{¿El proyecto permitirá reducir el uso de otros recursos? ¿Globalmente, el uso del proyecto
+		mejorará o empeorará la huella ecológica?} \\
+	
+	El proyecto pretende facilitar la programación en entornos distribuidos heterogéneos, por lo que el tiempo que se utilizarán estos entornos se verá reducido, por lo cual estaremos ayudando a reducir los recursos de otros proyectos. Definitivamente, el uso del proyecto mejorará la huella ecológica.
+	
+	\item \textbf{¿Podrían producirse escenarios que hiciesen aumentar la huella ecológica del proyecto?} \\
+	
+	La huella ecológica del proyecto durante el desarrollo podría verse afectada en el caso que hubiera un desvío notorio en las fases de experimentación donde hay que utilizar máquinas que suponen un consumo energético elevado. \textit{A posteriori} no puede ser que se aumente la huella ecológica intrínseca del proyecto, la posible huella viene dada por el uso que los usuarios hagan del proyecto.
+	
+	
+\end{itemize}
+
+\section{Dimensión económica}
+
+\begin{itemize}
+	
+	\item \textbf{\textbf{¿Has cuantificado el coste (recursos humanos y materiales) de la realización del proyecto? ¿Qué decisiones has tomado para reducir el coste? ¿ Has cuantificado este ahorro?}} \\
+	
+	Se ha cuantificado el coste de recursos humanos y materiales durante la realización del proyecto, para reducir el coste de los recursos humanos se ha intentado hacer las reuniones con el director y co-director las veces justas, minimizar el uso de recursos humanos solo cuando sea estrictamente necesario, para los recursos materiales se ha intentado utilizar una porción de las máquinas asequible y se ha intentado minimizar el uso de estas. Estas medidas se han tomado desde el primer momento por lo que el presupuesto ya se ajusta a ellas, no ha habido ningún ahorro al respecto.
+	
+	\item \textbf{¿Se ha ajustado el coste previsto al coste final? ¿Has justificado las diferencias (lecciones aprendidas)?} \\
+	
+	El coste se ha visto afectado en el hecho que tuvimos que descartar el uso del \textit{MinoTauro} por que las tarjetas gráficas que utilizan son incompatibles con los \textit{drivers} más nuevos de \textit{NVIDIA} por lo que \textit{OmpSs-2} no las soporta. Para reemplazar la máquina decidimos utilizar \textit{MareNostrum4}, lo que nos llevo a aumentar el coste final. Pero el coste previsto del proyecto aparte de la desviación que comentada no ha sufrido ningún desajuste, se ajusta completamente.
+	
+	\item \textbf{¿Qué coste estimas que tendrá el proyecto durante su vida útil? ¿ Se podría reducir este
+		coste para hacerlo más viable?} \\
+	
+	El proyecto no tiene ningún coste una vez desarrollado, si hubiera uno sería coste de infraestructura para mantenerlo en la nube de \textit{GitHub} o \textit{GitLab} pero es un servicio gratuito para instituciones de carácter público. El coste no se puede reducir más.
+	
+	\item \textbf{¿Se ha tenido en cuenta el coste de los ajustes/actualizaciones/reparaciones durante la
+		vida útil del proyecto?} \\
+	
+	No, dado que es una pieza de \textit{software} que integra dos modelos de programación no debería necesitar de actualizaciones durante su vida útil que no vengan hechas por los propios equipos de desarrollo de \textit{COMPSs} o \textit{OmpSs-2}, aún así, si hiciera falta se añadió el porcentaje de contingencia para poder encarar situaciones similares.
+	
+	\item \textbf{¿Podrían producirse escenarios que perjudicasen la viabilidad del proyecto?} \\
+	
+	El proyecto no pretende lucrarse por lo que realmente la viabilidad no podría verse afectada. La integración \textit{COMPSs+OmpSs-2} pretende ser utilizada en el marco de investigaciones científicas.
+	
+\end{itemize}
+
+\section{Dimensión social}
+
+\begin{itemize}
+	\item \textbf{¿La realización de este proyecto ha implicado reflexiones significativas a nivel personal, profesional o ético de las personas que han intervenido?} \\
+	
+	Por suerte el proyecto no ha llevado a ninguna persona implicada a tener que reflexionar de esta manera. Las reflexiones realizadas han sido sólo en el marco definido única y exclusivamente por el proyecto.
+	
+	\item \textbf{¿Quién se beneficiará del uso del proyecto?} \\
+	
+	Todo usuario que lo utilice, principalmente destinado a personal de investigación que quiera programar en entornos distribuidos heterogéneos de una manera más sencilla y efectiva.
+	
+	\item \textbf{¿Hay algún colectivo que puede verse perjudicado por el proyecto? ¿ En qué medida?} \\
+	
+	Desde luego que no, el proyecto no puede afectar de ninguna manera a ningún colectivo, podría afectar a nivel competitivo pero no tiene como objetivo ser vendido en el mercado y cuenta con licencias que permiten su uso, modificación y distribución de manera gratuita.
+	
+	\item \textbf{¿En qué medida soluciona el proyecto el problema planteado inicialmente?} \\
+	
+	El proyecto soluciona el problema tal y como estaba planeado desde que se inició la gestión del proyecto.
+	
+	\item \textbf{¿Podrían producirse escenarios que hiciesen que el proyecto fuese perjudicial para algún
+		segmento particular de la población?} \\
+	
+	El proyecto por si mismo no supone ninguna amenaza para ningún segmento de la población, solo el uso que le den los usuarios podría ser perjudicial. Pero no creo que seamos responsables del uso que hagan los usuarios cuando brindamos una herramienta que únicamente pretende hacer más fácil la programación de entornos distribuidos heterogéneos.
+	
+	\item \textbf{¿Podría crear el proyecto algún tipo de dependencia que dejase a los usuarios en posición
+		de debilidad?} \\
+	
+	De ninguna manera. El proyecto no incluye características que creen dependencia entre este y el usuario, en caso de que alguien desarrollase este tipo de dependencia sería un caso muy particular a tratar.
+	
+\end{itemize}

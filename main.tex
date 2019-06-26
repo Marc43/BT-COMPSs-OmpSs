@@ -1,11 +1,21 @@
 % Main document of the project, this will include all the other parts involving the documentation...
 
-\documentclass[a4paper]{article}
+\documentclass[a4paper, titlepage, twoside, openright]{report}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
 %% Sets page size and margins
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\usepackage{afterpage}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{0}
+	\newpage
+}
 
 %% Useful packages
 \usepackage[table,xcdraw]{xcolor}
@@ -33,6 +43,7 @@
 \selectlanguage{spanish}
 \usepackage{colortbl}
 \usepackage{cite}
+\usepackage{xr}
 
 \usepackage[toc,page]{appendix}
 \usepackage{pdflscape}
@@ -62,25 +73,76 @@
     commentstyle=\color{green}, % comment color
     keywordstyle=\color{blue}, % keyword color
     stringstyle=\color{red},
-    backgroundcolor=\color{lbcolor}
+    %backgroundcolor=\color{lbcolor}
 }
 
 \definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
 \definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
 \definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
 \definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+
 \lstdefinestyle{idlstyle}
 {
     language = C++,
     keywordstyle = {\color{key-color}},
     keywordstyle = [3]{\color{blue}},
-    otherkeywords = {in, int ,interface, out, inout},
-    morekeywords = [3]{in, out, inout}
+    keywordstyle = [4]{\color{red}},
+    otherkeywords = {interface},
+	morekeywords = [4]{@Constraints, ComputingUnits, Implements, processors, @Processor, ProcessorType},
+    morekeywords = [3]{in, out, inout},
+}
+
+\lstdefinestyle{JStyle}{
+	numberbychapter=false,
+	backgroundcolor=\color{white},   
+	commentstyle=\color{teal},
+	% 	keywordstyle=\,
+	% numberstyle=\tiny\color{mGray},
+	% 	stringstyle=\color{red},
+	% 	basicstyle=\scriptsize,
+	basicstyle=\small,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=3pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	language=C++,
+	frame=lines,
+	classoffset=1,
+	keywordstyle = \color{blue},
+	otherkeywords={\#pragma, omp, oss, parallel, single, taskwait, task, depend, firstprivate, priority, target, device, ndrange, in, out, inout},keywordstyle=\color{blue}\bfseries,
+}
+
+\lstdefinestyle{YStyle}{
+	numberbychapter=false,
+	backgroundcolor=\color{white},   
+	commentstyle=\color{teal},
+	basicstyle=\tiny,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=3pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	language=C++,
+	frame=lines,
+	classoffset=1,
+    literate={\%}{{\textcolor{blue}{\%}}}1
 }
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
+\begin{comment}
 % \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
 \title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
 \author
@@ -91,26 +153,97 @@ Rosa M. Badia
 \and
 Jorge Ejarque
 }
-\date{Febrero 2019}
+
+\date{Junio 2019}
+\end{comment}
 
 \begin{document}
 
+  {\centering
+    {\Huge Trabajo de Fin de Grado}\\
+    \vspace{5mm}
+    {\Large \textbf{Grado en Ingeniería Informática}}\\
+    \vspace{15mm}
+    \LARGE {Integrating COMPSs and OmpSs Programming Models to
+	support distributed heterogeneous computing environments}\\
+    \vspace{15mm}
+    \Large {En colaboración con Barcelona Supercomputing Center (BSC)}\\
+    \vspace{5mm}
+    \includegraphics[scale=0.3]{images/portada/BSC-Logo.png}\\
+    \vspace{5mm}
+    \Large \today \\
+    }
+    \vspace{17mm}
+    \hspace{2mm}
+    \begin{tabular}{l@{ } l}
+        \vspace{5mm}
+        \Large \textbf{Autor:} & \Large{Marc Domínguez de la Rocha} \\
+        \vspace{5mm}
+        \Large\textbf{Director:} & \Large{Rosa M. Badia}\\
+        \vspace{5mm}
+        \Large\textbf{Co-director:} & \Large{Jorge Ejarque}\\
+        \vspace{5mm}
+         \Large\textbf{Convocatoria: } & \Large{Primavera 2019}\\
+    \end{tabular}\par
+    \vspace{10mm}
+    {\centering
+    {\Large Facultat d'Informàtica de Barcelona (FIB)}\\
+    \vspace{3mm}
+    \includegraphics[scale=0.25]{images/portada/logo-fib.png}
+    \par
+}
 
+%\author Marc Domínguez de la Rocha
+%\title{Integrating COMPSs and OmpSs Programming Models to support distributed heterogeneous computing environments}
 
-\maketitle
+%\maketitle
 
-\newpage
+\input{abstract.tex}
+
+\input{agradecimientos.tex}
+
 \renewcommand{\contentsname}{Índice}
 \tableofcontents
 \newpage
 
-\input{deliverable1.tex}
-\input{deliverable2.tex}
-\input{deliverable3.tex}
-\input{appendix.tex}
+\input{GEP/deliverable1.tex}
+
+\input{technical_work/technical_work.tex}
+
+\newpage
+
+\input{conclusions.tex}
+
+\input{technical_work/limitaciones_ompss-2.tex}
+
+\newpage
+
+\input{informe_sostenibilidad.tex}
+
+\appendixpage
+\appendix
+
+\input{technical_work/pthreads.tex}
+
+\newpage
+
+\input{GEP/deliverable2.tex}
+\input{GEP/deliverable3.tex}
+\input{GEP/appendix.tex}
+
+\newpage
+
+\input{technical_work/spawn_appendix.tex}
+
+%\input{technical_work/autotools.tex}
+
+\input{technical_work/codigo_aplicaciones.tex}
+
+\input{technical_work/limitaciones_ompss-2-apendice.tex}
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \nocite{*}
 \end{document}
+
 \printbibliography

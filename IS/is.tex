@@ -1,0 +1,110 @@
+\section{Contextualización del proyecto}
+
+Hoy en día se tiende a tener distintos recursos de cómputo en un solo dispositivo, por ejemplo, en un teléfono móvil ya tenemos al menos un procesador y una tarjeta gráfica, pero no tan sólo en el ámbito más cotidiano (aunque no nos demos cuenta), sino que en los más profesionales y especializados está siendo también cada vez más común la heterogeneidad de los recursos de computación. 
+\par\bigskip
+
+El proyecto pretende facilitar la gestión de estos recursos de computación en entornos distribuidos, brindando un método robusto y eficiente para programar aplicaciones en estos entornos.
+\par\bigskip
+
+Este proyecto es un Trabajo de Fin de Grado del Grado en Ingeniería Informática, especializado en el área de Ingeniería de Computadores. El grado es impartido por la \textit{Facultat d'Informàtica de Barcelona (FIB)} centro perteneciente a la \textit{Universitat Politècnica de Catalunya (UPC)}. 
+\par\bigskip
+
+El proyecto se realiza conjuntamente con el \textit{Barcelona Supercomputing Center (BSC)}, estudiamos como podemos integrar los modelos de programación \textit{COMPSs} y \textit{OmpSs} para alcanzar este objetivo, implementamos un prototipo y evaluamos su rendimiento y características deseadas. 
+
+\section{Cambios en la planificación}
+
+Respecto a la planificación ha habido un par de modificaciones, por motivos de compatibilidad entre OmpSs-2 y las GPUs que hay en MinoTauro hemos decidido utilizar \textit{MareNostrum4} en su lugar. El cálculo para el supercomputador \textit{MareNostrum4} se ha computado con la instancia \textit{r5.12xlarge} de \textit{Amazon} que cuesta 2,7\euro la hora.
+\bigskip
+
+
+La siguente tabla muestra como afecta esto al presupuesto, todos los apartados están colapsados menos el que concierne al uso de \textit{MinoTauro} y \textit{MareNostrum4}.
+
+\begin{longtable}{l|l|l|l|l|l|}
+\cline{2-6}
+                                                                                                                                    & Uds.                            & Precio(\euro o \euro/h)         & Vida útil(años)         & Amortización(\euro/h)       & Precio(€)                        \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes directos}                                                                       &                                 &                         &                         &                         & {\color[HTML]{343434} 17.034,58} \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{343434} Gestión del proyecto}}                                           & {\color[HTML]{343434} 60 horas} & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} } & {\color[HTML]{343434} 620,45}    \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Uso de la API Nanos6}                                                                  & 60 horas                        &                         &                         &                         & 620,45                           \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Integrar OmpSs-2 en C/C++}                                                             & 96 horas                        &                         &                         &                         & 992,72                           \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Integrar OmpSs-2 en Python\\ y Java\end{tabular}}           & 93 horas                        &                         &                         &                         & 961,7                            \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Desarrollo de una aplicación\\ COMPSs+OmpSs-2\end{tabular}} & 84 horas                        &                         &                         &                         & 868,63                           \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Estudio del rendimiento}                                                               & 84 horas                        &                         &                         &                         & 12.250,63                         \\ \hline
+\multicolumn{1}{|l|}{MinoTauro}                                                                                                     & 10                              & 2,02                    & -                       & -                       & -1.696,8                         \\ \hline
+\multicolumn{1}{|l|}{MareNostrum4}                                                                                                     & 10                              & 2,7                    & -                       & -                       &  2268,0               \\ \hline
+\rowcolor[HTML]{C0C0C0} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}Redactar la memoria}                                                                   & 72 horas                        &                         &                         &                         & 720                              \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Costes indirectos}                                                                     &                                 &                         &                         &                         & 31.726,72                        \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total acumulado}                                                                       &                                 &                         &                         &                         & 48.761,3                         \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Contingencia}                                                                          & 10\%                            &                         &                         &                         & 53.637,43                        \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total sin IVA}                                                                         &                                 &                         &                         &                         & 53.637,43                       \\ \hline
+\rowcolor[HTML]{9B9B9B} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{9B9B9B}Total con IVA}                                                                         & 21\%                            &                         &                         &                         & 64.901,29                        \\ \hline
+\end{longtable}
+
+No hemos querido tener que implementar las tres integraciones (recordemos, \textit{C/C++}, \textit{Java}, \textit{Python}) sin antes ver si \textit{OmpSs-2} solucionaba los problemas que nos encontramos con \textit{OmpSs}, lo que nos ha llevado a adelantar parte del estudio de rendimiento. Por tanto, la planificación definitiva es:
+
+\begin{longtable}{|l|l|l|}
+\hline
+\rowcolor[HTML]{9B9B9B} 
+Tarea                                                                           & Descripción                                                                                                                                                                           & Estado      \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Gestión del proyecto                                                            & Engloba los cuatro entregables de la asignatura GEP.                                                                                                                                  & Completada  \\ \hline
+Uso de la API de Nanos6                                                         & \begin{tabular}[c]{@{}l@{}}Aprender a utilizar la API de Nanos6 para el modo \\ librería.\end{tabular}                                                                                & Completada  \\ \hline
+Integración en C/C++                                                            & \begin{tabular}[c]{@{}l@{}}Realizar la integración COMPSs+OmpSs-2 en el \\ binding de C/C++.\end{tabular}                                                                             & Completada  \\ \hline
+Estudio previo                                                                  & \begin{tabular}[c]{@{}l@{}}Estudio del rendimiento de la primera integración \\ con tal de prevenir problemas con el resto de \\ posibles integraciones (Java y Python).\end{tabular} & Completada  \\ \hline
+\begin{tabular}[c]{@{}l@{}}Desarrollo aplicación \\ COMPSs+OmpSs-2\end{tabular} & \begin{tabular}[c]{@{}l@{}}Desarrollar una aplicación con tal de poder \\ medir el rendimiento final.\end{tabular}                                                                    & Completada   \\ \hline
+Estudio del rendimiento                                                         & \begin{tabular}[c]{@{}l@{}}Estudio final del rendimiento de la integración\\ (o integraciones).\end{tabular}                                                                          & Pendiente   \\ \hline
+Integración Java y Python                                                       & Realizar la integración también en Java y Python.                                                                                                                                     & Pendiente   \\ \hline
+Redactar la memoria                                                             & Redactar el documento que recoge el desarrollo del proyecto.                                                                                                                          & En progreso \\ \hline
+\end{longtable}
+
+Nos encontramos en la tarea de estudio de rendimiento, que consistirá en comparar ambas integraciones con \textit{OmpSs} y \textit{OmpSs-2} para observar si hay alguna mejoría. 
+\smallskip
+Como el estudio de rendimiento consiste en ejecutar la aplicación desarrollada y extraer métricas para comparar, se puede ir realizando la integración con \textit{Java} y \textit{Python}.
+
+\section{Metodología y rigor}
+
+La metodología propuesta en el GEP fue \textit{SCRUM}. Una vez empezado el proyecto se percibió que esta metodología se suele utilizar con grupos más grandes, siendo el proyecto desarrollado por una única persona se decidió cambiar a la metodología iterativa. En esta metodología se aplica sobre el proyecto de manera iterativa en periodos de tiempo (llamados iteraciones) una serie de tareas similares en tanto que incrementalmente mejoremos el proyecto.
+
+\section{Análisis de alternativas}
+
+No se proponen alternativas dado que el trabajo propone hacerlo con una alternativa en concreto (utilizando COMPSs y OmpSs-2). La opción se justifica en la gestión del proyecto realizada.
+
+\section{Integración de conocimientos}
+
+Se utilizan conocimientos de programación a nivel de threads, de programación en entornos distribuidos, de programación en entornos paralelos, también técnicas de \textit{debugging} (gdb), lenguajes como \textit{C}, \textit{C++}, \textit{Java} y \textit{Bash} y herramientas para crear programas que interpreten o compilen como son \textit{Yacc} y \textit{Lex}.
+
+\begin{itemize}
+ \item \textbf{Programación distribuida y paralela}: Han sido necesarios conocimientos de programación distribuida y paralela para conocer cómo sería útil integrar ambos modelos. También será necesario para el posterior estudio de rendimiento a realizar sobre la integración.
+ \item \textbf{Debugging}: Para acelerar el desarrollo ha sido necesario conocer técnicas \textit{debugging} con tal de solventar el mayor número de problemas eficientemente.
+ \item \textbf{Lenguajes de programación}: Para realizar las integración de \textit{C/C++} ha sido necesario conocer los lenguajes \textit{C} y \textit{C++} además de \textit{Java}. Para realizar las dos integraciones pendientes hará falta también \textit{Python}.
+ \item \textbf{Scripting}: Mayoritariamente la infraestructura que \textit{COMPSs} necesita levantar con tal de encender el \textit{master} y los \textit{workers} utiliza \textit{scripts} de \textit{Bash}, por lo que ha sido necesario conocer bien este lenguaje de \textit{scripting}.
+ \item \textbf{Tracing}: Con tal de realizar el estudio previo de rendimiento se ha necesitado saber utilizar \textit{Extrae} y \textit{Paraver}.
+ \item \textbf{Arquitectura de un clúster}: Dado que el estudio del rendimiento se realizará en un clúster, se necesita conocer la arquitectura de este y como esto afecta al rendimiento que desempeñará la integración, tanto de manera positiva como negativa.
+ \item \textbf{Compiladores}: Se ha añadido mecanismos para soportar el tipo \textit{enum} y añadir \textit{headers} en una interfaz de una aplicación \textit{C/C++} por lo que ha sido necesario saber como modificar una gramática y modificar el \textit{parsing}. Se ha utilizado \textit{Yacc} y \textit{Lex}.
+\end{itemize}
+
+
+\section{Identificación de leyes y regulaciones}
+
+El proyecto consiste en el uso de dos modelos de programación existentes para concebir una integración y distribuirla. Dado que el proyecto se desarrolla en el grupo del primer modelo \textit{COMPSs}, no necesitamos ningún tipo de aprobación externa, aún así utiliza una licencia Apache 2.0\footnote{https://github.com/bsc-wdc/compss/blob/stable/LICENSE} por lo que igualmente no tendríamos ningún tipo de problema en su modificación y distribución. En cuánto al segundo modelo, utiliza la licencia GPL3.0\footnote{https://www.gnu.org/licenses/gpl-3.0.en.html}, que nos da permiso para utilizarlo, modificarlo y distribuirlo.
+
+

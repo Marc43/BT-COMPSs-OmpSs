@@ -1,0 +1,19 @@
+\BOOKMARK [1][-]{section.1}{Contexto}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Introducci\363n}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Actores}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Estado del arte}{}% 4
+\BOOKMARK [2][-]{subsection.2.1}{COMPSs}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Modelo de programaci\363n}{subsection.2.1}% 6
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Modelo de ejecuci\363n}{subsection.2.1}% 7
+\BOOKMARK [2][-]{subsection.2.2}{OmpSs}{section.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Modelo de programaci\363n y ejecuci\363n}{subsection.2.2}% 9
+\BOOKMARK [2][-]{subsection.2.3}{COMPSs+OmpSs}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{Alcance del proyecto}{}% 11
+\BOOKMARK [2][-]{subsection.3.1}{Requerimientos}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.2}{Objetivos}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.3}{Riesgos}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Problemas con el material de desarrollo}{subsection.3.3}% 15
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Problemas con los cl\372sters y supercomputadores}{subsection.3.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Aparici\363n de errores en la implementaci\363n}{subsection.3.3}% 17
+\BOOKMARK [3][-]{subsubsection.3.3.4}{Problemas con OmpSs/OmpSs-2}{subsection.3.3}% 18
+\BOOKMARK [1][-]{section.4}{Metodolog\355a}{}% 19

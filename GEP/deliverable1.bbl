@@ -1,0 +1,411 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{badia2015comp}{article}{}
+      \name{author}{8}{}{%
+        {{hash=4b821c22170941b24ead39ae5dcaebe9}{%
+           family={Badia},
+           familyi={B\bibinitperiod},
+           given={Rosa\bibnamedelima M},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=ddf410d441526261aa752d9f4a0a3ef4}{%
+           family={Conejero},
+           familyi={C\bibinitperiod},
+           given={Javier},
+           giveni={J\bibinitperiod}}}%
+        {{hash=dd85ebf10e0618810c45f48319cae818}{%
+           family={Diaz},
+           familyi={D\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod}}}%
+        {{hash=139e8ce2b3dc7ec86f430ef88fe8bd54}{%
+           family={Ejarque},
+           familyi={E\bibinitperiod},
+           given={Jorge},
+           giveni={J\bibinitperiod}}}%
+        {{hash=401587ba6d95aadb6899da74073fa696}{%
+           family={Lezzi},
+           familyi={L\bibinitperiod},
+           given={Daniele},
+           giveni={D\bibinitperiod}}}%
+        {{hash=e4bb82b73724642639f495e40b6ca19e}{%
+           family={Lordan},
+           familyi={L\bibinitperiod},
+           given={Francesc},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a7f90b4cac3e166b72c91fa5bc124bd2}{%
+           family={Ramon-Cortes},
+           familyi={R\bibinithyphendelim C\bibinitperiod},
+           given={Cristian},
+           giveni={C\bibinitperiod}}}%
+        {{hash=9f55e7f2967673306e24fd8bf7e730b6}{%
+           family={Sirvent},
+           familyi={S\bibinitperiod},
+           given={Raul},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{983442742108c95618deb845fc595069}
+      \strng{fullhash}{d7b7aebd6f80e630dc02176892939845}
+      \strng{bibnamehash}{983442742108c95618deb845fc595069}
+      \strng{authorbibnamehash}{983442742108c95618deb845fc595069}
+      \strng{authornamehash}{983442742108c95618deb845fc595069}
+      \strng{authorfullhash}{d7b7aebd6f80e630dc02176892939845}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SoftwareX}
+      \field{title}{Comp superscalar, an interoperable programming framework}
+      \field{volume}{3}
+      \field{year}{2015}
+      \field{pages}{32\bibrangedash 36}
+      \range{pages}{5}
+    \endentry
+    \entry{tejedor2017pycompss}{article}{}
+      \name{author}{8}{}{%
+        {{hash=5667ed56034c5799a4375595983db745}{%
+           family={Tejedor},
+           familyi={T\bibinitperiod},
+           given={Enric},
+           giveni={E\bibinitperiod}}}%
+        {{hash=6173cd98ee40e87e7ff23c0f6ed8e602}{%
+           family={Becerra},
+           familyi={B\bibinitperiod},
+           given={Yolanda},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=d93165b4c56aa2a28d45956018b9a7dc}{%
+           family={Alomar},
+           familyi={A\bibinitperiod},
+           given={Guillem},
+           giveni={G\bibinitperiod}}}%
+        {{hash=0957806ce36de4c7c9afdcaa7cf4f252}{%
+           family={Queralt},
+           familyi={Q\bibinitperiod},
+           given={Anna},
+           giveni={A\bibinitperiod}}}%
+        {{hash=4b821c22170941b24ead39ae5dcaebe9}{%
+           family={Badia},
+           familyi={B\bibinitperiod},
+           given={Rosa\bibnamedelima M},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=adb7c9e4e76fa78166cef16f41929e1c}{%
+           family={Torres},
+           familyi={T\bibinitperiod},
+           given={Jordi},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f286bb85bff677650a7e59bba1449c28}{%
+           family={Cortes},
+           familyi={C\bibinitperiod},
+           given={Toni},
+           giveni={T\bibinitperiod}}}%
+        {{hash=3774ce9483ae082f4f45349b4f4aab60}{%
+           family={Labarta},
+           familyi={L\bibinitperiod},
+           given={Jes{ú}s},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Sage Publications Sage UK: London, England}%
+      }
+      \strng{namehash}{97f86bd6315985b3ef74ee19a2d1a0dc}
+      \strng{fullhash}{1f383c722a4d9d3bc928e9636eaf3496}
+      \strng{bibnamehash}{97f86bd6315985b3ef74ee19a2d1a0dc}
+      \strng{authorbibnamehash}{97f86bd6315985b3ef74ee19a2d1a0dc}
+      \strng{authornamehash}{97f86bd6315985b3ef74ee19a2d1a0dc}
+      \strng{authorfullhash}{1f383c722a4d9d3bc928e9636eaf3496}
+      \field{sortinit}{2}
+      \field{sortinithash}{cbff857e587bcb4635511624d773949e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The International Journal of High Performance Computing Applications}
+      \field{number}{1}
+      \field{title}{PyCOMPSs: Parallel computational workflows in Python}
+      \field{volume}{31}
+      \field{year}{2017}
+      \field{pages}{66\bibrangedash 82}
+      \range{pages}{17}
+    \endentry
+    \entry{ayguade2009design}{article}{}
+      \name{author}{9}{}{%
+        {{hash=023cec4b1a1b82a444cd60e67363866f}{%
+           family={Ayguad{é}},
+           familyi={A\bibinitperiod},
+           given={Eduard},
+           giveni={E\bibinitperiod}}}%
+        {{hash=30d55a197386393c261625c446246998}{%
+           family={Copty},
+           familyi={C\bibinitperiod},
+           given={Nawal},
+           giveni={N\bibinitperiod}}}%
+        {{hash=099ebff405c73991bf04246df2c92378}{%
+           family={Duran},
+           familyi={D\bibinitperiod},
+           given={Alejandro},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e4be7a246087a83eae649fd695fd168f}{%
+           family={Hoeflinger},
+           familyi={H\bibinitperiod},
+           given={Jay},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b30d47f57311e4afb7c80331fd4d6f10}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=dc698b91b29adf08d30a4f766624286d}{%
+           family={Massaioli},
+           familyi={M\bibinitperiod},
+           given={Federico},
+           giveni={F\bibinitperiod}}}%
+        {{hash=b33b32fbecb9979ca236babe8b4cda4e}{%
+           family={Teruel},
+           familyi={T\bibinitperiod},
+           given={Xavier},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a481b3a2b0f7ce6c2202ab43158f303e}{%
+           family={Unnikrishnan},
+           familyi={U\bibinitperiod},
+           given={Priya},
+           giveni={P\bibinitperiod}}}%
+        {{hash=fa0353c961612f2db7bd3d19efac1199}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Guansong},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{aa755d676f904a671c3b63ae521c2941}
+      \strng{fullhash}{886a3b45f26f5e9dd682b80c7a2a13d4}
+      \strng{bibnamehash}{aa755d676f904a671c3b63ae521c2941}
+      \strng{authorbibnamehash}{aa755d676f904a671c3b63ae521c2941}
+      \strng{authornamehash}{aa755d676f904a671c3b63ae521c2941}
+      \strng{authorfullhash}{886a3b45f26f5e9dd682b80c7a2a13d4}
+      \field{sortinit}{3}
+      \field{sortinithash}{a4b52e5432884761f50fb9571273b93e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Parallel and Distributed Systems}
+      \field{number}{3}
+      \field{title}{The design of OpenMP tasks}
+      \field{volume}{20}
+      \field{year}{2009}
+      \field{pages}{404\bibrangedash 418}
+      \range{pages}{15}
+    \endentry
+    \entry{duran2011ompss}{article}{}
+      \name{author}{7}{}{%
+        {{hash=099ebff405c73991bf04246df2c92378}{%
+           family={Duran},
+           familyi={D\bibinitperiod},
+           given={Alejandro},
+           giveni={A\bibinitperiod}}}%
+        {{hash=023cec4b1a1b82a444cd60e67363866f}{%
+           family={Ayguad{é}},
+           familyi={A\bibinitperiod},
+           given={Eduard},
+           giveni={E\bibinitperiod}}}%
+        {{hash=4b821c22170941b24ead39ae5dcaebe9}{%
+           family={Badia},
+           familyi={B\bibinitperiod},
+           given={Rosa\bibnamedelima M},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=3774ce9483ae082f4f45349b4f4aab60}{%
+           family={Labarta},
+           familyi={L\bibinitperiod},
+           given={Jes{ú}s},
+           giveni={J\bibinitperiod}}}%
+        {{hash=9d365707b8e1e2d1d2dec8a611e8d251}{%
+           family={Martinell},
+           familyi={M\bibinitperiod},
+           given={Luis},
+           giveni={L\bibinitperiod}}}%
+        {{hash=84226bf1ec941a6bd1d1be0bdab1b543}{%
+           family={Martorell},
+           familyi={M\bibinitperiod},
+           given={Xavier},
+           giveni={X\bibinitperiod}}}%
+        {{hash=140762e98465033c74672a0ddd90fb0b}{%
+           family={Planas},
+           familyi={P\bibinitperiod},
+           given={Judit},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {World Scientific}%
+      }
+      \strng{namehash}{54d35b4d619ccef19827f820ce20a5c0}
+      \strng{fullhash}{811e284ac6df60421917de8416883fbd}
+      \strng{bibnamehash}{54d35b4d619ccef19827f820ce20a5c0}
+      \strng{authorbibnamehash}{54d35b4d619ccef19827f820ce20a5c0}
+      \strng{authornamehash}{54d35b4d619ccef19827f820ce20a5c0}
+      \strng{authorfullhash}{811e284ac6df60421917de8416883fbd}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Parallel Processing Letters}
+      \field{number}{02}
+      \field{title}{Ompss: a proposal for programming heterogeneous multi-core architectures}
+      \field{volume}{21}
+      \field{year}{2011}
+      \field{pages}{173\bibrangedash 193}
+      \range{pages}{21}
+    \endentry
+    \entry{sainz2014leveraging}{inproceedings}{}
+      \name{author}{6}{}{%
+        {{hash=622b3381e68fe43d4818f285ad5e9709}{%
+           family={Sainz},
+           familyi={S\bibinitperiod},
+           given={Florentino},
+           giveni={F\bibinitperiod}}}%
+        {{hash=287fba0be41913e4f47227e65f844aea}{%
+           family={Mateo},
+           familyi={M\bibinitperiod},
+           given={Sergi},
+           giveni={S\bibinitperiod}}}%
+        {{hash=861113553ae34f736302e563885b0cee}{%
+           family={Beltran},
+           familyi={B\bibinitperiod},
+           given={Vicen{ç}},
+           giveni={V\bibinitperiod}}}%
+        {{hash=25976b8bff001b73d6eba484e45715ab}{%
+           family={Bosque},
+           familyi={B\bibinitperiod},
+           given={Jose\bibnamedelima L},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=84226bf1ec941a6bd1d1be0bdab1b543}{%
+           family={Martorell},
+           familyi={M\bibinitperiod},
+           given={Xavier},
+           giveni={X\bibinitperiod}}}%
+        {{hash=023cec4b1a1b82a444cd60e67363866f}{%
+           family={Ayguad{é}},
+           familyi={A\bibinitperiod},
+           given={Eduard},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{2c0cdcfe2a95e4628926f7d349c4f733}
+      \strng{fullhash}{a54a8bfb283c3727b939751b6e72e96a}
+      \strng{bibnamehash}{2c0cdcfe2a95e4628926f7d349c4f733}
+      \strng{authorbibnamehash}{2c0cdcfe2a95e4628926f7d349c4f733}
+      \strng{authornamehash}{2c0cdcfe2a95e4628926f7d349c4f733}
+      \strng{authorfullhash}{a54a8bfb283c3727b939751b6e72e96a}
+      \field{sortinit}{5}
+      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2014 IEEE 26th International Symposium on Computer Architecture and High Performance Computing}
+      \field{title}{Leveraging OmpSs to exploit hardware accelerators}
+      \field{year}{2014}
+      \field{pages}{112\bibrangedash 119}
+      \range{pages}{8}
+    \endentry
+    \entry{filgueras2013heterogeneous}{inproceedings}{}
+      \name{author}{7}{}{%
+        {{hash=a1f904e98651d312db2cdfa6b1faaf6a}{%
+           family={Filgueras},
+           familyi={F\bibinitperiod},
+           given={Antonio},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f441aeb23b32c0621893db723eca530f}{%
+           family={Gil},
+           familyi={G\bibinitperiod},
+           given={Eduard},
+           giveni={E\bibinitperiod}}}%
+        {{hash=44352f508e412e0c6752b0a50aeaf95c}{%
+           family={Alvarez},
+           familyi={A\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod}}}%
+        {{hash=fbea4f3e4a66673a064abba505e4a45e}{%
+           family={Jimenez},
+           familyi={J\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=84226bf1ec941a6bd1d1be0bdab1b543}{%
+           family={Martorell},
+           familyi={M\bibinitperiod},
+           given={Xavier},
+           giveni={X\bibinitperiod}}}%
+        {{hash=3d6889e60391ac71b9e85a9ff798bf61}{%
+           family={Langer},
+           familyi={L\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=643b67f3362750f23792fc5278fee561}{%
+           family={Noguera},
+           familyi={N\bibinitperiod},
+           given={Juanjo},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{fbf0e24dede78ada7ae96bf44dad5ef1}
+      \strng{fullhash}{99165083e16b382f77496ac91e0b313c}
+      \strng{bibnamehash}{fbf0e24dede78ada7ae96bf44dad5ef1}
+      \strng{authorbibnamehash}{fbf0e24dede78ada7ae96bf44dad5ef1}
+      \strng{authornamehash}{fbf0e24dede78ada7ae96bf44dad5ef1}
+      \strng{authorfullhash}{99165083e16b382f77496ac91e0b313c}
+      \field{sortinit}{6}
+      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2013 IFIP/IEEE 21st International Conference on Very Large Scale Integration (VLSI-SoC)}
+      \field{title}{Heterogeneous tasking on smp/fpga socs: The case of ompss and the zynq}
+      \field{year}{2013}
+      \field{pages}{290\bibrangedash 291}
+      \range{pages}{2}
+    \endentry
+    \entry{OmpSs2reference}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2615465d2b9b3d31cb9115c699f9e039}{%
+           family={Group},
+           familyi={G\bibinitperiod},
+           given={BSC\bibnamedelimb Programming\bibnamedelima Models},
+           giveni={B\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{2615465d2b9b3d31cb9115c699f9e039}
+      \strng{fullhash}{2615465d2b9b3d31cb9115c699f9e039}
+      \strng{bibnamehash}{2615465d2b9b3d31cb9115c699f9e039}
+      \strng{authorbibnamehash}{2615465d2b9b3d31cb9115c699f9e039}
+      \strng{authornamehash}{2615465d2b9b3d31cb9115c699f9e039}
+      \strng{authorfullhash}{2615465d2b9b3d31cb9115c699f9e039}
+      \field{sortinit}{7}
+      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://pm.bsc.es/ftp/ompss-2/doc/spec}}
+      \field{note}{[Online; accedido 25-Febrero-2019]}
+      \field{title}{{OmpSs-2 Specification}}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

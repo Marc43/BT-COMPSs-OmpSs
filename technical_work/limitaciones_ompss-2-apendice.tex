@@ -1,0 +1,88 @@
+\chapter{Limitaciones COMPSs+OmpSs-2: código del test}
+\label{appendix:estudioprevio}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Programa principal del test},captionpos=b, 
+label={lst:tltmain}, language=C++]
+#include <iostream>
+#include <c_compss.h>
+#include "tlt.h"
+using namespace std;
+
+int main() {
+	cout << "Encendemos el runtime... " << endl;
+
+	compss_on();
+	
+	int* array_a = (int*) malloc(30 * sizeof(int));
+	int* array_b = (int*) malloc(30 * sizeof(int));
+	
+	for (int i = 0; i < 30; ++i) {
+	
+		coarse_task(array_a, 30);
+		
+		fine_task(array_b, 30);
+	
+	}
+	
+	compss_wait_on(array_a);
+	compss_wait_on(array_b);   
+		
+	cout << "Apagamos el runtime... "   << endl;
+	compss_off();
+
+}   
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Interfaz de la aplicación de test},captionpos=b, 
+label={lst:idltlt}, style=idlstyle] 
+interface tlt {
+
+void coarse_task(inout int[N] a, in int N);
+
+void fine_task(inout int[N] a, in int N);
+
+};
+\end{lstlisting}
+\end{minipage}
+
+\newpage
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting} [caption={Funciones a ejecutar como tareas del test},captionpos=b,
+label={lst:tltfuncs}, language=C++] 
+#include <unistd.h>
+#include <stdio.h>
+
+#define COARSE_GRAIN_SLEEP 300000
+#define FINE_GRAIN_SLEEP 50000
+
+void coarse_task(int* a, int N) {
+	
+	int i;
+	for (i = 0; i < N; ++i) {
+		#pragma oss task in([N]a) label(COARSE_GRAIN_TASK) 
+		{
+		a[i] = i;
+		usleep(COARSE_GRAIN_SLEEP);
+		}
+	}
+	#pragma oss taskwait
+}
+
+void fine_task(int* a, int N) {
+	
+	int i;
+	for (i = 0; i < N; ++i) {
+		#pragma oss task in([N]a) label(FINE_GRAIN_TASK)
+		{
+		a[i] = i;
+		usleep(FINE_GRAIN_SLEEP);
+		}
+	} 
+	#pragma oss taskwait
+}  
+\end{lstlisting}
+\end{minipage}
