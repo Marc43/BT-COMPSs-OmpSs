@@ -35,5 +35,5 @@ En la ejecución de la imagen \ref{fig:regular} hay muchos más recursos, y como
 
 \par\bigskip
 
-Para eliminar esta limitación, habría que otorgar a cada tarea generada a través de la función \textit{nanos6\_spawn\_function} un subconjunto de los recursos o organizar la planificación con prioridades descendientes entre tareas consecutivas generadas vía \textit{spawn}, con la primera opción las tareas de \textit{OmpSs-2} generadas en una tarea de \textit{COMPSs} no harían ni sufrirían interferencias ya que tienen recursos propios asignados, y con la segunda opción se ejecutarían en orden, por lo que tampoco habría interferencias con ni sobre el resto.
+Para eliminar esta limitación, habría que otorgar a cada tarea generada a través de la función \textit{nanos6\_spawn\_function} un subconjunto de los recursos o organizar la planificación con prioridades descendientes entre tareas consecutivas generadas vía \textit{spawn}, con la primera opción las tareas de \textit{OmpSs-2} generadas en una tarea de \textit{COMPSs} no harían ni sufrirían interferencias ya que tienen recursos propios asignados, y con la segunda opción se daría prioridad a la ejecución de tareas en el orden original de generación, por lo que tampoco habría interferencias con ni sobre el resto.
 

@@ -1,12 +1,12 @@
 \chapter{Evaluación}
 \label{sec:estudiorend}
 
-En este capítulo describiremos las aplicaciones descritas para evaluar la integración \textit{COMPSs+OmpSs-2}, los entornos donde haremos la evaluación y los resultados de esta.  
+En este capítulo describiremos las aplicaciones que hemos desarrollado para evaluar la integración \textit{COMPSs+OmpSs-2}. Las aplicaciones con las que evaluamos la integración son \textit{K-Means} y \textit{Cholesky}. Con \textit{K-Means} hemos realizado un estudio de escalabilidad en el \textit{cluster} \textit{CTE-Power} y con \textit{Cholesky} una comparativa entre \textit{COMPSs} y \textit{COMPSs+OmpSs-2} en el supercomputador \textit{MareNostrum4}. 
 
 \section{Aplicaciones}
 \subsection{K-Means}
 
-\textit{K-Means} es un algoritmo utilizado para hacer \textit{clustering} sobre un grupo de datos, es decir, agrupar los datos en \textit{clusters}. Cada dato pertenece al \textit{cluster} cuyo centro está en la distancia mínima, si no fuera así pertenecería a otro \textit{cluster}. Se inicializan \textit{clusters} con centros escogidos de manera aleatoria y se comparan las distancias a todos los \textit{clusters} y se determina a cual pertenece cada dato (siempre al centro más cercano), una vez hecho esto se vuelve a calcular el centro de cada \textit{cluster}, todo este proceso conforma una iteración de \textit{K-Means}, habitualmente se itera hasta que converge, esto es que la distancia entre los centros asignados en dos iteraciones consecutivas de cada \textit{cluster} es cercana a 0.
+\textit{K-Means} es un algoritmo utilizado para hacer \textit{clustering} sobre un grupo de datos, es decir, agrupar los datos en \textit{clusters}. Se hace el cálculo de la distancia de cada dato a todos los \textit{clusters} para determinar cuál es el más cercano y asignarlo a este. Una vez hecho esto se vuelve a calcular el centro de cada \textit{cluster}. Todo este proceso conforma una iteración de \textit{K-Means}, que se itera hasta que converge, esto es que la distancia entre los centros asignados en dos iteraciones consecutivas de cada \textit{cluster} es cercana a 0.
 
 \begin{figure}[h]
 	\centering 
@@ -15,13 +15,15 @@ En este capítulo describiremos las aplicaciones descritas para evaluar la integ
 	\label{fig:grafokmeans}
 \end{figure}
 
-Tal y como hemos desarrollado la aplicación tiene 4 tareas, que son \textit{init\_Fragment}, \textit{compute\_newCluster} (tiene una implementación en CPU y otra en GPU), \textit{merge\_newCluster}, \textit{update\_Clusters}. La imagen \ref{fig:grafokmeans} muestra un grafo de dependencias de una ejecución de \textit{K-Means} donde el número de \textit{clusters} a formar es 50 y se efectúan dos iteración. Para no sobrecargar este apartado se incluye en el apéndice \ref{sec:codigokmeans} la interfaz y el programa principal de la aplicación.
+Tal y como hemos desarrollado la aplicación tiene 4 tareas, que son \textit{init\_Fragment}, \textit{compute\_newCluster} (tiene una implementación en CPU y otra en GPU), \textit{merge\_newCluster} y \textit{update\_Clusters}. En la implementación se generan de manera aleatoria fragmentos, que son agrupaciones de los datos que debemos \textit{clusterizar}. Con esta clasificación en fragmentos conseguimos que la granularidad de las tareas de \textit{COMPSs} sea lo suficientemente gruesa. El cálculo de las distancias entre los datos de un fragmento y los \textit{clusters} en la tarea \textit{compute\_newCluster}, está implementado con \textit{OmpSs-2} tanto para la tarea de CPU como para la de GPU.
+
+La imagen \ref{fig:grafokmeans} muestra un grafo de dependencias de una ejecución de \textit{K-Means} donde los datos están agrupados en 8 fragmentos, el número de \textit{clusters} a formar es 50 y se efectúan dos iteraciones. Para no sobrecargar este apartado se incluye en el apéndice \ref{sec:codigokmeans} la interfaz y el programa principal de la aplicación.
 
 \subsection{Cholesky}
 
 \textit{Cholesky} es un método de descomposición aplicable cuando la matriz es simétrica definida positiva, entonces esta puede ser descompuesta como el producto de una matriz triangular inferior y su traspuesta. El método \textit{Cholesky} se utiliza para resolver sistemas de ecuaciones lineales, es similar a la descomposición \textit{LU} y es el doble de eficiente.
 \par\bigskip
-La aplicación ha sido desarrollada utilizando una librería para operaciones de algebra lineal programada en \textit{C} con \textit{OmpSs} y \textit{OmpSs-2}, esta librería es \textit{LASs}\footnote{https://pm.bsc.es/mathlibs/lass} (\textit{Linear Algebra routines on OmpSs}). Las funciones que implementa \textit{LASs} serán utilizadas como tareas a nivel de \textit{COMPSs} y después una vez ejecutadas harán uso de \textit{OmpSs-2}, por lo que realmente desarrollar una aplicación utilizando una librería externa es muy sencillo.
+La aplicación ha sido desarrollada con una visión de la matriz por bloques en dos niveles con tal de distribuirla entre los nodos de la máquina y poderla repartir entre los recursos dentro de un mismo nodo. La primera descomposición es efectuada por \textit{COMPSs}, la segunda se efectúa de manera transparente a nosotros ya que la realiza una librería para operaciones de álgebra lineal programada en \textit{C} con \textit{OmpSs-2}. Esta librería es \textit{LASs}\footnote{https://pm.bsc.es/mathlibs/lass} (\textit{Linear Algebra routines on OmpSs}), en la implementación de cada función que utilizamos se realiza una partición de los bloques que provienen de \textit{COMPSs} y se generan tareas de grano fino al nivel de \textit{OmpSs-2}. Las funciones que implementa \textit{LASs} serán utilizadas como tareas a nivel de \textit{COMPSs} y después una vez ejecutadas harán uso de \textit{OmpSs-2}, por lo que realmente desarrollar una aplicación utilizando librerías externas es muy sencillo.
 \par\bigskip
 Tiene 5 tareas, \textit{generate\_block}, \textit{ddss\_dpotrf}, \textit{ddss\_dtrsm}, \textit{ddss\_dgemm}, \textit{ddss\_dsyrk}, \textit{generate\_block} se utiliza para generar los bloques de manera distribuida (así el \textit{master} no tiene reservar memoria para toda la matriz, que podría ser muy grande), las otras 4 tareas son operaciones de algebra lineal que utilizadas de la forma correcta aplicarán el método de descomposición de \textit{Cholesky}.
 En el apéndice \ref{sec:codigocholesky} se encuentra la interfaz y el programa principal de la aplicación. 
@@ -33,9 +35,10 @@ En el apéndice \ref{sec:codigocholesky} se encuentra la interfaz y el programa 
 	\label{fig:grafocholesky}
 \end{figure}
 
-La imagen \ref{fig:grafocholesky} muestra un grafo de dependencias de la aplicación \textit{Cholesky} con una matriz de 64 bloques con 4096x4096 elementos cada uno. 
+La imagen \ref{fig:grafocholesky} muestra un grafo de dependencias de una ejecución de la aplicación \textit{Cholesky} con una matriz de 64 bloques con 4096x4096 elementos cada uno. 
 
 \section{Entornos para el estudio}
+\label{sec:entornos}
 
 Para la realización del estudio del rendimiento se han utilizado dos máquinas que el \textit{Barcelona Supercomputing Center} pone a nuestra disposición, que son \textit{CTE-Power} y \textit{MareNostrum4}.
 
@@ -105,7 +108,7 @@ Esta disminución de la ganancia cobra sentido cuando en el grafo de la aplicaci
 
 \subsection{Weak scaling}
 
-En un test de \textit{weak scaling}, esperamos que los tiempos de ejecución sean siempre los mismos, ya que el tamaño del problema es siempre proporcional a los recursos de cómputo. Esto sería perfecto pero hay que efectuar comunicación entre nodos y gestionar todo el sistema, por lo que no podemos mantener este escenario ideal. La imagen \ref{fig:wc-effic} muestra cómo al aumentar el número de nodos la eficiencia baja del ideal (que el tiempo de ejecución sea siempre el mismo), pero se mantiene alrededor del mismo valor a partir de los 6 nodos.
+En un test de \textit{weak scaling}, esperamos que los tiempos de ejecución sean siempre los mismos, ya que el tamaño del problema es siempre proporcional a los recursos de cómputo. Esto sería perfecto pero hay que efectuar comunicación entre nodos y gestionar todo el sistema, por lo que no podemos mantener este escenario ideal. Se han tomado 10 muestras de cada ejecución, línea azul marca el valor ideal (que toma este valor de la primera ejecución), y la naranja la eficiencia respecto al valor ideal. Los valores utilizados para calcular la eficiencia y el valor ideal se han hecho con la media de las 10 ejecuciones. La imagen \ref{fig:wc-effic} muestra cómo al aumentar el número de nodos la eficiencia baja del ideal (que el tiempo de ejecución sea siempre el mismo), pero se mantiene alrededor del mismo valor a partir de los 6 nodos.
 
 \begin{figure}[H]
 	\centering 
