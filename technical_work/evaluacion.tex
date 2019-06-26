@@ -6,16 +6,16 @@ En este capítulo describiremos las aplicaciones descritas para evaluar la integ
 \section{Aplicaciones}
 \subsection{K-Means}
 
-\textit{K-Means} es un algoritmo utilizado para hacer \textit{clustering} sobre un grupo de datos, es decir, agrupar los datos en \textit{clusters}. Cada dato pertenece al \textit{cluster} cuyo centro está en la distancia mínima, si no fuera así pertenecería a otro \textit{cluster}. Se inicializan \textit{clusters} con centros escogidos de manera aleatoria y se comparan las distancias a todos los \textit{clusters} y se determina a cual pertenece cada dato (siempre al centro más cercano), una vez hecho esto se vuelve a calcular el centro de cada \textit{cluster}, todo este proceso conforma una iteración de \textit{K-Means}, habitualmente se itera hasta que converge, esto es que la distancia entre los centros asignados en dos interaciones consecutivas de cada \textit{cluster} es cercana a 0.
+\textit{K-Means} es un algoritmo utilizado para hacer \textit{clustering} sobre un grupo de datos, es decir, agrupar los datos en \textit{clusters}. Cada dato pertenece al \textit{cluster} cuyo centro está en la distancia mínima, si no fuera así pertenecería a otro \textit{cluster}. Se inicializan \textit{clusters} con centros escogidos de manera aleatoria y se comparan las distancias a todos los \textit{clusters} y se determina a cual pertenece cada dato (siempre al centro más cercano), una vez hecho esto se vuelve a calcular el centro de cada \textit{cluster}, todo este proceso conforma una iteración de \textit{K-Means}, habitualmente se itera hasta que converge, esto es que la distancia entre los centros asignados en dos iteraciones consecutivas de cada \textit{cluster} es cercana a 0.
 
 \begin{figure}[h]
 	\centering 
 	\caption{Grafo de dependencias entre tareas de K-Means.}
-	\includegraphics[scale=0.2]{grafo_kmeans.pdf}
+	\includegraphics[scale=0.3]{grafo_kmeans.pdf}
 	\label{fig:grafokmeans}
 \end{figure}
 
-Tal y como hemos desarrollado la aplicación tiene 4 tareas, que son \textit{init\_Fragment}, \textit{compute\_newCluster} (tiene una implementación en CPU y otra en GPU), \textit{merge\_newCluster}, \textit{update\_Clusters}. La imagen \ref{fig:grafokmeans} muestra un grafo de dependencias de una ejecución de \textit{K-Means} donde el número de \textit{clusters} a formar es 25 y se efectúa una única iteración. Para no sobrecargar este apartado se incluye en el apéndice \ref{sec:codigokmeans} la interfaz y el programa principal de la aplicación.
+Tal y como hemos desarrollado la aplicación tiene 4 tareas, que son \textit{init\_Fragment}, \textit{compute\_newCluster} (tiene una implementación en CPU y otra en GPU), \textit{merge\_newCluster}, \textit{update\_Clusters}. La imagen \ref{fig:grafokmeans} muestra un grafo de dependencias de una ejecución de \textit{K-Means} donde el número de \textit{clusters} a formar es 50 y se efectúan dos iteración. Para no sobrecargar este apartado se incluye en el apéndice \ref{sec:codigokmeans} la interfaz y el programa principal de la aplicación.
 
 \subsection{Cholesky}
 
@@ -29,7 +29,7 @@ En el apéndice \ref{sec:codigocholesky} se encuentra la interfaz y el programa 
 \begin{figure}[h]
 	\centering 
 	\caption{Grafo de dependencias entre tareas de Cholesky.}
-	\includegraphics[scale=0.07]{grafo_cholesky.pdf}
+	\includegraphics[scale=0.12]{grafo_cholesky.pdf}
 	\label{fig:grafocholesky}
 \end{figure}
 
@@ -69,7 +69,7 @@ Cada nodo tiene los siguientes componentes:
 	\item 2 x \textit{Intel Xeon Platinum 8160 @ 2.10GHz} con 24 cores.
 	\item Hay nodos con distintos tipos de memoria:
 		\subitem 1,88 GB/core de memoria. %organizada en 12 \textit{dimms} de 8GB @ 2667MHz.
-		\subitem 7,93 GB/Core de memoria.
+		\subitem 7,93 GB/core de memoria.
 	\item Un SSD que proporciona 200 GB de almacenaje local.
 	\item 100 Gbit/s \textit{Intel Omni-Path HFI Silicon 100 Series PCI-E adapter}.
 	\item 10 Gbit \textit{Ethernet}.
@@ -92,7 +92,7 @@ La imagen \ref{fig:sc-time} muestra una gráfica que tiene en el eje vertical el
 	\label{fig:sc-time}
 \end{figure}
 
-Es bueno que la línea azul sea lo más parecida a la línea naranja, eso nos indicaría que la aplicación escala perfectamente, ya que cada vez que aumentamos los recursos el tiempo de ejecución se reduciría proporcionalmente. La imagen \ref{fig:sc-speedup} muestra la misma información que \ref{fig:sc-time} dispuesta en forma de ganancia, se puede ver que se comporta bien hasta que en los 6 nodos empieza a dejar de acercarse al ideal.
+Es bueno que la línea azul sea lo más parecida a la línea naranja, eso nos indicaría que la aplicación escala perfectamente, ya que cada vez que aumentamos los recursos el tiempo de ejecución se reduciría proporcionalmente. La imagen \ref{fig:sc-speedup} muestra la misma información que \ref{fig:sc-time} dispuesta en forma de ganancia, se puede ver que se comporta bien hasta que en los 4 nodos empieza a dejar de acercarse al ideal.
 
 \begin{figure}[H]
 	\centering 
@@ -100,6 +100,8 @@ Es bueno que la línea azul sea lo más parecida a la línea naranja, eso nos in
 	\includegraphics[scale=0.8]{estudio/KMeans/sc/kmeans-sc-speedup.png}
 	\label{fig:sc-speedup}
 \end{figure}
+ 
+Esta disminución de la ganancia cobra sentido cuando en el grafo de la aplicación \ref{fig:grafokmeans} vemos que en la fase de computar los \textit{clusters} nuevos (tareas de color blanco) la aplicación es totalmente paralela pero en la fase de re-asignar los centros de los \textit{clusters} (tareas de color rojo) deja de serlo. Esta característica de la aplicación hace que nunca podamos alcanzar la ganancia ideal ya que hay tramos o fases de esta que no son completamente paralelos, aunque estemos utilizando todos los recursos que hay a nuestra disposición tenemos que esperar a ejecutar un nivel de re-asignación antes de empezar el siguiente. 
 
 \subsection{Weak scaling}
 
@@ -113,6 +115,60 @@ En un test de \textit{weak scaling}, esperamos que los tiempos de ejecución sea
 \end{figure}
 
 \section{Cholesky}
+
+Para evaluar la integración con la aplicación \textit{Cholesky} hemos decidido comparar la integración \textit{COMPSs+OmpSs-2} con \textit{COMPSs} puro, en el primer test de la evaluación hemos variado el número de bloques y el tamaño de estos bloques. La evaluación con esta aplicación se lleva acabo en un nodo de \textit{MareNostrum4} que se han descrito en la sección \ref{sec:mare}.
+
+\par\bigskip
+
+\begin{figure}[H]
+	\centering 
+	\caption{Tiempo de ejecución de Cholesky con 16 bloques.}
+	\includegraphics[scale=0.8]{estudio/Cholesky/cholesky-16-blocks-time.png}
+	\label{fig:cholesky-16-time}
+\end{figure}
+
+La imagen \ref{fig:cholesky-16-time} muestra el tiempo de ejecución de la versión \textit{COMPSs+OmpSs-2} y \textit{COMPSs} con 16 bloques, los tamaños de bloque aparecen en el eje horizontal. A medida que se aumenta el tamaño de cada bloque la librería \textit{LASs} tiene más margen para partir los bloques y generar tareas, pero la versión \textit{COMPSs} ejecuta todo absolutamente en secuencial, haciendo que cada vez que la ganancia sea más notoria. En la imagen \ref{fig:cholesky-16-speedup} se muestra la ganancia de \textit{COMPSs+OmpSs-2} respecto la versión de \textit{COMPSs}.
+
+\par\bigskip
+
+\begin{figure}[H]
+	\centering 
+	\caption{Ganancia de Cholesky con COMPSs+OmpSs-2 respecto la versión COMPSs.}
+	\includegraphics[scale=0.8]{estudio/Cholesky/cholesky-16-blocks-speedup.png}
+	\label{fig:cholesky-16-speedup}
+\end{figure}
+
+A pesar de que en las imágenes \ref{fig:cholesky-16-time} y \ref{fig:cholesky-16-speedup} se muestra una diferencia grande entre la versión con y sin \textit{OmpSs-2}, esto es así por que el número de tareas que \textit{COMPSs} puede generar y están libres de dependencias y por tanto puede ejecutar a la vez no es superior o igual al número de procesadores que hay en un nodo, por este motivo no estamos aprovechando todo el nodo. En cambio en la versión con \textit{OmpSs-2} partimos los bloques y generamos tareas que los procesen, estas utilizan los procesadores que en cualquier otro caso estarían inactivos.
+
+\par\bigskip
+
+Tal y como hemos visto, las gráficas anteriores no eran justas para \textit{COMPSs} ya que no permitían utilizar todos los procesadores del nodo. El siguiente test pretende poner ambas versiones en un escenario justo, el número de bloques se aumenta a 64 y los tamaños de bloque se mantienen como en el anterior test.
+\par\bigskip
+
+La imagen \ref{fig:cholesky-64-time} muestra los tiempos de ejecución de ambas versiones, por el mismo motivo que antes al aumentar el tamaño de bloque las diferencias entre ambas se vuelven más notorias.
+
+\par\bigskip
+
+\begin{figure}[H]
+	\centering 
+	\caption{Tiempo de ejecución de Cholesky con 64 bloques.}
+	\includegraphics[scale=0.8]{estudio/Cholesky/cholesky-64-blocks-time.png}
+	\label{fig:cholesky-64-time}
+\end{figure}
+
+Es en la ganancia de la imagen \ref{fig:cholesky-64-speedup} donde se puede apreciar que la comparación es más justa que la anterior, ahora como máximo obtenemos una ganancia alrededor de 3.5, antes estaba cerca de 10. Ha sido el aumento del número de bloques lo que ha permitido que la versión de \textit{COMPSs} aproveche todo un nodo. Aún así, si vemos la imagen \ref{fig:grafocholesky} se puede ver como en la aplicación el número de tareas disminuye a medida que se acaba la aplicación, por lo que nos volvemos a encontrar en el mismo escenario anterior, en el cual no aprovechábamos todos los recursos del nodo. \textit{COMPSs+OmpSs-2} vuelve a sacar provecho de este escenario, puesto que aunque haya menos tareas de granularidad gruesa, estas generan de granularidad finas al nivel de \textit{OmpSs-2} con lo cual se puede seguir aprovechando los recursos.
+
+\par\bigskip
+
+\begin{figure}[H]
+	\centering 
+	\caption{Ganancia de Cholesky con COMPSs+OmpSs-2 respecto la versión COMPSs.}
+	\includegraphics[scale=0.8]{estudio/Cholesky/cholesky-64-blocks-speedup.png}
+	\label{fig:cholesky-64-speedup}
+\end{figure}
+
+
+
 
 
 
